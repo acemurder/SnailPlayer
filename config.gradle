@@ -1,0 +1,44 @@
+ext {
+
+    android = [compileSdkVersion: 25,
+               buildToolsVersion: "25.0.2",
+               applicationId    : "com.ride.snailplayer",
+               minSdkVersion    : 21,
+               targetSdkVersion : 25,
+               versionCode      : 1,
+               versionName      : "1.0"]
+
+    def androidLibraryVersion = "25.3.1"
+    def architectureComponentsVersion = "1.0.0-alpha1"
+
+    dependencies = ["appcompat-v7"                 : "com.android.support:appcompat-v7:${androidLibraryVersion}",
+                    "support-annotations"          : "com.android.support:support-annotations:${androidLibraryVersion}",
+                    "design"                       : "com.android.support:design:${androidLibraryVersion}",
+                    "recyclerview-v7"              : "com.android.support:recyclerview-v7:${androidLibraryVersion}",
+                    "cardview-v7"                  : "com.android.support:cardview-v7:${androidLibraryVersion}",
+
+                    "lifecycle-runtime"            : "android.arch.lifecycle:runtime:${architectureComponentsVersion}",
+                    "lifecycle-extensions"         : "android.arch.lifecycle:extensions:${architectureComponentsVersion}",
+                    "lifecycle-reactivestreams"    : "android.arch.lifecycle:reactivestreams:${architectureComponentsVersion}",
+                    "lifecycle-compiler"           : "android.arch.lifecycle:compiler:${architectureComponentsVersion}",
+
+                    "room-runtime"                 : "android.arch.persistence.room:runtime:${architectureComponentsVersion}",
+                    "room-compiler"                : "android.arch.persistence.room:compiler:${architectureComponentsVersion}",
+
+                    "rxandroid"                    : "io.reactivex.rxjava2:rxandroid:2.0.1",
+                    "rxjava"                       : "io.reactivex.rxjava2:rxjava:2.1.0",
+                    "okhttp"                       : "com.squareup.okhttp3:okhttp:3.8.0",
+                    "okhttp-logging-interceptor"   : "com.squareup.okhttp3:logging-interceptor:3.8.0",
+                    "retrofit"                     : "com.squareup.retrofit2:retrofit:2.3.0",
+                    "retrofit-converter-gson"      : "com.squareup.retrofit2:converter-gson:2.3.0",
+                    "retrofit-adapter-rxjava"      : "com.squareup.retrofit2:adapter-rxjava2:2.3.0",
+                    "gson"                         : "com.google.code.gson:gson:2.8.0",
+                    "fresco"                       : "com.facebook.fresco:fresco:1.3.0",
+                    "fresco-webpsupport"           : "com.facebook.fresco:webpsupport:1.3.0",
+                    "eventbus"                     : "org.greenrobot:eventbus:3.0.0",
+                    "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.3",
+                    "material-dialog"              : "com.afollestad.material-dialogs:core:0.9.4.5",
+                    "ucrop"                        : "com.github.yalantis:ucrop:2.2.1",
+                    "easypermissions"              : "pub.devrel:easypermissions:0.4.0",
+                    "umeng"                        : "com.umeng.analytics:analytics:latest.integration"]
+}
