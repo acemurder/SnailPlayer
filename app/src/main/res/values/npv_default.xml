@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_num_progress_text_size">12sp</dimen>
+    <dimen name="default_num_progress_text_padding">3dp</dimen>
+    <color name="default_num_progress_text_color">#4291F1</color>
+    <dimen name="default_num_progress_reached_area_height">1.5dp</dimen>
+    <dimen name="default_num_progress_unreached_area_height">1dp</dimen>
+    <color name="default_num_progress_reached_area_color">#4291F1</color>
+    <color name="default_num_progress_unreached_area_color">#CCCCCC</color>
+</resources>
