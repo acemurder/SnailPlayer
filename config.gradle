@@ -36,8 +36,8 @@ ext {
                     "fresco"                       : "com.facebook.fresco:fresco:1.3.0",
                     "fresco-webpsupport"           : "com.facebook.fresco:webpsupport:1.3.0",
                     "eventbus"                     : "org.greenrobot:eventbus:3.0.0",
-                    "dragger2"                     : "com.google.dagger:dagger:2.1",
-                    "dragger2-compiler"            : "com.google.dagger:dagger-compiler:2.1",
+                    "dagger2"                     : "com.google.dagger:dagger:2.1",
+                    "dagger2-compiler"            : "com.google.dagger:dagger-compiler:2.1",
                     "easypermissions"              : "pub.devrel:easypermissions:0.4.0",
                     "umeng"                        : "com.umeng.analytics:analytics:latest.integration",
 
