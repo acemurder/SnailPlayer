@@ -1,13 +1,10 @@
 package com.ride.snailplayer.net;
 
-
 import com.ride.snailplayer.common.config.SnailPlayerConfig;
 import com.ride.snailplayer.net.service.IQiYiApiService;
 import com.ride.util.common.AppUtils;
 
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -31,7 +28,6 @@ public enum ApiClient {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-
         }
 
         @Override
@@ -49,7 +45,6 @@ public enum ApiClient {
         }
     };
 
-    @Inject
     final Retrofit mRetrofit;
     final OkHttpClient mOkHttpClient;
 
