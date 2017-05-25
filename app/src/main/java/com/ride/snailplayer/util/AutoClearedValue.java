@@ -19,11 +19,16 @@ package com.ride.snailplayer.util;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import javax.inject.Inject;
+
+import dagger.Component;
+
 /**
  * A value holder that automatically clears the reference if the Fragment's view is destroyed.
  * @param <T>
  */
 public class AutoClearedValue<T> {
+
     private T value;
 
     public AutoClearedValue(Fragment fragment, T value) {

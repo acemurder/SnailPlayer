@@ -17,11 +17,11 @@ ext {
                     "recyclerview-v7"              : "com.android.support:recyclerview-v7:${androidLibraryVersion}",
                     "cardview-v7"                  : "com.android.support:cardview-v7:${androidLibraryVersion}",
 
+                    //App Architecture
                     "lifecycle-runtime"            : "android.arch.lifecycle:runtime:${architectureComponentsVersion}",
                     "lifecycle-extensions"         : "android.arch.lifecycle:extensions:${architectureComponentsVersion}",
                     "lifecycle-reactivestreams"    : "android.arch.lifecycle:reactivestreams:${architectureComponentsVersion}",
                     "lifecycle-compiler"           : "android.arch.lifecycle:compiler:${architectureComponentsVersion}",
-
                     "room-runtime"                 : "android.arch.persistence.room:runtime:${architectureComponentsVersion}",
                     "room-compiler"                : "android.arch.persistence.room:compiler:${architectureComponentsVersion}",
 
@@ -36,9 +36,13 @@ ext {
                     "fresco"                       : "com.facebook.fresco:fresco:1.3.0",
                     "fresco-webpsupport"           : "com.facebook.fresco:webpsupport:1.3.0",
                     "eventbus"                     : "org.greenrobot:eventbus:3.0.0",
+                    "dragger2"                     : "com.google.dagger:dagger:2.1",
+                    "dragger2-compiler"            : "com.google.dagger:dagger-compiler:2.1",
+                    "easypermissions"              : "pub.devrel:easypermissions:0.4.0",
+                    "umeng"                        : "com.umeng.analytics:analytics:latest.integration",
+
                     "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.3",
                     "material-dialog"              : "com.afollestad.material-dialogs:core:0.9.4.5",
                     "ucrop"                        : "com.github.yalantis:ucrop:2.2.1",
-                    "easypermissions"              : "pub.devrel:easypermissions:0.4.0",
-                    "umeng"                        : "com.umeng.analytics:analytics:latest.integration"]
+                    "vLayout"                      : "com.alibaba.android:vlayout:1.0.6@aar"]
 }

@@ -114,11 +114,17 @@ dependencies {
     compile rootProject.ext.dependencies["fresco"]
     compile rootProject.ext.dependencies["fresco-webpsupport"]
     compile rootProject.ext.dependencies["eventbus"]
+    compile rootProject.ext.dependencies["dragger2"]
+    annotationProcessor rootProject.ext.dependencies["dragger2-compiler"]
+    compile rootProject.ext.dependencies["easypermissions"]
+    compile rootProject.ext.dependencies["umeng"]
+
     compile rootProject.ext.dependencies["material-dialog"]
     compile rootProject.ext.dependencies["photoview"]
     compile rootProject.ext.dependencies["ucrop"]
-    compile rootProject.ext.dependencies["easypermissions"]
-    compile rootProject.ext.dependencies["umeng"]
+    compile (rootProject.ext.dependencies["vLayout"]) {
+        transitive = true
+    }
 
     compile project(':util')
 
