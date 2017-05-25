@@ -124,5 +124,4 @@ dependencies {
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util')
-
 }

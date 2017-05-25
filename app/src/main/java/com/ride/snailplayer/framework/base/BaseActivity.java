@@ -1,8 +1,7 @@
-package com.ride.snailplayer.snailplayer.base;
+package com.ride.snailplayer.framework.base;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.support.v7.app.AppCompatActivity;
 
 import com.umeng.analytics.MobclickAgent;
@@ -12,9 +11,9 @@ import com.umeng.analytics.MobclickAgent;
  * @since 2017/5/19.
  */
 
-public class BaseActivity extends AppCompatActivity implements LifecycleOwner {
+public class BaseActivity extends AppCompatActivity implements LifecycleRegistryOwner {
 
-    private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
     @Override
     protected void onResume() {
@@ -29,7 +28,7 @@ public class BaseActivity extends AppCompatActivity implements LifecycleOwner {
     }
 
     @Override
-    public Lifecycle getLifecycle() {
+    public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
     }
 }

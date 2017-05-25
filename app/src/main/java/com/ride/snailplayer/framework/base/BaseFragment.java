@@ -1,4 +1,4 @@
-package com.ride.snailplayer.snailplayer.base;
+package com.ride.snailplayer.framework.base;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;

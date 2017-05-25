@@ -1,4 +1,4 @@
-package com.ride.snailplayer.snailplayer.repository;
+package com.ride.snailplayer.framework.repository;
 
 /**
  * @author Stormouble

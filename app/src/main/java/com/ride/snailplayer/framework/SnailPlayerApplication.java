@@ -1,11 +1,9 @@
-package com.ride.snailplayer.snailplayer;
+package com.ride.snailplayer.framework;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.qiyi.video.playcore.QiyiVideoView;
 import com.ride.snailplayer.common.config.SnailPlayerConfig;
-import com.ride.snailplayer.net.ApiClient;
 import com.ride.util.common.AppUtils;
 import com.ride.util.common.Utils;
 import com.ride.util.log.Timber;

@@ -1,11 +1,11 @@
-package com.ride.snailplayer.snailplayer.ui.home;
+package com.ride.snailplayer.framework.ui;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
-import com.ride.snailplayer.snailplayer.base.BaseActivity;
+import com.ride.snailplayer.framework.base.BaseActivity;
 
 public class HomeActivity extends BaseActivity {
 

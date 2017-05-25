@@ -748,7 +748,7 @@ public final class Timber {
         @Override
         String decorateMessage(String message) {
             StackTraceElement element = createCallStackTraceElement();
-            return "LineNumber:" + element.getLineNumber() + " message=" + message;
+            return "LineNumber:" + element.getLineNumber() + " " + message;
         }
 
         /**

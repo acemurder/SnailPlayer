@@ -23,7 +23,7 @@ import android.arch.lifecycle.LiveData;
  */
 public class AbsentLiveData<T> extends LiveData<T> {
 
-    private AbsentLiveData() {
+    public AbsentLiveData() {
         postValue(null);
     }
 
