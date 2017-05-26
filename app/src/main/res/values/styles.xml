@@ -15,4 +15,7 @@
 
     <style name="Theme.SnailPlayer" parent="Theme.SnailPlayer.Base"/>
 
+    <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
 </resources>
