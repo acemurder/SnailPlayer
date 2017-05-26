@@ -121,6 +121,7 @@ dependencies {
     compile (rootProject.ext.dependencies["vLayout"]) {
         transitive = true
     }
+    compile rootProject.ext.dependencies["lottie"]
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util')

@@ -44,5 +44,6 @@ ext {
                     "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.3",
                     "material-dialog"              : "com.afollestad.material-dialogs:core:0.9.4.5",
                     "ucrop"                        : "com.github.yalantis:ucrop:2.2.1",
-                    "vLayout"                      : "com.alibaba.android:vlayout:1.0.6@aar"]
+                    "vLayout"                      : "com.alibaba.android:vlayout:1.0.6@aar",
+                    "lottie"                      : "com.airbnb.android:lottie:2.0.0-rc1"]
 }
