@@ -1,6 +1,6 @@
-package com.ride.snailplayer.util;
+package com.ride.snailplayer.net.util;
 
-public class ImageUtils {
+public class IQiYiImageUtils {
 
     public static String IMG_120_160 = "_120_160";
     public static String IMG_180_236 = "_180_236";

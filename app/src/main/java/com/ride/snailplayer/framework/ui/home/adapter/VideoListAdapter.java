@@ -18,6 +18,8 @@ import com.ride.snailplayer.net.model.VideoInfo;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by ：AceMurder
  * Created on ：2017/5/31

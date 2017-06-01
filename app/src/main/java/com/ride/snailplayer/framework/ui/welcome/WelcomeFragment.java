@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ride.snailplayer.framework.base.BaseFragment;
-import com.ride.snailplayer.framework.ui.HomeActivity;
+import com.ride.snailplayer.framework.ui.home.HomeActivity;
 
 /**
  * @author Stormouble
