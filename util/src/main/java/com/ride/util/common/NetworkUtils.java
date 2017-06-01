@@ -32,20 +32,20 @@ public final class NetworkUtils {
      *
      * @return 网络类型
      * <ul>
-     * <li>{@link NetworkUtils.NetworkStatus#NETWORK_WIFI   } </li>
-     * <li>{@link NetworkUtils.NetworkStatus#NETWORK_4G     } </li>
-     * <li>{@link NetworkUtils.NetworkStatus#NETWORK_3G     } </li>
-     * <li>{@link NetworkUtils.NetworkStatus#NETWORK_2G     } </li>
-     * <li>{@link NetworkUtils.NetworkStatus#NETWORK_UNKNOWN} </li>
-     * <li>{@link NetworkUtils.NetworkStatus#NETWORK_NO     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_WIFI   } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_4G     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_3G     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_2G     } </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_UNKNOWN} </li>
+     * <li>{@link NetworkUtils.NetworkType#NETWORK_NO     } </li>
      * </ul>
      */
-    public static NetworkStatus getNetworkStatus() {
-        NetworkStatus networkStatus = NetworkStatus.NETWORK_NO;
+    public static NetworkType getNetworkStatus() {
+        NetworkType type = NetworkType.NETWORK_NO;
         NetworkInfo info = getActiveNetWorkInfo();
         if (info != null) {
             if (info.getType() == ConnectivityManager.TYPE_WIFI) {
-                networkStatus = NetworkStatus.NETWORK_WIFI;
+                type = NetworkType.NETWORK_WIFI;
             } else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
                 switch (info.getSubtype()) {
                     case NETWORK_TYPE_GSM:
@@ -54,7 +54,7 @@ public final class NetworkUtils {
                     case TelephonyManager.NETWORK_TYPE_EDGE:
                     case TelephonyManager.NETWORK_TYPE_1xRTT:
                     case TelephonyManager.NETWORK_TYPE_IDEN:
-                        networkStatus = NetworkStatus.NETWORK_2G;
+                        type = NetworkType.NETWORK_2G;
                         break;
 
                     case NETWORK_TYPE_TD_SCDMA:
@@ -67,29 +67,29 @@ public final class NetworkUtils {
                     case TelephonyManager.NETWORK_TYPE_EVDO_B:
                     case TelephonyManager.NETWORK_TYPE_EHRPD:
                     case TelephonyManager.NETWORK_TYPE_HSPAP:
-                        networkStatus = NetworkStatus.NETWORK_3G;
+                        type = NetworkType.NETWORK_3G;
                         break;
 
                     case NETWORK_TYPE_IWLAN:
                     case TelephonyManager.NETWORK_TYPE_LTE:
-                        networkStatus = NetworkStatus.NETWORK_4G;
+                        type = NetworkType.NETWORK_4G;
                         break;
                     default:
                         String subtypeName = info.getSubtypeName();
                         if (subtypeName.equalsIgnoreCase("TD-SCDMA")
                                 || subtypeName.equalsIgnoreCase("WCDMA")
                                 || subtypeName.equalsIgnoreCase("CDMA2000")) {
-                            networkStatus = NetworkStatus.NETWORK_3G;
+                            type = NetworkType.NETWORK_3G;
                         } else {
-                            networkStatus = NetworkStatus.NETWORK_UNKNOWN;
+                            type = NetworkType.NETWORK_UNKNOWN;
                         }
                         break;
                 }
             } else {
-                networkStatus = NetworkStatus.NETWORK_UNKNOWN;
+                type = NetworkType.NETWORK_UNKNOWN;
             }
         }
-        return networkStatus;
+        return type;
     }
 
     public static NetworkInfo getActiveNetWorkInfo() {
@@ -108,7 +108,7 @@ public final class NetworkUtils {
         return null;
     }
 
-    public enum NetworkStatus {
+    public enum NetworkType {
         NETWORK_WIFI,
         NETWORK_4G,
         NETWORK_3G,

@@ -18,4 +18,17 @@
     <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="Theme.SnailPlayer.Welcome" parent="Theme.SnailPlayer">
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="Theme.SnailPlayer.Search" parent="Theme.SnailPlayer">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+
+    </style>
+
 </resources>

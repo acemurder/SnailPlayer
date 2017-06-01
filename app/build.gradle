@@ -93,6 +93,7 @@ dependencies {
     compile rootProject.ext.dependencies["support-annotations"]
     compile rootProject.ext.dependencies["design"]
     compile rootProject.ext.dependencies["recyclerview-v7"]
+    compile rootProject.ext.dependencies["cardview-v7"]
 
     compile rootProject.ext.dependencies["lifecycle-runtime"]
     compile rootProject.ext.dependencies["lifecycle-extensions"]
@@ -118,7 +119,7 @@ dependencies {
     compile rootProject.ext.dependencies["material-dialog"]
     compile rootProject.ext.dependencies["photoview"]
     compile rootProject.ext.dependencies["ucrop"]
-    compile (rootProject.ext.dependencies["vLayout"]) {
+    compile(rootProject.ext.dependencies["vLayout"]) {
         transitive = true
     }
     compile rootProject.ext.dependencies["lottie"]

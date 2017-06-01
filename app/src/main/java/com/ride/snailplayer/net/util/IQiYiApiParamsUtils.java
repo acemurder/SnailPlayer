@@ -12,7 +12,7 @@ import com.ride.util.common.DeviceUtils;
 import com.ride.util.common.EncodeUtils;
 import com.ride.util.common.EncryptUtils;
 import com.ride.util.common.NetworkUtils;
-import com.ride.util.common.PreferenceUtils;
+import com.ride.util.common.SPUtils;
 import com.ride.util.common.ScreenUtils;
 import com.ride.util.common.Utils;
 
@@ -148,7 +148,7 @@ public class IQiYiApiParamsUtils {
             return mDeviceID;
         }
 
-        String cacheValue = (String) PreferenceUtils.get(SP_DEVICE_ID);
+        String cacheValue = SPUtils.getInstance().getString(SP_DEVICE_ID);
         if (!TextUtils.isEmpty(cacheValue)) {
             mDeviceID = cacheValue;
             return mDeviceID;
@@ -173,7 +173,7 @@ public class IQiYiApiParamsUtils {
         mDeviceID = IMEI + MAC + ANDROID_ID + SERIAL;
         mDeviceID = EncryptUtils.encryptWithSHA1(mDeviceID);
         if (!TextUtils.isEmpty(mDeviceID)) {
-            PreferenceUtils.set(SP_DEVICE_ID, mDeviceID);
+            SPUtils.getInstance().put(SP_DEVICE_ID, mDeviceID);
         }
         return mDeviceID;
     }
