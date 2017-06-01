@@ -18,6 +18,7 @@ public class SnailPlayerApplication extends Application {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
 
         QiyiVideoView.init(this);

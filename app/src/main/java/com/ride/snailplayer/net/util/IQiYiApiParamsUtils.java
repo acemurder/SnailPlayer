@@ -148,7 +148,7 @@ public class IQiYiApiParamsUtils {
             return mDeviceID;
         }
 
-        String cacheValue = (String) PreferenceUtils.get(SP_DEVICE_ID);
+        String cacheValue = String.valueOf( PreferenceUtils.get(SP_DEVICE_ID));
         if (!TextUtils.isEmpty(cacheValue)) {
             mDeviceID = cacheValue;
             return mDeviceID;

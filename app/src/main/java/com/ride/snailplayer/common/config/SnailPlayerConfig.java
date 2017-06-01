@@ -46,4 +46,12 @@ public class SnailPlayerConfig {
      */
     public final static String PLATFORM_ID = "10";
 
+    /**
+     * 数据获取成功
+     */
+    public final static int API_CODE_SUCCESS = 100000;
+
+    public final static int API_CODE_NO_DATA = 100002;
+
+
 }

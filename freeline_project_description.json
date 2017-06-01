@@ -1,0 +1,179 @@
+{
+    "android_gradle_plugin_version": "2.3.2",
+    "apk_path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/outputs/apk/debug/SnailPlayer-debug.apk",
+    "apt": {
+        "app": {
+            "aptArgs": [
+                "-Aandroid.databinding.artifactType=APPLICATION",
+                "-Aandroid.databinding.printEncodedErrors=0",
+                "-Aandroid.databinding.minApi=21",
+                "-Aandroid.databinding.isTestVariant=0",
+                "-Aandroid.databinding.enableDebugLogs=0",
+                "-Aandroid.databinding.sdkDir=/Users/zhengyuxuan/Library/Android/sdk",
+                "-Aandroid.databinding.bindingBuildFolder=/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/intermediates/data-binding-compiler/debug",
+                "-Aandroid.databinding.enableForTests=0",
+                "-Aandroid.databinding.modulePackage=com.ride.snailplayer",
+                "-Aandroid.databinding.generationalFileOutDir=/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/intermediates/bundles/debug/data-binding",
+                "-Aandroid.databinding.xmlOutDir=/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/intermediates/data-binding-info/debug"
+            ],
+            "aptOutput": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/generated/source/apt/debug",
+            "disableDiscovery": false,
+            "enabled": true,
+            "processor": null,
+            "processorPath": "/Users/zhengyuxuan/.android/build-cache/d5763568d9cff102816184b9be6aafef7756ddac/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/401df336e2dc8f617f093cba085868c443542857/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/8e53c1ccb61c831526ae26d5e6d6ac6aaad9341d/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/52ba7facdad6f700012947b6065cb44aa880abe5/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/9c34b6fc3d4d5ddfb98ad665de4ef162dc903084/output/jars/classes.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/android.arch.lifecycle/common/1.0.0-alpha1/dddb0f589fc65ed3a262d1a90f4d61af6891776a/common-1.0.0-alpha1.jar:/Users/zhengyuxuan/.android/build-cache/fda7f1cefe0bafa6d77783bdedb7d053ff16a4f0/output/jars/classes.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/android.arch.persistence.room/common/1.0.0-alpha1/4fb1be8519a8e9d931945beaee734dd7c1691462/common-1.0.0-alpha1.jar:/Users/zhengyuxuan/.android/build-cache/fe8146995b5a17f1c09cc62cc88561a3f4827c29/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/fa0ef159ecfdecdb094377e11500ccad68fc9ede/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/73f7a76d8699073996dec60ae40d5361d9398ad7/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/c8095aadba2cf5e680668a87d7d9ff65a7d72119/output/jars/classes.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/logging-interceptor/3.8.0/f765f004f3e201bd6ad0904266e605d7fb776d5/logging-interceptor-3.8.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/converter-gson/2.3.0/9e09011e9767bb76b5e27c9b8223476b93b14631/converter-gson-2.3.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/adapter-rxjava2/2.3.0/f436637f9500ab5b8bc32afe556373180894b4a5/adapter-rxjava2-2.3.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.3.0/bcacde6a8ccedcc56c127403d26b76072fe6214d/retrofit-2.3.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.0/2fdf84dedcaaeabb9d70cde9dbb8aad4eccb80a1/rxjava-2.1.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.0/14b8c877d98005ba3941c9257cfe09f6ed0e0d74/reactive-streams-1.0.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/glide/4.0.0-RC0/eb86cd1d96acc30dcebf338abaf2c62ca28bf355/glide-4.0.0-RC0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/gifdecoder/4.0.0-RC0/c64f5d4805b528de434a5a8bb9a8091b6f9cd1a7/gifdecoder-4.0.0-RC0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/disklrucache/4.0.0-RC0/46d23cdc19155c5f0d47ece99ca1c421346c1509/disklrucache-4.0.0-RC0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/annotations/4.0.0-RC0/d5dd0afc50069b7fa0fc12ac85f91efa8df4db67/annotations-4.0.0-RC0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.0/c4ba5371a29ac9b2ad6129b1d39ea38750043eff/gson-2.8.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/org.greenrobot/eventbus/3.0.0/ddd99896e9569eaababbe81b35d80e1b91c4ad85/eventbus-3.0.0.jar:/Users/zhengyuxuan/.android/build-cache/faff5b717c40a0f007da4d88193e96cd36a30397/output/jars/classes.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.umeng.analytics/analytics/6.1.0/8d988e1e13f64c0e8e9d935e347f510f712b376b/analytics-6.1.0.jar:/Users/zhengyuxuan/.android/build-cache/8ec039fcef1b7350123f7f9dd73a1deb1174e42e/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/7a0fe75f9dc3dbd6faee0e2029b678893d4b2f0e/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/ee3b67b90e482ad227c9a73ed7cd9270cb7096f5/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/bdb5879a71b133fe3d37a3a53c0b8852c2b11628/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/e8fc7ad2f648375a058f755fbc633d639dddfaa5/output/jars/classes.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.8.0/5a11f020cce2d11eb71ba916700600e18c4547e7/okhttp-3.8.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar:/Users/zhengyuxuan/.android/build-cache/003d520ead5a41f9078220436cc84e110e47a370/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/ed3499bfe5cfdb7a053dcf5aaef99e6fdc7764a7/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/b29fcdf40dc6f7f1d0cc7a0a70f31e2b1faa6a17/output/jars/classes.jar:/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/build/intermediates/bundles/default/classes.jar:/Users/zhengyuxuan/.android/build-cache/0b19182cf27423c56cf29dbaa0a2597ae9dda3a3/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/9def4faffe7762e15ad1bd937cefda7d65f868ce/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/442ba3bf122d8cef10e54fecb72b8b61208ba03b/output/jars/classes.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.9.9/f7b520c458572890807d143670c9b24f4de90897/joda-time-2.9.9.jar:/Users/zhengyuxuan/.android/build-cache/1fd113ad617add63e71782d58e021f51d35b0841/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/b622bad2e0a2faa7968c6fa90f48897986dda90a/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/56bf44c5a31fb6560ec1213fcdb0ef56de25300a/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/a6fbe9e9f1f78b8c5894bcbbe52d37e2e8b18c3b/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/d426b027d61d05a9ad6767ff6902d76a6913d774/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/2225322c9179bcb9ffc68c2af9f0a669cf445a91/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/0cc88bd755497ee99ed2744267cc3634f8994fc7/output/jars/classes.jar:/Users/zhengyuxuan/.android/build-cache/24e51328a09547a3a5105cca108c633d3ff908e7/output/jars/classes.jar:/Users/zhengyuxuan/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.android.databinding/baseLibrary/2.3.2/64d8dd1d16035a16928e74269b7b66af9a229f02/baseLibrary-2.3.2.jar:/Users/zhengyuxuan/.android/build-cache/ed217dc92c6f23861251c89a6b69112d56849c1c/output/jars/classes.jar:/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/libs/iQIYISdk.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/android.arch.lifecycle/compiler/1.0.0-alpha1/da47bd0aa5c0bc2255527efcb2613ec5232e3d4e/compiler-1.0.0-alpha1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/android.arch.persistence.room/compiler/1.0.0-alpha1/ce0f0544adf7530169d13c97b5c75f91147421fe/compiler-1.0.0-alpha1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/compiler/4.0.0-RC0/a787851933d12dd29d5a2f43ce02e2144bdeca79/compiler-4.0.0-RC0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.android.databinding/compiler/2.3.2/c7125acfcb525b30fef7ee8bfecb0f7695931303/compiler-2.3.2.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.1/98e484e67f913e934559f7f55f0c94be5593f03c/kotlin-stdlib-1.1.1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.google.auto/auto-common/0.6/cf7212b0f8bfef12657b942df8f4f2cf032d3f41/auto-common-0.6.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.squareup/javapoet/1.8.0/e858dc62ef484048540d27d36f3ec2177a3fa9b1/javapoet-1.8.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/android.arch.persistence.room/migration/1.0.0-alpha1/f5fd2978ca5e8751acee9c720cbd0147ecbf1d60/migration-1.0.0-alpha1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/org.antlr/antlr4/4.5.3/f35db7e4b2446e4174ba6a73db7bd6b3e6bb5da1/antlr4-4.5.3.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/org.xerial/sqlite-jdbc/3.16.1/72540738ecee65b58ef5a6dbc125e83223716b17/sqlite-jdbc-3.16.1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.10/4b95f4897fa13f2cd904aee711aeafc0c5295cd8/commons-codec-1.10.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.google.auto.service/auto-service/1.0-rc3/35c5d43b0332b8f94d473f9fee5fb1d74b5e0056/auto-service-1.0-rc3.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.1/f7be08ec23c21485b9b5a1cf1654c2ec8c58168d/jsr305-3.0.1.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.googlecode.juniversalchardet/juniversalchardet/1.0.3/cd49678784c46aa8789c060538e0154013bb421b/juniversalchardet-1.0.3.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar:/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/19.0/6ce200f6b23222af3d8abb6b6459e6c44f4bb0e9/guava-19.0.jar"
+        }
+    },
+    "apt_libraries": {
+        "dagger": false,
+        "butterknife": false
+    },
+    "auto_dependency": true,
+    "build_cache_dir": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/freeline",
+    "build_directory": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build",
+    "build_script": "./gradlew :app:assembleDebug",
+    "build_script_work_directory": "",
+    "build_tools_directory": "/Users/zhengyuxuan/Library/Android/sdk/build-tools/25.0.2",
+    "build_tools_version": "25.0.2",
+    "check_sources_md5": [
+        
+    ],
+    "compile_sdk_directory": "/Users/zhengyuxuan/Library/Android/sdk/platforms/android-25",
+    "compile_sdk_version": "android-25",
+    "databinding": [
+        {
+            "isLibrary": false,
+            "minSdkVersion": 21,
+            "name": "app",
+            "packageName": "com.ride.snailplayer"
+        }
+    ],
+    "databinding_compiler_jar": "/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/com.android.databinding/compiler/2.3.2/c7125acfcb525b30fef7ee8bfecb0f7695931303/compiler-2.3.2.jar",
+    "databinding_modules": [
+        "app"
+    ],
+    "debug_package": "com.ride.snailplayer",
+    "exclude_dep_res_paths": [
+        
+    ],
+    "extra_dep_res_paths": [
+        
+    ],
+    "freeline_cache_dir": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer",
+    "freeline_gradle_plugin_version": "0.8.7",
+    "ignore_resource_ids": [
+        "avd_hide_password_1",
+        "avd_hide_password_2",
+        "avd_hide_password_3",
+        "avd_show_password_1",
+        "avd_show_password_2",
+        "avd_show_password_3"
+    ],
+    "java_home": "/Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home",
+    "launcher": "com.ride.snailplayer.framework.ui.activity.HomeActivity",
+    "main_assets_directory": [
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/assets",
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/assets"
+    ],
+    "main_jniLibs_directory": [
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/jniLibs",
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/libs"
+    ],
+    "main_jni_directory": [
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/jni",
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/jni"
+    ],
+    "main_manifest_path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/AndroidManifest.xml",
+    "main_project_dir": "app",
+    "main_project_name": "app",
+    "main_r_path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/build/generated/source/r/debug/R.java",
+    "main_res_directory": [
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/res",
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/res"
+    ],
+    "main_src_directory": [
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/java",
+        "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/java"
+    ],
+    "module_dependencies": {
+        "app": [
+            "util"
+        ],
+        "util": [
+            
+        ]
+    },
+    "modules": [
+        {
+            "name": "app",
+            "path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app"
+        },
+        {
+            "name": "util",
+            "path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util"
+        }
+    ],
+    "package": "com.ride.snailplayer",
+    "product_flavor": "",
+    "project_source_sets": {
+        "app": {
+            "main_assets_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/assets",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/assets"
+            ],
+            "main_jniLibs_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/jniLibs",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/libs"
+            ],
+            "main_jni_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/jni",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/jni"
+            ],
+            "main_manifest_path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/AndroidManifest.xml",
+            "main_res_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/res",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/res"
+            ],
+            "main_src_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/debug/java",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/app/src/main/java"
+            ]
+        },
+        "util": {
+            "main_assets_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/release/assets",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/main/assets"
+            ],
+            "main_jniLibs_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/release/jniLibs",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/main/jniLibs"
+            ],
+            "main_jni_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/release/jni",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/main/jni"
+            ],
+            "main_manifest_path": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/main/AndroidManifest.xml",
+            "main_res_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/release/res",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/main/res"
+            ],
+            "main_src_directory": [
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/release/java",
+                "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/src/main/java"
+            ]
+        }
+    },
+    "project_type": "gradle",
+    "retrolambda": {
+        "app": {
+            "enabled": true,
+            "mainClass": "net.orfjackal.retrolambda.Main",
+            "rtJar": "/Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/jre/lib/rt.jar",
+            "supportIncludeFiles": true,
+            "targetJar": "/Users/zhengyuxuan/.gradle/caches/modules-2/files-2.1/net.orfjackal.retrolambda/retrolambda/2.5.1/3db6629d3ba0168c580af3be44fe54014dfb105/retrolambda-2.5.1.jar"
+        }
+    },
+    "root_dir": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer",
+    "sdk_directory": "/Users/zhengyuxuan/Library/Android/sdk",
+    "use_jdk8": true,
+    "use_system_gradle": false
+}
