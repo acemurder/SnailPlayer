@@ -90,7 +90,6 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
     @Override
     public void stopProgress() {
         mBinding.refreshLayout.setRefreshing(false);
-
     }
 
     @Override
