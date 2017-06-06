@@ -1,24 +1,16 @@
 package com.ride.snailplayer.framework.ui.home.adapter;
 
-import android.databinding.DataBindingUtil;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ItemMovieBinding;
 import com.ride.snailplayer.framework.base.adapter.databinding.DataBoundAdapter;
 import com.ride.snailplayer.framework.base.adapter.databinding.DataBoundViewHolder;
 import com.ride.snailplayer.net.model.VideoInfo;
+import com.ride.snailplayer.widget.ItemClickListener;
 
 import java.util.List;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by ：AceMurder
@@ -30,6 +22,8 @@ import okhttp3.OkHttpClient;
 public class VideoListAdapter extends DataBoundAdapter<ItemMovieBinding> {
     private List<VideoInfo> videoInfoList;
     private Fragment fragment;
+    private ItemClickListener listener;
+
 
     /**
      * Creates a DataBoundAdapter with the given item layout
@@ -42,11 +36,16 @@ public class VideoListAdapter extends DataBoundAdapter<ItemMovieBinding> {
         this.fragment = fragment;
     }
 
+    public void setListener(ItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     protected void bindItem(DataBoundViewHolder<ItemMovieBinding> holder, int position, List<Object> payloads) {
         holder.binding.setVideo(videoInfoList.get(position));
         String url = getUrl(videoInfoList.get(position).img);
+        if (listener != null)
+            holder.binding.getRoot().setOnClickListener((v -> listener.onClick(videoInfoList.get(position))));
         Glide.with(fragment)
                 .load(url)
                 .into(holder.binding.movieImage);
@@ -54,7 +53,7 @@ public class VideoListAdapter extends DataBoundAdapter<ItemMovieBinding> {
 
     private String getUrl(String oldUrl) {
         int index = oldUrl.lastIndexOf(".");
-        String url = oldUrl.substring(0, index) +"_195_260";
+        String url = oldUrl.substring(0, index) +"_260_360";
         return url + ".jpg";
     }
 

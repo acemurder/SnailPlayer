@@ -23,7 +23,7 @@ public class FuncMapResourceToData <T> implements Function<Resource<T>, T> {
 
     @Override
     public T apply(@NonNull Resource<T> resource) throws Exception {
-        if (resource.code == 100000) {
+        if (resource.code == 100000 || resource.code == 0) {
             return resource.data;
         } else {
             throw new SnailPlayerApiException("code=" + resource.code + ",errorMssage=" + resource.errorMessage);

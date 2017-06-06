@@ -12,15 +12,15 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-            android:name=".framework.SnailPlayerApplication"
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:largeHeap="true"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:theme="@style/Theme.SnailPlayer">
-
-        <activity android:name=".framework.ui.home.activity.HomeActivity">
+        android:name=".framework.SnailPlayerApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Theme.SnailPlayer">
+        <activity android:name=".framework.ui.home.HomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -46,9 +46,15 @@
                     android:resource="@xml/searchable"/>
         </activity>
         <activity
-                android:name=".framework.ui.welcome.WelcomeActivity"
-                android:theme="@style/Theme.SnailPlayer.Welcome"
-                android:exported="false"/>
+            android:name=".framework.ui.welcome.WelcomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SnailPlayer.Welcome" />
+        <activity
+            android:name=".framework.ui.play.PlayActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/PlayActivityTheme"
+            android:hardwareAccelerated="false">
+        </activity>
     </application>
 
 </manifest>

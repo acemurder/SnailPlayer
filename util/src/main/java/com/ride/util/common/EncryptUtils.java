@@ -36,7 +36,8 @@ public final class EncryptUtils {
      * @return
      */
     public static String encryptWithSHA1(String str, String charsetName) {
-        if (!TextUtils.isEmpty(str))  return null;
+        if (TextUtils.isEmpty(str))
+            return null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA1");
             md.update(str.getBytes(charsetName));

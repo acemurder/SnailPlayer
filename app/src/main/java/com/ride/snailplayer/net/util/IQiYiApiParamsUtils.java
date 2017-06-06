@@ -15,6 +15,7 @@ import com.ride.util.common.NetworkUtils;
 import com.ride.util.common.SPUtils;
 import com.ride.util.common.ScreenUtils;
 import com.ride.util.common.Utils;
+import com.ride.util.log.Timber;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -172,6 +173,7 @@ public class IQiYiApiParamsUtils {
         }
         mDeviceID = IMEI + MAC + ANDROID_ID + SERIAL;
         mDeviceID = EncryptUtils.encryptWithSHA1(mDeviceID);
+        Timber.i(mDeviceID);
         if (!TextUtils.isEmpty(mDeviceID)) {
             SPUtils.getInstance().put(SP_DEVICE_ID, mDeviceID);
         }

@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp">
 
-            <android.support.v7.widget.AppCompatImageView
+            <ImageView
                     android:id="@+id/movie_image"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
