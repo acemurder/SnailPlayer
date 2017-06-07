@@ -5,7 +5,7 @@ package com.ride.util.common;
  * @since 2017/5/23.
  */
 
-public final class StringUtils {
+public final class  StringUtils {
 
     public StringUtils() {
         throw new UnsupportedOperationException("StringUtils can't be initialized");

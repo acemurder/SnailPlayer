@@ -1,13 +1,13 @@
-package com.ride.snailplayer.widget;
+package com.ride.snailplayer.widget.recyclerview;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Created by Stormouble on 16/5/7.
+ * @author Stormouble
+ * @since 16/5/7.
  */
-public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
+public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
     private int currentPage = 1;
 
@@ -19,18 +19,15 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
 
     private int visibleThreshold = 5;
 
-    private LinearLayoutManager mLinearLayoutManager;
-
-    public EndlessRecyclerViewScrollListener(LinearLayoutManager linearLayoutManager, int visibleThreshold) {
+    public EndlessRecyclerViewScrollListener(int visibleThreshold) {
         this.visibleThreshold = visibleThreshold;
-        mLinearLayoutManager = linearLayoutManager;
     }
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        int firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+        int firstVisibleItem = getFirstVisibleItemPos();
         int visibleItemCount = recyclerView.getChildCount();
-        int totalItemCount = mLinearLayoutManager.getItemCount();
+        int totalItemCount = getItemCount();
 
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
@@ -59,6 +56,10 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             loading = true;
         }
     }
+
+    public abstract int getFirstVisibleItemPos();
+
+    public abstract int getItemCount();
 
     public abstract void onLoadMore(int page, int totalItemCount);
 }

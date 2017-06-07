@@ -13,7 +13,7 @@ import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentMovieListBinding;
 import com.ride.snailplayer.framework.ui.home.adapter.VideoListAdapter;
 import com.ride.snailplayer.net.model.VideoInfo;
-import com.ride.snailplayer.widget.LoadMoreRecyclerViewListener;
+import com.ride.snailplayer.widget.recyclerview.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,17 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
         mBinding.videoList.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
         mBinding.videoList.setLayoutManager(gridLayoutManager);
-        mBinding.videoList.addOnScrollListener(new LoadMoreRecyclerViewListener(gridLayoutManager,5) {
+        mBinding.videoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(5) {
+            @Override
+            public int getFirstVisibleItemPos() {
+                return gridLayoutManager.findFirstVisibleItemPosition();
+            }
+
+            @Override
+            public int getItemCount() {
+                return gridLayoutManager.getItemCount();
+            }
+
             @Override
             public void onLoadMore(int page, int totalItemCount) {
                 presenter.loadVideoInfo(id,name,page,30);

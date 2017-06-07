@@ -34,18 +34,16 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
     }
 
     private void initView() {
-        adapter = new HomePagerAdapter(getSupportFragmentManager(),fragments,channelList);
+        adapter = new HomePagerAdapter(getSupportFragmentManager(), fragments, channelList);
         mBinding.homeViewPager.setAdapter(adapter);
         mBinding.homeTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mBinding.homeTabLayout.setupWithViewPager(mBinding.homeViewPager);
         mBinding.homeTabLayout.setTabsFromPagerAdapter(adapter);//给Tabs设置适配器
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     private void initFragment(List<Channel> channels) {
