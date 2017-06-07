@@ -47,5 +47,6 @@ ext {
                     "vLayout"                      : "com.alibaba.android:vlayout:1.0.6@aar",
                     "lottie"                       : "com.airbnb.android:lottie:2.0.0-rc1",
                     "smart-tab"                    : "com.ogaclejapan.smarttablayout:library:1.6.1@aar",
-                    "smart-tab-utils"              : "com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar"]
+                    "smart-tab-utils"              : "com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar",
+                    "rollviewpager"                : "com.jude:rollviewpager:1.4.6"]
 }
