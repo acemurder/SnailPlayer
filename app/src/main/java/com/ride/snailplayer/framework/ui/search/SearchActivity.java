@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -24,6 +25,9 @@ import com.ride.snailplayer.BR;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivitySearchBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
+import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItemAdapter;
+import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
+import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 
 public class SearchActivity extends BaseActivity {
 
@@ -31,7 +35,7 @@ public class SearchActivity extends BaseActivity {
 
     private String mQuery;
 
-    static void launchActivity(Activity activity) {
+    public static void launchActivity(Activity activity) {
         Intent intent = new Intent(activity, SearchActivity.class);
         activity.startActivity(intent);
     }
@@ -63,16 +67,35 @@ public class SearchActivity extends BaseActivity {
         Drawable up = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
         Toolbar toolbar = getToolbar();
         toolbar.setNavigationIcon(up);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateUpOrBack(SearchActivity.this, null);
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> navigateUpOrBack(SearchActivity.this, null));
     }
 
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mBinding.searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mBinding.searchView.setIconified(false);
+        // Set the query hint.
+        mBinding.searchView.setQueryHint("");
+        mBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchFor(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchFor(newText);
+                return true;
+            }
+        });
+        mBinding.searchView.setOnCloseListener(() -> {
+            doExitAnim(null);
+            return false;
+        });
+        if (!TextUtils.isEmpty(mQuery)) {
+            mBinding.searchView.setQuery(mQuery, false);
+        }
     }
 
     @Override

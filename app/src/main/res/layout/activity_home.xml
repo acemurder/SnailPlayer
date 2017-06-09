@@ -44,6 +44,7 @@
                             android:layout_centerVertical="true"
                             android:background="?selectableItemBackgroundBorderless"
                             android:onClick="@{()->homeActionHandler.onMenuAllChannelClick()}"
+                            android:src="@drawable/ic_menu"
                             app:lottie_fileName="menu.json"
                             app:lottie_autoPlay="false"
                             app:lottie_loop="false"
@@ -93,15 +94,16 @@
                     android:layout_height="48dp"
                     app:stl_indicatorColor="@color/theme_accent"
                     app:stl_indicatorThickness="3dp"
+                    app:stl_indicatorWidth="18dp"
+                    app:stl_indicatorCornerRadius="0dp"
+                    app:stl_indicatorWithoutPadding="true"
                     app:stl_overlineColor="@color/transparent"
                     app:stl_overlineThickness="0dp"
                     app:stl_underlineColor="@color/app_grey"
                     app:stl_underlineThickness="0.7dp"
                     app:stl_dividerColor="@color/transparent"
                     app:stl_dividerThickness="0dp"
-                    app:stl_defaultTabTextColor="@color/app_white"
-                    app:stl_defaultTabTextSize="14sp"
-                    app:stl_defaultTabBackground="?selectableItemBackgroundBorderless"
+                    app:stl_clickable="true"
                     app:stl_titleOffset="auto_center"/>
 
         </android.support.design.widget.AppBarLayout>

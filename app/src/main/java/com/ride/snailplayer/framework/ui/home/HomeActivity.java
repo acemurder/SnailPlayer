@@ -2,11 +2,14 @@ package com.ride.snailplayer.framework.ui.home;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -15,8 +18,10 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerIte
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
+import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
 
 import java.util.List;
@@ -48,11 +53,18 @@ public class HomeActivity extends BaseActivity {
             GradientTextView view = new GradientTextView(container.getContext());
             view.setText((String) adapter.getPageTitle(position));
             view.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-            int padding = ScreenUtils.dp2px(16);
-            view.setPadding(padding, padding, padding, padding);
+            int horizontalPadding = ScreenUtils.dp2px(8);
+            view.setPadding(horizontalPadding, 0, horizontalPadding, 0);
             return view;
+        });
+        mBinding.homeSmartTabLayout.setOnTabClickListener(new SmartTabLayout.OnTabClickListener() {
+            @Override
+            public void onTabClicked(int position) {
+                Timber.d("onTabClicked");
+                HomeActivity.this.changeTab(position);
+            }
         });
         mBinding.homeSmartTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -68,7 +80,7 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                changeTab((GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position), position);
+                changeTab(position);
             }
 
             @Override
@@ -98,13 +110,14 @@ public class HomeActivity extends BaseActivity {
                 mBinding.homeSmartTabLayout.setViewPager(mBinding.homeViewPager);
 
                 //设置第一个tab为选中状态
-                changeTab((GradientTextView) mBinding.homeSmartTabLayout.getTabAt(0), 0);
+                changeTab(0);
             }
         });
     }
 
-    private void changeTab(GradientTextView selectedTab, int position) {
-        selectedTab.setAlphaRatio(1f);
+    private void changeTab(int position) {
+        GradientTextView selected = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position);
+        selected.setAlphaRatio(1f);
 
         //reset其他tab
         for (int i = 0; i < mAdapter.getCount(); i++) {
@@ -120,10 +133,18 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void onMenuSearchClick() {
-
+        SearchActivity.launchActivity(this);
     }
 
     public void onMenuFileDownloadClick() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        startActivity(home);
     }
 }

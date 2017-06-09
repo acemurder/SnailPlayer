@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.FloatRange;
@@ -80,8 +79,6 @@ public class GradientTextView extends View {
         if (!TextUtils.isEmpty(mText)) {
             mSourceTextPaint.getTextBounds(mText, 0, mText.length(), mTextRect);
         }
-
-        setBackgroundColor(Color.DKGRAY);
     }
 
     @Override
@@ -133,9 +130,10 @@ public class GradientTextView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        float x = getPaddingLeft();
-        float y = (getHeight() + getPaddingTop() - getPaddingBottom() -
-                (mSourceTextPaint.ascent() + mSourceTextPaint.descent())) / 2;
+        int width = getWidth() - getPaddingLeft() - getPaddingRight();
+        int height = getHeight() - getPaddingTop() - getPaddingBottom();
+        int x = getPaddingLeft() + (width / 2 - mTextRect.width() / 2);
+        int y = getPaddingTop() + (int) (height / 2 - (mSourceTextPaint.ascent() + mSourceTextPaint.descent()) / 2);
 
         mSourceTextPaint.setAlpha((int) (255 - 255 * mAlphaRatio));
         canvas.drawText(mText, x, y, mSourceTextPaint);
