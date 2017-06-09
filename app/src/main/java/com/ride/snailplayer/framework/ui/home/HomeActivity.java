@@ -57,7 +57,7 @@ public class HomeActivity extends BaseActivity {
 
             //设置点击效果
             TypedValue outValue = new TypedValue();
-            getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,
+            getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
                     outValue, true);
             view.setBackgroundResource(outValue.resourceId);
 

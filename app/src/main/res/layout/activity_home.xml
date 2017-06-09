@@ -72,7 +72,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@+id/home_iv_search"
-                            android:layout_marginRight="@dimen/padding_normal"
+                            android:layout_marginRight="24dp"
                             android:layout_centerVertical="true"
                             android:clickable="true"
                             android:src="@drawable/ic_file_download"
