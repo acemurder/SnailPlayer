@@ -21,42 +21,51 @@
         <android.support.design.widget.AppBarLayout
                 android:id="@+id/home_appbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary">
 
             <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
                     app:theme="@style/ActionBarThemeOverlay"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
+                    app:contentInsetStart="0dp">
 
                 <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                    <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/home_menu"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginRight="16dp"
+                    <ImageView
+                            android:id="@+id/iv_menu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:onClick="@{()->homeActionHandler.onMenuAllChannelClick()}"
+                            android:layout_marginRight="8dp"
+                            android:paddingLeft="-14dp"
                             android:src="@drawable/ic_menu"
-                            app:lottie_fileName="menu.json"
-                            app:lottie_autoPlay="false"
-                            app:lottie_loop="false"
-                            app:lottie_colorFilter="@color/app_white"/>
+                            android:contentDescription="@null"/>
 
                     <com.ride.snailplayer.widget.CircleImageView
                             android:id="@+id/home_iv_avatar"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:layout_toRightOf="@+id/iv_menu"
+                            android:layout_marginLeft="@dimen/spacing_normal"
                             android:layout_centerVertical="true"
-                            android:layout_toRightOf="@+id/home_menu"
                             android:src="@drawable/profile"/>
+
+                    <TextView
+                            android:id="@+id/home_tv_login_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/home_iv_avatar"
+                            android:layout_marginLeft="10dp"
+                            android:text="未登录"
+                            android:textSize="16sp"
+                            android:textColor="@color/app_white"/>
 
                     <ImageView
                             android:id="@+id/home_iv_download"

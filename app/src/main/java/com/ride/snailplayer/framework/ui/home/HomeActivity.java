@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
+import android.util.TypedValue;
 import android.widget.LinearLayout;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -55,7 +55,14 @@ public class HomeActivity extends BaseActivity {
             view.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-            int horizontalPadding = ScreenUtils.dp2px(8);
+            //设置点击效果
+            TypedValue outValue = new TypedValue();
+            getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,
+                    outValue, true);
+            view.setBackgroundResource(outValue.resourceId);
+
+            //设置padding
+            int horizontalPadding = ScreenUtils.dp2px(10);
             view.setPadding(horizontalPadding, 0, horizontalPadding, 0);
             return view;
         });
