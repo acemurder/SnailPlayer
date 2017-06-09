@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -33,6 +32,8 @@ public class HomeActivity extends BaseActivity {
     private LiveData<List<Channel>> mPreloadChannelList;
     private FragmentStatePagerItemAdapter mAdapter;
     private FragmentPagerItems mItems = FragmentPagerItems.with(this).create();
+
+    private boolean mIsTabClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +67,15 @@ public class HomeActivity extends BaseActivity {
             view.setPadding(horizontalPadding, 0, horizontalPadding, 0);
             return view;
         });
-        mBinding.homeSmartTabLayout.setOnTabClickListener(new SmartTabLayout.OnTabClickListener() {
-            @Override
-            public void onTabClicked(int position) {
-                Timber.d("onTabClicked");
-                HomeActivity.this.changeTab(position);
-            }
+        mBinding.homeSmartTabLayout.setOnTabClickListener(position -> {
+            mIsTabClicked = true;
+            changeTab(position);
         });
         mBinding.homeSmartTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (positionOffset != 0) {
+                Timber.d("onPageScrolled");
+                if (positionOffset != 0 && !mIsTabClicked) {
                     //渐变tab颜色
                     GradientTextView left = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position);
                     GradientTextView right = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position + 1);
@@ -92,6 +91,9 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                if (mIsTabClicked && state == ViewPager.SCROLL_STATE_IDLE) {
+                    mIsTabClicked = false;
+                }
             }
         });
 
@@ -133,10 +135,6 @@ public class HomeActivity extends BaseActivity {
                 tab.setAlphaRatio(0f);
             }
         }
-    }
-
-    public void onMenuAllChannelClick() {
-
     }
 
     public void onMenuSearchClick() {

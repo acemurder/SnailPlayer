@@ -103,7 +103,6 @@
                     android:layout_height="48dp"
                     app:stl_indicatorColor="@color/theme_accent"
                     app:stl_indicatorThickness="3dp"
-                    app:stl_indicatorWidth="18dp"
                     app:stl_indicatorCornerRadius="0dp"
                     app:stl_indicatorWithoutPadding="true"
                     app:stl_overlineColor="@color/transparent"
