@@ -1,113 +1,129 @@
 package com.ride.snailplayer.framework.ui.home;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import android.support.v4.view.ViewPager;
+import android.widget.LinearLayout;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
-import com.ride.snailplayer.framework.ui.home.adapter.HomePagerAdapter;
+import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItem;
+import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
+import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
-import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.Channel;
-import com.ride.util.log.Timber;
+import com.ride.snailplayer.widget.GradientTextView;
+import com.ride.util.common.util.ScreenUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 
 public class HomeActivity extends BaseActivity {
 
     private ActivityHomeBinding mBinding;
-    private List<Fragment> fragments = new ArrayList<>();
-    private HomePagerAdapter adapter;
-    private List<Channel> channelList = new ArrayList<>();
+    private HomeViewModel mHomeViewModel;
+    private LiveData<List<Channel>> mPreloadChannelList;
+    private FragmentStatePagerItemAdapter mAdapter;
+    private FragmentPagerItems mItems = FragmentPagerItems.with(this).create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-        initView();
-        initData();
+        mBinding.setHomeActionHandler(this);
+        mHomeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+
+        setupTab();
     }
 
-    private void initView() {
-        adapter = new HomePagerAdapter(getSupportFragmentManager(), fragments, channelList);
-        mBinding.homeViewPager.setAdapter(adapter);
-        mBinding.homeTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        mBinding.homeTabLayout.setupWithViewPager(mBinding.homeViewPager);
-        mBinding.homeTabLayout.setTabsFromPagerAdapter(adapter);//给Tabs设置适配器
-    }
+    private void setupTab() {
+        mItems = FragmentPagerItems.with(this).create();
+        mAdapter = new FragmentStatePagerItemAdapter(getSupportFragmentManager(), mItems);
+        mBinding.homeViewPager.setAdapter(mAdapter);
 
-    private void initData() {
-        Observable<List<Channel>> observable = Observable.create(new ObservableOnSubscribe<List<Channel>>() {
+        mBinding.homeSmartTabLayout.setCustomTabView((container, position, adapter) -> {
+            GradientTextView view = new GradientTextView(container.getContext());
+            view.setText((String) adapter.getPageTitle(position));
+            view.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            int padding = ScreenUtils.dp2px(16);
+            view.setPadding(padding, padding, padding, padding);
+            return view;
+        });
+        mBinding.homeSmartTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<List<Channel>> e) throws Exception {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("channel.json")));
-                StringBuilder builder = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null)
-                    builder.append(line);
-                reader.close();
-                Timber.i(Thread.currentThread().getName());
-                List<Channel> channels = new Gson().fromJson(builder.toString(), new TypeToken<List<Channel>>() {
-                }.getType());
-                e.onNext(channels);
-                e.onComplete();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (positionOffset != 0) {
+                    //渐变tab颜色
+                    GradientTextView left = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position);
+                    GradientTextView right = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position + 1);
+                    left.setAlphaRatio(1 - positionOffset);
+                    right.setAlphaRatio(positionOffset);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                changeTab((GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position), position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
             }
         });
-        observable.compose(MainThreadObservableTransformer.instance()).subscribe(new Consumer<List<Channel>>() {
-            @Override
-            public void accept(@NonNull List<Channel> channels) throws Exception {
-                initFragment(channels);
-            }
-        });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void initFragment(List<Channel> channels) {
-        Channel channel = new Channel();
-        channel.name = "推荐";
-        channel.describe = "推荐";
-        channel.id = "0";
-        channelList.add(channel);
-        mBinding.homeTabLayout.addTab(mBinding.homeTabLayout.newTab().setText(channel.name));
-        channelList.addAll(channels);
-        fragments.add(new RecommendFragment());
-        adapter.notifyDataSetChanged();
-        for (Channel c : channels) {
-            mBinding.homeTabLayout.addTab(mBinding.homeTabLayout.newTab().setText(c.name));
-            MovieListFragment fragment = new MovieListFragment();
+        mPreloadChannelList = mHomeViewModel.getPreloadChannelList();
+        mPreloadChannelList.observe(this, channels -> {
             Bundle bundle = new Bundle();
-            bundle.putString("id", c.id);
-            bundle.putString("name", c.name);
-            Timber.i(c.name);
-            fragment.setArguments(bundle);
-            fragments.add(fragment);
+            if (channels != null && !channels.isEmpty()) {
+                //添加推荐tab页
+                Channel recommendChannel = channels.get(0);
+                bundle.putString("id", recommendChannel.id);
+                bundle.putString("name", recommendChannel.name);
+                mItems.add(FragmentPagerItem.of(recommendChannel.name, RecommendFragment.class, bundle));
+
+                //添加其他tab页
+                for (int i = 1; i < channels.size(); i++) {
+                    Channel channel = channels.get(i);
+                    bundle = new Bundle();
+                    bundle.putString("id", channel.id);
+                    bundle.putString("name", channel.name);
+                    mItems.add(FragmentPagerItem.of(channel.name, MovieListFragment.class, bundle));
+                }
+                mAdapter.notifyDataSetChanged();
+                mBinding.homeSmartTabLayout.setViewPager(mBinding.homeViewPager);
+
+                //设置第一个tab为选中状态
+                changeTab((GradientTextView) mBinding.homeSmartTabLayout.getTabAt(0), 0);
+            }
+        });
+    }
+
+    private void changeTab(GradientTextView selectedTab, int position) {
+        selectedTab.setAlphaRatio(1f);
+
+        //reset其他tab
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            if (i != position) {
+                GradientTextView tab = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(i);
+                tab.setAlphaRatio(0f);
+            }
         }
-        adapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onMenuAllChannelClick() {
+
     }
 
+    public void onMenuSearchClick() {
+
+    }
+
+    public void onMenuFileDownloadClick() {
+
+    }
 }

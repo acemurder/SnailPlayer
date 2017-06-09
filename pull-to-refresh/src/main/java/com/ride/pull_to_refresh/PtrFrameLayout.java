@@ -302,7 +302,6 @@ public class PtrFrameLayout extends ViewGroup {
                 } else {
                     return dispatchTouchEventSupper(e);
                 }
-
             case MotionEvent.ACTION_DOWN:
                 mHasSendCancelEvent = false;
                 mPtrIndicator.onPressDown(e.getX(), e.getY());

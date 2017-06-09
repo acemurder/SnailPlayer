@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_giv_source_text_color">#FFFEFEFE</color>
+    <color name="default_giv_target_text_color">#FFFFC107</color>
+    <dimen name="default_giv_text_size">14sp</dimen>
+</resources>

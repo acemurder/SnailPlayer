@@ -41,12 +41,13 @@ ext {
                     "easypermissions"              : "pub.devrel:easypermissions:0.4.0",
                     "umeng"                        : "com.umeng.analytics:analytics:latest.integration",
 
+                    "joda-time"                    : "joda-time:joda-time:2.9.9",
+
                     "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.3",
                     "material-dialog"              : "com.afollestad.material-dialogs:core:0.9.4.5",
                     "ucrop"                        : "com.github.yalantis:ucrop:2.2.1",
                     "vLayout"                      : "com.alibaba.android:vlayout:1.0.6@aar",
                     "lottie"                       : "com.airbnb.android:lottie:2.0.0-rc1",
                     "smart-tab"                    : "com.ogaclejapan.smarttablayout:library:1.6.1@aar",
-                    "smart-tab-utils"              : "com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar",
                     "rollviewpager"                : "com.jude:rollviewpager:1.4.6"]
 }

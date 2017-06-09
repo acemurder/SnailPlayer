@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.ride.snailplayer.framework.event.NetworkFlowEvent;
 import com.ride.snailplayer.framework.event.NetworkNoEvent;
 import com.ride.snailplayer.framework.event.NetworkWifiEvent;
-import com.ride.util.common.NetworkUtils;
+import com.ride.util.common.util.NetworkUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GradientTextView">
+        <attr name="gtv_source_text_color" format="color"/>
+        <attr name="gtv_target_text_color" format="color"/>
+        <attr name="gtv_text" format="string|reference"/>
+        <attr name="gtv_text_size" format="dimension"/>
+        <attr name="gtv_alpha_ratio" format="float"/>
+    </declare-styleable>
+</resources>

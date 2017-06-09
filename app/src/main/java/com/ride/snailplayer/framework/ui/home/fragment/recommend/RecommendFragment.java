@@ -16,7 +16,7 @@ import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.RecommendItem;
 import com.ride.snailplayer.net.model.VideoInfo;
 import com.ride.snailplayer.net.util.IQiYiApiParamsUtils;
-import com.ride.util.log.Timber;
+import com.ride.util.common.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;

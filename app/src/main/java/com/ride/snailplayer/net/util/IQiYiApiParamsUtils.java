@@ -7,15 +7,15 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.ride.snailplayer.common.config.SnailPlayerConfig;
-import com.ride.util.common.AppUtils;
-import com.ride.util.common.DeviceUtils;
-import com.ride.util.common.EncodeUtils;
-import com.ride.util.common.EncryptUtils;
-import com.ride.util.common.NetworkUtils;
-import com.ride.util.common.SPUtils;
-import com.ride.util.common.ScreenUtils;
-import com.ride.util.common.Utils;
-import com.ride.util.log.Timber;
+import com.ride.util.common.util.AppUtils;
+import com.ride.util.common.util.DeviceUtils;
+import com.ride.util.common.util.EncodeUtils;
+import com.ride.util.common.util.EncryptUtils;
+import com.ride.util.common.util.NetworkUtils;
+import com.ride.util.common.util.SPUtils;
+import com.ride.util.common.util.ScreenUtils;
+import com.ride.util.common.util.Utils;
+import com.ride.util.common.log.Timber;
 
 import org.json.JSONException;
 import org.json.JSONObject;

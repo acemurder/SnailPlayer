@@ -3,4 +3,8 @@
 
     <!-- Label for Search screen, that allows users to search for videos. -->
     <string name="title_search">查找</string>
+
+    <!--Home menu-->
+    <string name="menu_search">@string/title_search</string>
+    <string name="menu_file_download">下载</string>
 </resources>

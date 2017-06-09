@@ -1,50 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".framework.ui.home.activity.HomeActivity">
+        <variable
+                name="homeActionHandler"
+                type="com.ride.snailplayer.framework.ui.home.HomeActivity"/>
+
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="RtlHardcoded"
+            tools:context=".framework.ui.home.activity.HomeActivity">
 
         <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:id="@+id/home_appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/home_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:theme="@style/ActionBarThemeOverlay"
+                    app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                    app:layout_scrollFlags="scroll|enterAlways">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/home_tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabIndicatorColor="@color/app_white"
-                app:tabTextColor="@color/app_lighter_gray"
-                app:tabSelectedTextColor="@color/app_white"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/home_menu"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_centerVertical="true"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:onClick="@{()->homeActionHandler.onMenuAllChannelClick()}"
+                            app:lottie_fileName="menu.json"
+                            app:lottie_autoPlay="false"
+                            app:lottie_loop="false"
+                            app:lottie_colorFilter="@color/app_white"/>
+
+                    <com.ride.snailplayer.widget.CircleImageView
+                            android:id="@+id/home_iv_avatar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/home_menu"
+                            android:src="@drawable/profile"/>
+
+                    <ImageView
+                            android:id="@+id/home_iv_download"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/home_iv_search"
+                            android:layout_marginRight="@dimen/padding_normal"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:src="@drawable/ic_file_download"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/menu_file_download"
+                            android:onClick="@{()->homeActionHandler.onMenuFileDownloadClick()}"/>
+
+                    <ImageView
+                            android:id="@+id/home_iv_search"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/padding_normal"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
+                            android:src="@drawable/ic_search"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/menu_search"
+                            android:onClick="@{()->homeActionHandler.onMenuSearchClick()}"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout
+                    android:id="@+id/home_smart_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    app:stl_indicatorColor="@color/theme_accent"
+                    app:stl_indicatorThickness="3dp"
+                    app:stl_overlineColor="@color/transparent"
+                    app:stl_overlineThickness="0dp"
+                    app:stl_underlineColor="@color/app_grey"
+                    app:stl_underlineThickness="0.7dp"
+                    app:stl_dividerColor="@color/transparent"
+                    app:stl_dividerThickness="0dp"
+                    app:stl_defaultTabTextColor="@color/app_white"
+                    app:stl_defaultTabTextSize="14sp"
+                    app:stl_defaultTabBackground="?selectableItemBackgroundBorderless"
+                    app:stl_titleOffset="auto_center"/>
+
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/home_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        </android.support.v4.view.ViewPager>
-        <!--<android.support.v4.widget.NestedScrollView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-           <!--&gt;-->
-           <!---->
-        <!--</android.support.v4.widget.NestedScrollView>-->
+                android:id="@+id/home_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

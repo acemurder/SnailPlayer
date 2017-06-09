@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ride.pull_to_refresh.PtrDefaultHandler;
+import com.ride.pull_to_refresh.PtrFrameLayout;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentMovieListBinding;
 import com.ride.snailplayer.framework.ui.home.adapter.VideoListAdapter;
@@ -49,8 +51,6 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
         presenter = new VideoListPresenter(this);
         init();
         presenter.loadVideoInfo(id,name,1,30);
-
-
     }
 
     private void init() {
@@ -61,10 +61,10 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
         }
         mAdapter = new VideoListAdapter(R.layout.item_movie, videoInfoList, this);
         mAdapter.setListener((videoInfo -> PlayActivity.launchActivity(getActivity(),videoInfo)));
-        mBinding.videoList.setAdapter(mAdapter);
+        mBinding.rvVideoList.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
-        mBinding.videoList.setLayoutManager(gridLayoutManager);
-        mBinding.videoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(5) {
+        mBinding.rvVideoList.setLayoutManager(gridLayoutManager);
+        mBinding.rvVideoList.addOnScrollListener(new EndlessRecyclerViewScrollListener(5) {
             @Override
             public int getFirstVisibleItemPos() {
                 return gridLayoutManager.findFirstVisibleItemPosition();
@@ -82,10 +82,12 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
         });
 
        // loadData(1,50);
-        mBinding.refreshLayout.setOnRefreshListener(()->{
-           // loadData(1,50);
-            refresh = true;
-            presenter.loadVideoInfo(id,name,1,30);
+        mBinding.ptrRefreshLayout.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                refresh = true;
+                presenter.loadVideoInfo(id,name,1,30);
+            }
         });
     }
 
@@ -97,12 +99,12 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
 
     @Override
     public void showProgress() {
-        mBinding.refreshLayout.setRefreshing(true);
+        mBinding.ptrRefreshLayout.autoRefresh();
     }
 
     @Override
     public void stopProgress() {
-        mBinding.refreshLayout.setRefreshing(false);
+        mBinding.ptrRefreshLayout.refreshComplete();
     }
 
     @Override

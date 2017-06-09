@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.ride.snailplayer.net.model.VideoInfo;
-import com.ride.util.log.Timber;
+import com.ride.util.common.log.Timber;
 
 import java.util.List;
 

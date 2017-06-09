@@ -8,7 +8,7 @@ import com.ride.snailplayer.databinding.ItemMovieBinding;
 import com.ride.snailplayer.framework.base.adapter.databinding.DataBoundAdapter;
 import com.ride.snailplayer.framework.base.adapter.databinding.DataBoundViewHolder;
 import com.ride.snailplayer.net.model.VideoInfo;
-import com.ride.snailplayer.widget.ItemClickListener;
+import com.ride.snailplayer.framework.event.listener.ItemClickListener;
 
 import java.util.List;
 

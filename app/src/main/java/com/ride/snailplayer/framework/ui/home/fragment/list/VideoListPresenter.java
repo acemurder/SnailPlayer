@@ -6,7 +6,7 @@ import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.ChannelDetail;
 import com.ride.snailplayer.net.model.Resource;
 import com.ride.snailplayer.net.util.IQiYiApiParamsUtils;
-import com.ride.util.log.Timber;
+import com.ride.util.common.log.Timber;
 
 import org.apache.http.conn.ConnectTimeoutException;
 

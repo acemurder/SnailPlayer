@@ -2,7 +2,7 @@ package com.ride.snailplayer.net;
 
 import com.ride.snailplayer.common.config.SnailPlayerConfig;
 import com.ride.snailplayer.net.service.IQiYiApiService;
-import com.ride.util.common.AppUtils;
+import com.ride.util.common.util.AppUtils;
 
 import java.util.concurrent.TimeUnit;
 

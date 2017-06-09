@@ -4,9 +4,9 @@ import android.app.Application;
 
 import com.qiyi.video.playcore.QiyiVideoView;
 import com.ride.snailplayer.common.config.SnailPlayerConfig;
-import com.ride.util.common.AppUtils;
-import com.ride.util.common.Utils;
-import com.ride.util.log.Timber;
+import com.ride.util.common.util.AppUtils;
+import com.ride.util.common.util.Utils;
+import com.ride.util.common.log.Timber;
 import com.umeng.analytics.MobclickAgent;
 
 /**

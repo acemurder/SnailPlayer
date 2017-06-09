@@ -15,9 +15,9 @@ import java.util.List;
  * Enjoy it !!!
  */
 public class HomePagerAdapter  extends FragmentStatePagerAdapter {
+
     private List<Fragment> fragments;
     private List<Channel> channels;
-
 
     public HomePagerAdapter(FragmentManager fm, List<Fragment> fragments, List<Channel> channels) {
         super(fm);

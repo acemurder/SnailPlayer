@@ -7,8 +7,6 @@ import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import com.ride.util.log.Timber;
-
 /**
  * @author Stormouble
  * @since 2017/5/24.

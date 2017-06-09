@@ -132,7 +132,6 @@ public class VideoPlayView extends RelativeLayout {
 
     }
 
-
     private void initView() {
         LayoutInflater.from(mContext).inflate(R.layout.video_play_view, this);
         mControlLayout = (LinearLayout) findViewById(R.id.video_controller);
@@ -268,17 +267,12 @@ public class VideoPlayView extends RelativeLayout {
     public void onScreenSizeChanged(int width, int height, boolean fullScreen) {
         mVideoView.setVideoViewSize(width, height, fullScreen);
         mFullScreenImage.setBackgroundResource(R.drawable.ic_fullscreen_exit);
-
-
-
-
     }
 
     public void onScreenSizeChanged(int width, int height) {
         mVideoView.setVideoViewSize(width, height);
         mFullScreenImage.setBackgroundResource(R.drawable.ic_fullscreen);
     }
-
 
     public QiyiVideoView getmVideoView() {
         return mVideoView;
