@@ -30,7 +30,7 @@ import io.reactivex.functions.Function;
 
 public class HomeViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Channel>> mPreloadChannelList
+    private final MutableLiveData<List<Channel>> mPreloadChannelList
             = new MutableLiveData<>();
 
     public HomeViewModel(Application application) {
@@ -64,7 +64,6 @@ public class HomeViewModel extends AndroidViewModel {
                     }
                 })
                 .compose(MainThreadObservableTransformer.<ArrayList<Channel>>instance())
-                .filter(channels -> !channels.isEmpty())
                 .subscribe(channels -> mPreloadChannelList.setValue(channels), Timber::d);
     }
 

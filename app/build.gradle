@@ -133,5 +133,5 @@ dependencies {
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util')
-    compile project(':pull-to-refresh')
+    compile project(':smooth-refresh-lib')
 }

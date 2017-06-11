@@ -3,16 +3,14 @@ package com.ride.snailplayer.framework.ui.home.fragment.list;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ride.pull_to_refresh.PtrDefaultHandler;
-import com.ride.pull_to_refresh.PtrFrameLayout;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentMovieListBinding;
+import com.ride.snailplayer.framework.base.BaseFragment;
 import com.ride.snailplayer.framework.ui.home.adapter.VideoListAdapter;
 import com.ride.snailplayer.framework.ui.play.PlayActivity;
 import com.ride.snailplayer.net.model.VideoInfo;
@@ -21,6 +19,8 @@ import com.ride.snailplayer.widget.recyclerview.EndlessRecyclerViewScrollListene
 import java.util.ArrayList;
 import java.util.List;
 
+import me.dkzwm.smoothrefreshlayout.SmoothRefreshLayout;
+
 /**
  * Created by ：AceMurder
  * Created on ：2017/5/31
@@ -28,7 +28,7 @@ import java.util.List;
  * Enjoy it !!!
  */
 
-public class MovieListFragment extends Fragment implements VideoListContract.View {
+public class MovieListFragment extends BaseFragment implements VideoListContract.View {
     FragmentMovieListBinding mBinding;
     private String id;
     private String name;
@@ -81,12 +81,16 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
             }
         });
 
-       // loadData(1,50);
-        mBinding.ptrRefreshLayout.setPtrHandler(new PtrDefaultHandler() {
+        mBinding.smoothRefreshLayout.setOnRefreshListener(new SmoothRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
+            public void onRefreshBegin(boolean isRefresh) {
                 refresh = true;
                 presenter.loadVideoInfo(id,name,1,30);
+            }
+
+            @Override
+            public void onRefreshComplete() {
+
             }
         });
     }
@@ -99,12 +103,12 @@ public class MovieListFragment extends Fragment implements VideoListContract.Vie
 
     @Override
     public void showProgress() {
-        mBinding.ptrRefreshLayout.autoRefresh();
+        mBinding.smoothRefreshLayout.autoRefresh();
     }
 
     @Override
     public void stopProgress() {
-        mBinding.ptrRefreshLayout.refreshComplete();
+        mBinding.smoothRefreshLayout.refreshComplete();
     }
 
     @Override

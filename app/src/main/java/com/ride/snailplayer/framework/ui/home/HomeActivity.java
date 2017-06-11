@@ -20,7 +20,6 @@ import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragme
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
-import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
 
 import java.util.List;
@@ -74,7 +73,6 @@ public class HomeActivity extends BaseActivity {
         mBinding.homeSmartTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Timber.d("onPageScrolled");
                 if (positionOffset != 0 && !mIsTabClicked) {
                     //渐变tab颜色
                     GradientTextView left = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position);
