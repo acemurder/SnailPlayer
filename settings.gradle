@@ -1,1 +1,1 @@
-include ':app', ':util', 'smooth-refresh-lib'
+include ':app', ':util', ':bmoblib', 'smooth-refresh-lib'

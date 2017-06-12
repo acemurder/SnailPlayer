@@ -21,6 +21,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**
@@ -64,7 +65,7 @@ public class HomeViewModel extends AndroidViewModel {
                     }
                 })
                 .compose(MainThreadObservableTransformer.<ArrayList<Channel>>instance())
-                .subscribe(channels -> mPreloadChannelList.setValue(channels), Timber::d);
+                .subscribe(mPreloadChannelList::setValue, ignored -> {});
     }
 
     public LiveData<List<Channel>> getPreloadChannelList() {

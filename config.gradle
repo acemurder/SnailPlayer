@@ -41,8 +41,11 @@ ext {
                     "easypermissions"              : "pub.devrel:easypermissions:0.4.0",
                     "umeng"                        : "com.umeng.analytics:analytics:latest.integration",
 
-                    "joda-time"                    : "joda-time:joda-time:2.9.9",
+                    "bmob-sdk"                     : "cn.bmob.android:bmob-sdk:3.5.5",
+                    "bmob-push"                    : "cn.bmob.android:bmob-push:0.8",
+                    "bmob-campat"                  : "cn.bmob.android:http-legacy:1.0",
 
+                    "joda-time"                    : "joda-time:joda-time:2.9.9",
                     "photoview"                    : "com.github.chrisbanes.photoview:library:1.2.3",
                     "material-dialog"              : "com.afollestad.material-dialogs:core:0.9.4.5",
                     "ucrop"                        : "com.github.yalantis:ucrop:2.2.1",

@@ -3,6 +3,7 @@ package com.ride.snailplayer.framework.ui.home.fragment.list;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,11 @@ public class MovieListFragment extends BaseFragment implements VideoListContract
     private boolean refresh = false;
     private VideoListContract.Presenter presenter;
 
+    public static Fragment newInstance(Bundle bundle) {
+        MovieListFragment f = new MovieListFragment();
+        f.setArguments(bundle);
+        return f;
+    }
 
     @Nullable
     @Override

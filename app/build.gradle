@@ -78,6 +78,7 @@ android {
         abortOnError false
     }
     packagingOptions {
+        exclude 'META-INF/rxjava.properties'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
@@ -119,7 +120,6 @@ dependencies {
     compile rootProject.ext.dependencies["gson"]
     compile rootProject.ext.dependencies["eventbus"]
     compile rootProject.ext.dependencies["easypermissions"]
-    compile rootProject.ext.dependencies["umeng"]
 
     compile rootProject.ext.dependencies["material-dialog"]
     compile rootProject.ext.dependencies["photoview"]
@@ -129,9 +129,11 @@ dependencies {
     }
     compile rootProject.ext.dependencies["lottie"]
     compile rootProject.ext.dependencies["smart-tab"]
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     compile rootProject.ext.dependencies["rollviewpager"]
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util')
     compile project(':smooth-refresh-lib')
+    //compile project(':bmoblib')
 }

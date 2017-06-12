@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.framework.ui.welcome.WelcomeActivity;
-import com.umeng.analytics.MobclickAgent;
 
 
 /**
@@ -56,13 +55,11 @@ public class BaseActivity extends AppCompatActivity implements LifecycleRegistry
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     @Override

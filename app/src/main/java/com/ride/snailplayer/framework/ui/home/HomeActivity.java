@@ -5,23 +5,32 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
-import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItem;
-import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
-import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
+//import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItem;
+//import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
+//import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity {
@@ -45,10 +54,6 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void setupTab() {
-        mItems = FragmentPagerItems.with(this).create();
-        mAdapter = new FragmentStatePagerItemAdapter(getSupportFragmentManager(), mItems);
-        mBinding.homeViewPager.setAdapter(mAdapter);
-
         mBinding.homeSmartTabLayout.setCustomTabView((container, position, adapter) -> {
             GradientTextView view = new GradientTextView(container.getContext());
             view.setText((String) adapter.getPageTitle(position));
@@ -95,6 +100,8 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
+        List<Fragment> fragmentList = new ArrayList<>();
+
         mPreloadChannelList = mHomeViewModel.getPreloadChannelList();
         mPreloadChannelList.observe(this, channels -> {
             Bundle bundle = new Bundle();
@@ -103,23 +110,32 @@ public class HomeActivity extends BaseActivity {
                 Channel recommendChannel = channels.get(0);
                 bundle.putString("id", recommendChannel.id);
                 bundle.putString("name", recommendChannel.name);
-                mItems.add(FragmentPagerItem.of(recommendChannel.name, RecommendFragment.class, bundle));
-
+                //mItems.add(FragmentPagerItem.of(recommendChannel.name, RecommendFragment.class, bundle));
+                RecommendFragment rf = new RecommendFragment();
+                rf.setArguments(bundle);
+                fragmentList.add(rf);
                 //添加其他tab页
                 for (int i = 1; i < channels.size(); i++) {
                     Channel channel = channels.get(i);
                     bundle = new Bundle();
                     bundle.putString("id", channel.id);
                     bundle.putString("name", channel.name);
-                    mItems.add(FragmentPagerItem.of(channel.name, MovieListFragment.class, bundle));
+
+                    MovieListFragment mlf = new MovieListFragment();
+                    mlf.setArguments(bundle);
+                    //mItems.add(FragmentPagerItem.of(channel.name, MovieListFragment.class, bundle));
+                    fragmentList.add(mlf);
                 }
-                mAdapter.notifyDataSetChanged();
-                mBinding.homeSmartTabLayout.setViewPager(mBinding.homeViewPager);
+
+                //mBinding.homeSmartTabLayout.setViewPager(mBinding.homeViewPager);
 
                 //设置第一个tab为选中状态
-                changeTab(0);
+                //changeTab(0);
             }
         });
+        TestFragmentAdapter adapter = new TestFragmentAdapter(getSupportFragmentManager(), fragmentList);
+
+        mBinding.homeViewPager.setAdapter(adapter);
     }
 
     private void changeTab(int position) {
@@ -149,5 +165,28 @@ public class HomeActivity extends BaseActivity {
         home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         home.addCategory(Intent.CATEGORY_HOME);
         startActivity(home);
+    }
+
+    private class TestFragmentAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> mFragmentList;
+
+        public TestFragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+            super(fm);
+            mFragmentList = fragmentList;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", "1");
+            bundle.putString("name", "电视剧");
+            return MovieListFragment.newInstance(bundle);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
     }
 }
