@@ -2,6 +2,7 @@ package com.ride.snailplayer.framework.ui.home.fragment.list;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.dkzwm.smoothrefreshlayout.SmoothRefreshLayout;
+import me.dkzwm.smoothrefreshlayout.extra.header.LottieHeader;
+
 
 /**
  * Created by ：AceMurder
@@ -37,12 +40,6 @@ public class MovieListFragment extends BaseFragment implements VideoListContract
     private List<VideoInfo> videoInfoList = new ArrayList<>();
     private boolean refresh = false;
     private VideoListContract.Presenter presenter;
-
-    public static Fragment newInstance(Bundle bundle) {
-        MovieListFragment f = new MovieListFragment();
-        f.setArguments(bundle);
-        return f;
-    }
 
     @Nullable
     @Override
@@ -87,11 +84,16 @@ public class MovieListFragment extends BaseFragment implements VideoListContract
             }
         });
 
+
         mBinding.smoothRefreshLayout.setOnRefreshListener(new SmoothRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefreshBegin(boolean isRefresh) {
-                refresh = true;
-                presenter.loadVideoInfo(id,name,1,30);
+            public void onRefreshBegin(final boolean isRefresh) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBinding.smoothRefreshLayout.refreshComplete();
+                    }
+                }, 2000);
             }
 
             @Override
@@ -99,6 +101,19 @@ public class MovieListFragment extends BaseFragment implements VideoListContract
 
             }
         });
+
+//        mBinding.smoothRefreshLayout.setOnRefreshListener(new SmoothRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefreshBegin(boolean isRefresh) {
+//                refresh = true;
+//                presenter.loadVideoInfo(id,name,1,30);
+//            }
+//
+//            @Override
+//            public void onRefreshComplete() {
+//
+//            }
+//        });
     }
 
     @Override

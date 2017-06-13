@@ -2,13 +2,14 @@ package me.dkzwm.smoothrefreshlayout.extra.header;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import me.dkzwm.smoothrefreshlayout.R;
 import me.dkzwm.smoothrefreshlayout.SmoothRefreshLayout;
 import me.dkzwm.smoothrefreshlayout.extra.IRefreshView;
 import me.dkzwm.smoothrefreshlayout.indicator.IIndicator;
@@ -23,27 +24,23 @@ public class LottieHeader extends FrameLayout implements IRefreshView {
     private LottieAnimationView mLottieAnimationView;
 
     public LottieHeader(Context context) {
-        super(context);
+        this(context, null);
     }
 
-    public LottieHeader(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+    public LottieHeader(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public LottieHeader(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public LottieHeader(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        init();
     }
 
-    @Override
-    protected void onFinishInflate() {
-        int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(0);
-            if (child instanceof LottieAnimationView) {
-                mLottieAnimationView = (LottieAnimationView) child;
-            }
-        }
-        super.onFinishInflate();
+    private void init() {
+        View headerView = LayoutInflater.from(getContext()).inflate(R.layout.lottie_header, this);
+        mLottieAnimationView =
+                (LottieAnimationView) headerView.findViewById(R.id.smooth_refresh_animation_view);
     }
 
     @Override
@@ -59,31 +56,25 @@ public class LottieHeader extends FrameLayout implements IRefreshView {
 
     @Override
     public void onFingerUp(SmoothRefreshLayout layout, IIndicator indicator) {
-
     }
 
     @Override
     public void onReset(SmoothRefreshLayout layout) {
-
     }
 
     @Override
     public void onRefreshPrepare(SmoothRefreshLayout layout) {
-
     }
 
     @Override
     public void onRefreshBegin(SmoothRefreshLayout layout, IIndicator indicator) {
-
     }
 
     @Override
     public void onRefreshComplete(SmoothRefreshLayout layout) {
-
     }
 
     @Override
     public void onRefreshPositionChanged(SmoothRefreshLayout layout, byte status, IIndicator indicator) {
-
     }
 }

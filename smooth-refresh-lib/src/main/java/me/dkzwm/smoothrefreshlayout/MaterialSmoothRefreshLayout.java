@@ -3,8 +3,11 @@ package me.dkzwm.smoothrefreshlayout;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import me.dkzwm.smoothrefreshlayout.extra.footer.MaterialFooter;
+import me.dkzwm.smoothrefreshlayout.extra.header.LottieHeader;
 import me.dkzwm.smoothrefreshlayout.extra.header.MaterialHeader;
 import me.dkzwm.smoothrefreshlayout.utils.PixelUtl;
 

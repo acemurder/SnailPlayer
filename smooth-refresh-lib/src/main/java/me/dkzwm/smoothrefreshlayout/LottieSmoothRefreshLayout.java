@@ -30,8 +30,7 @@ public class LottieSmoothRefreshLayout extends SmoothRefreshLayout {
 
     private void initViews() {
         mMode = MODE_REFRESH;
-        mLottelHeader = (LottieHeader) LayoutInflater.from(
-                getContext()).inflate(R.layout.lottie_header, this, false);
+        mLottelHeader = new LottieHeader(getContext());
         setHeaderView(mLottelHeader);
         setEnableKeepRefreshView(true);
     }
