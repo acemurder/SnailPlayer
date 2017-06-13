@@ -31,6 +31,17 @@ public class SnailPlayerConfig {
      */
     public final static String UMENG_KEY = "591e8b1499f0c7250c000d95";
 
+
+    /**
+     * Bmob云后台Application ID
+     */
+    public final static String BMOB_APPLICATION_ID = "97d1aa449df415134bf56e4f8e522a17";
+
+    /**
+     * Bmob云后台REST API Key
+     */
+    public final static String BMOB_RESTAPI_KEY = "47375fdfd13f09f586a3926b58131a3a";
+
     /**
      * 客户端版本
      */

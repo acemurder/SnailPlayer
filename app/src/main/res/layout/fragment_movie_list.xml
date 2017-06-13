@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
 
-        <com.ride.pull_to_refresh.PtrFrameLayout
-                android:id="@+id/ptr_refresh_layout"
+        <me.dkzwm.smoothrefreshlayout.LottieSmoothRefreshLayout
+                android:id="@+id/smooth_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-            <include layout="@layout/include_ptr_header"/>
 
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_video_list"
@@ -20,7 +17,8 @@
 
             </android.support.v7.widget.RecyclerView>
 
-        </com.ride.pull_to_refresh.PtrFrameLayout>
+        </me.dkzwm.smoothrefreshlayout.LottieSmoothRefreshLayout>
 
-    </LinearLayout>
+    </FrameLayout>
+
 </layout>

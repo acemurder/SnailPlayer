@@ -66,6 +66,13 @@ android {
             }
         }
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi'   //只打 armeabi
+        }
+    }
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -78,6 +85,8 @@ android {
         abortOnError false
     }
     packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
@@ -97,7 +106,6 @@ dependencies {
     compile rootProject.ext.dependencies["appcompat-v7"]
     compile rootProject.ext.dependencies["support-annotations"]
     compile rootProject.ext.dependencies["design"]
-    compile rootProject.ext.dependencies["recyclerview-v7"]
     compile rootProject.ext.dependencies["cardview-v7"]
 
     compile rootProject.ext.dependencies["lifecycle-runtime"]
@@ -119,7 +127,6 @@ dependencies {
     compile rootProject.ext.dependencies["gson"]
     compile rootProject.ext.dependencies["eventbus"]
     compile rootProject.ext.dependencies["easypermissions"]
-    compile rootProject.ext.dependencies["umeng"]
 
     compile rootProject.ext.dependencies["material-dialog"]
     compile rootProject.ext.dependencies["photoview"]
@@ -127,11 +134,11 @@ dependencies {
     compile(rootProject.ext.dependencies["vLayout"]) {
         transitive = true
     }
-    compile rootProject.ext.dependencies["lottie"]
     compile rootProject.ext.dependencies["smart-tab"]
     compile rootProject.ext.dependencies["rollviewpager"]
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util')
-    compile project(':pull-to-refresh')
+    compile project(':smooth-refresh-lib')
+    compile project(':bmoblib')
 }

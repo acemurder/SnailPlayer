@@ -26,12 +26,11 @@ import com.ride.util.common.util.ScreenUtils;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity {
-
     private ActivityHomeBinding mBinding;
     private HomeViewModel mHomeViewModel;
     private LiveData<List<Channel>> mPreloadChannelList;
     private FragmentStatePagerItemAdapter mAdapter;
-    private FragmentPagerItems mItems = FragmentPagerItems.with(this).create();
+    private FragmentPagerItems mItems;
 
     private boolean mIsTabClicked;
 
@@ -74,7 +73,6 @@ public class HomeActivity extends BaseActivity {
         mBinding.homeSmartTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Timber.d("onPageScrolled");
                 if (positionOffset != 0 && !mIsTabClicked) {
                     //渐变tab颜色
                     GradientTextView left = (GradientTextView) mBinding.homeSmartTabLayout.getTabAt(position);

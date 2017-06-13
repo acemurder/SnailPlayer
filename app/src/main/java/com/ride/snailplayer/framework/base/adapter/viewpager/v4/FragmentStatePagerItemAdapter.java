@@ -60,6 +60,11 @@ public class FragmentStatePagerItemAdapter extends FragmentStatePagerAdapter {
   }
 
   @Override
+  public int getItemPosition(Object object) {
+    return super.getItemPosition(object);
+  }
+
+  @Override
   public CharSequence getPageTitle(int position) {
     return getPagerItem(position).getTitle();
   }

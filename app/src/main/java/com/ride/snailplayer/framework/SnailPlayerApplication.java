@@ -4,10 +4,10 @@ import android.app.Application;
 
 import com.qiyi.video.playcore.QiyiVideoView;
 import com.ride.snailplayer.common.config.SnailPlayerConfig;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.AppUtils;
 import com.ride.util.common.util.Utils;
-import com.ride.util.common.log.Timber;
-import com.umeng.analytics.MobclickAgent;
+
 
 /**
  * @author Stormouble
@@ -18,13 +18,12 @@ public class SnailPlayerApplication extends Application {
 
     @Override
     public void onCreate() {
-
         super.onCreate();
 
         QiyiVideoView.init(this);
         Utils.init(this);
         initLog();
-        initUmeng();
+        initBomb();
     }
 
     private void initLog() {
@@ -33,10 +32,8 @@ public class SnailPlayerApplication extends Application {
         }
     }
 
-    private void initUmeng() {
-        MobclickAgent.UMAnalyticsConfig config =
-                new MobclickAgent.UMAnalyticsConfig(this, SnailPlayerConfig.UMENG_KEY, "wangdoujia");
-        MobclickAgent.startWithConfigure(config);
+    private void initBomb() {
+        //Bmob.initialize(this, SnailPlayerConfig.BMOB_APPLICATION_ID);
     }
 
 }
