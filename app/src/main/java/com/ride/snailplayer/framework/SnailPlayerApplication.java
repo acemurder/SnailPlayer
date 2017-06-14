@@ -1,12 +1,16 @@
 package com.ride.snailplayer.framework;
 
 import android.app.Application;
+import android.preference.PreferenceManager;
 
 import com.qiyi.video.playcore.QiyiVideoView;
-import com.ride.snailplayer.common.config.SnailPlayerConfig;
+import com.ride.snailplayer.config.SnailPlayerConfig;
+import com.ride.snailplayer.framework.base.model.User;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.AppUtils;
 import com.ride.util.common.util.Utils;
+
+import cn.bmob.v3.Bmob;
 
 
 /**
@@ -15,6 +19,8 @@ import com.ride.util.common.util.Utils;
  */
 
 public class SnailPlayerApplication extends Application {
+
+    private static User mUser;
 
     @Override
     public void onCreate() {
@@ -33,7 +39,15 @@ public class SnailPlayerApplication extends Application {
     }
 
     private void initBomb() {
-        //Bmob.initialize(this, SnailPlayerConfig.BMOB_APPLICATION_ID);
+        Bmob.initialize(this, SnailPlayerConfig.BMOB_APPLICATION_ID);
+    }
+
+    public static User getUser() {
+        return null;
+    }
+
+    public static void setUser(User user) {
+
     }
 
 }

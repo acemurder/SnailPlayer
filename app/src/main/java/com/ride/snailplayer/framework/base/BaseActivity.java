@@ -13,9 +13,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.ride.snailplayer.R;
-import com.ride.snailplayer.framework.ui.welcome.WelcomeActivity;
+import com.ride.util.common.log.Timber;
 
 
 /**
@@ -25,20 +26,15 @@ import com.ride.snailplayer.framework.ui.welcome.WelcomeActivity;
 
 public class BaseActivity extends AppCompatActivity implements LifecycleRegistryOwner {
 
-    private LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
+
+    private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
     private Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (WelcomeActivity.shouldDisplay(this)) {
-            Intent intent = new Intent(this, WelcomeActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -50,6 +46,19 @@ public class BaseActivity extends AppCompatActivity implements LifecycleRegistry
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
         getToolbar();
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        View mainContent = findViewById(R.id.main_content);
+        if (mainContent != null) {
+            mainContent.setAlpha(0);
+            mainContent.animate().alpha(1).setDuration(MAIN_CONTENT_FADEIN_DURATION);
+        } else {
+            Timber.w("No view with ID main_content to fade in.");
+        }
     }
 
     @Override

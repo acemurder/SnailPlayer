@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">SnailPlayer</string>
+    <string name="app_name">骑着蜗牛</string>
 
     <!-- Label for Activity-->
     <string name="title_search">查找</string>
 
     <!--Launch Activity-->
-    <string name="launch_info">享受美妙时光</string>
+    <string name="app_slogan">享 受 美 妙 时 光</string>
 
     <!--Home menu-->
     <string name="menu_search">@string/title_search</string>

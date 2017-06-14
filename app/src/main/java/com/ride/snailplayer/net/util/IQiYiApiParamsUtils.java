@@ -6,7 +6,8 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.ride.snailplayer.common.config.SnailPlayerConfig;
+import com.ride.snailplayer.config.SnailPlayerConfig;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.AppUtils;
 import com.ride.util.common.util.DeviceUtils;
 import com.ride.util.common.util.EncodeUtils;
@@ -15,7 +16,6 @@ import com.ride.util.common.util.NetworkUtils;
 import com.ride.util.common.util.SPUtils;
 import com.ride.util.common.util.ScreenUtils;
 import com.ride.util.common.util.Utils;
-import com.ride.util.common.log.Timber;
 
 import org.json.JSONException;
 import org.json.JSONObject;

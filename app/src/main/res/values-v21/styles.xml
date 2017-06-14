@@ -15,10 +15,4 @@
   limitations under the License.
   -->
 <resources>
-    <style name="Theme.SnailPlayer" parent="Theme.SnailPlayer.Base">
-        <!--<item name="popupItemBackground">@drawable/popup_item_background</item>-->
-        <!--<item name="photoItemForeground">@drawable/photo_item_foreground</item>-->
-        <!--<item name="photoItemForegroundBorderless">@drawable/photo_item_foreground_borderless</item>-->
-        <!--<item name="imageItemBackground">?android:selectableItemBackgroundBorderless</item>-->
-    </style>
 </resources>

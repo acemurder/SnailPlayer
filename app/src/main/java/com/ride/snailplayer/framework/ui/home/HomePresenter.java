@@ -1,8 +1,7 @@
 package com.ride.snailplayer.framework.ui.home;
 
-import com.ride.snailplayer.common.config.SnailPlayerConfig;
+import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.net.ApiClient;
-import com.ride.snailplayer.net.func.FuncMapResourceToData;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.net.model.Resource;
