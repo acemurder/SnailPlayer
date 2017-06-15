@@ -4,12 +4,21 @@
     <!-- Label for Activity-->
     <string name="label_search">查找</string>
     <string name="label_login">登录</string>
-    <string name="label_register">登录</string>
+    <string name="label_register">注册</string>
 
-    <!--Launch Activity-->
-    <string name="app_slogan">享 受 美 妙 时 光</string>
+    <!--LaunchActivity-->
+    <string name="app_slogan">享受美妙时光</string>
+
+    <!--IntroActivity-->
+    <string name="app_description">我们可能还年轻，但我们一直在努力</string>
 
     <!--Home menu-->
     <string name="menu_search">@string/label_search</string>
     <string name="menu_file_download">下载</string>
+
+    <!--LoginActivity-->
+    <string name="account_hint">手机号</string>
+    <string name="password_hint">密码</string>
+    <string name="forget_password">忘记密码？</string>
+    <string name="new_user_register">新用户注册</string>
 </resources>

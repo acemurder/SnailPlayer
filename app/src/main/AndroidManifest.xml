@@ -59,18 +59,20 @@
         <activity
                 android:name=".framework.ui.login.LoginActivity"
                 android:exported="false"
-                android:label="@string/label_login"
                 android:launchMode="singleTop"
-                android:theme="@style/Theme.SnailPlayer.FullScreen">
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.SnailPlayer.FullScreen"
+                android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
 
         <activity
                 android:name=".framework.ui.login.RegisterActivity"
                 android:exported="false"
-                android:label="@string/label_register"
                 android:launchMode="singleTop"
+                android:screenOrientation="portrait"
                 android:parentActivityName=".framework.ui.login.LoginActivity"
-                android:theme="@style/Theme.SnailPlayer.FullScreen">
+                android:theme="@style/Theme.SnailPlayer.FullScreen"
+                android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
 
         <activity

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+        <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"
+                android:contentDescription="@null"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_logo"
+                android:layout_alignTop="@+id/iv_logo"
+                android:layout_alignBottom="@+id/iv_logo"
+                android:layout_marginTop="@dimen/spacing_micro"
+                android:layout_marginLeft="@dimen/spacing_micro"
+                android:layout_marginBottom="@dimen/spacing_micro"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/tv_app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/app_name"
+                    android:textSize="24sp"/>
+
+            <TextView
+                    android:id="@+id/tv_app_slogan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="bottom"
+                    android:text="@string/app_slogan"
+                    android:textSize="14sp"
+                    android:letterSpacing="1.1"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

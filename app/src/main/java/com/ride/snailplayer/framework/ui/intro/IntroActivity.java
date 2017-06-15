@@ -48,17 +48,10 @@ public class IntroActivity extends MaterialIntroActivity {
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.theme_primary)
                         .buttonsColor(R.color.theme_accent)
-                        .possiblePermissions(new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_SMS})
                         .image(R.drawable.img_intro_1)
-                        .title("title 3")
-                        .description("Description 3")
-                        .build(),
-                new MessageButtonBehaviour(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showMessage("We provide solutions to make you love your work");
-                    }
-                }, "Work with love"));
+                        .title(getResources().getString(R.string.app_name))
+                        .description(getResources().getString(R.string.app_description))
+                        .build(), null);
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.theme_primary)
                         .buttonsColor(R.color.theme_accent)

@@ -11,7 +11,7 @@
     <item>
         <shape>
             <corners android:radius="3dp"/>
-            <solid android:color="@color/theme_primary" />
+            <solid android:color="@color/theme_primary_light" />
         </shape>
     </item>
 </selector>

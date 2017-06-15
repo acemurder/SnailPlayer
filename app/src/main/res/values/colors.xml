@@ -25,9 +25,9 @@
     <color name="body_text_2_inverse">#8affffff</color>
 
     <color name="theme_primary">#8BC34A</color>
-    <color name="theme_primary_light">#DCEDC8</color>
+    <color name="theme_primary_light">#33CC8F</color>
     <color name="theme_primary_dark">#689F38</color>
     <color name="theme_accent">#FFC107</color>
+    <color name="theme_accent_dark">#FD9620</color>
 
-    <color name="score_text">#FD9620</color>
 </resources>
