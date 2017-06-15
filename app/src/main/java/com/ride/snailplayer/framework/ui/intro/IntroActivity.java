@@ -38,7 +38,7 @@ public class IntroActivity extends MaterialIntroActivity {
      * @return true if the activity should be displayed, otherwise false.
      */
     public static boolean shouldDisplay() {
-        return !SettingUtils.isAlreadyDisplayWelcome();
+        return !SettingUtils.isAlreadyDisplayIntro();
     }
 
     @Override
@@ -91,6 +91,8 @@ public class IntroActivity extends MaterialIntroActivity {
 
     @Override
     public void onFinish() {
+        super.onFinish();
+        //SettingUtils.markAlreadyDisplayIntro(true);
         HomeActivity.launchActivity(this);
     }
 }

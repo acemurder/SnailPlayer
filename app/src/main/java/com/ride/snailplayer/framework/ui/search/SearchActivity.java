@@ -65,6 +65,7 @@ public class SearchActivity extends BaseActivity {
 
     private void setupToolbar() {
         Drawable up = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
+        DrawableCompat.setTint(up, ContextCompat.getColor(this, R.color.body_text_2));
         Toolbar toolbar = getToolbar();
         toolbar.setNavigationIcon(up);
         toolbar.setNavigationOnClickListener(v -> navigateUpOrBack(SearchActivity.this, null));
@@ -107,6 +108,14 @@ public class SearchActivity extends BaseActivity {
                 searchFor(query);
                 mBinding.searchView.setQuery(query, false);
             }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isFinishing()) {
+            overridePendingTransition(0, 0);
         }
     }
 

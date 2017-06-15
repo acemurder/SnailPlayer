@@ -1,6 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
+    <style name="Widget.Base" parent="Theme.AppCompat.NoActionBar"/>
     <style name="Theme.SnailPlayer.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <!--<item name="popupItemBackground">?android:selectableItemBackground</item>-->
         <!--<item name="photoItemForeground">?android:selectableItemBackground</item>-->
@@ -21,22 +22,10 @@
     </style>
 
     <style name="Theme.SnailPlayer" parent="Theme.SnailPlayer.Base"/>
+    <style name="Widget.SnailPlayer" parent="Widget.Base"/>
 
     <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
-    <style name="Theme.SnailPlayer.Welcome" parent="Theme.SnailPlayer">
-        <item name="android:windowBackground">@color/background</item>
-    </style>
-
-    <style name="Theme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
-    <style name="Theme.SnailPlayer.Launch" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@color/background</item>
-    </style>
 
     <style name="Theme.SnailPlayer.Search" parent="Theme.SnailPlayer">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -66,6 +55,15 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="Theme.SnailPlayer.FullScreen" parent="Theme.SnailPlayer">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="Widget.SnailPlayer.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edit_text</item>
     </style>
 
     <style name="PlayActivityTheme" parent="@style/Theme.AppCompat.Light">

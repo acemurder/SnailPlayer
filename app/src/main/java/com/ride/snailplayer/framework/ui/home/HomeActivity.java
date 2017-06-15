@@ -20,6 +20,7 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerIte
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
+import com.ride.snailplayer.framework.ui.login.LoginActivity;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
@@ -149,6 +150,10 @@ public class HomeActivity extends BaseActivity {
 
     public void onMenuFileDownloadClick() {
 
+    }
+
+    public void onAvatarClick() {
+        LoginActivity.launchActivity(this);
     }
 
     @Override

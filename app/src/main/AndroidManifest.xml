@@ -26,6 +26,7 @@
 
         <activity
                 android:name=".framework.ui.launch.SplashActivity"
+                android:launchMode="singleTop"
                 android:theme="@style/Theme.SnailPlayer.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -38,7 +39,7 @@
                 android:name=".framework.ui.launch.LaunchActivity"
                 android:exported="false"
                 android:screenOrientation="portrait"
-                android:theme="@style/Theme.SnailPlayer.Launch"/>
+                android:theme="@style/Theme.SnailPlayer.FullScreen"/>
 
         <activity
                 android:name=".framework.ui.intro.IntroActivity"
@@ -57,16 +58,25 @@
 
         <activity
                 android:name=".framework.ui.login.LoginActivity"
-                android:theme="@style/Theme.SnailPlayer">
+                android:exported="false"
+                android:label="@string/label_login"
+                android:launchMode="singleTop"
+                android:theme="@style/Theme.SnailPlayer.FullScreen">
         </activity>
 
-        <activity android:name=".framework.ui.login.RegisterActivity">
+        <activity
+                android:name=".framework.ui.login.RegisterActivity"
+                android:exported="false"
+                android:label="@string/label_register"
+                android:launchMode="singleTop"
+                android:parentActivityName=".framework.ui.login.LoginActivity"
+                android:theme="@style/Theme.SnailPlayer.FullScreen">
         </activity>
 
         <activity
                 android:name=".framework.ui.search.SearchActivity"
                 android:exported="false"
-                android:label="@string/title_search"
+                android:label="@string/label_search"
                 android:launchMode="singleTop"
                 android:theme="@style/Theme.SnailPlayer.Search">
 
