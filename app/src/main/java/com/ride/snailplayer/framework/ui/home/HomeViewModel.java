@@ -1,17 +1,15 @@
 package com.ride.snailplayer.framework.ui.home;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.util.common.util.IOUtils;
-import com.ride.util.common.log.Timber;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +19,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 /**

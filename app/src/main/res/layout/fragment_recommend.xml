@@ -7,15 +7,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.jude.rollviewpager.RollPagerView
-            android:id="@+id/loop_pager_view"
-            android:layout_width="match_parent"
-            android:clipToPadding="false"
-            android:layout_height="200dp"
-            android:clipChildren="false"
-            app:rollviewpager_play_delay="2500">
 
-        </com.jude.rollviewpager.RollPagerView>
+        <!--<com.jude.rollviewpager.RollPagerView-->
+            <!--android:id="@+id/loop_pager_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:clipToPadding="false"-->
+            <!--android:layout_height="200dp"-->
+            <!--android:clipChildren="false"-->
+            <!--app:rollviewpager_play_delay="2500">-->
+
+        <!--</com.jude.rollviewpager.RollPagerView>-->
 
     </LinearLayout>
 </layout>

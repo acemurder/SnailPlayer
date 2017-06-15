@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/recommend_iv_img"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <TextView
+        android:id="@+id/recommend_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="嫌疑人X.即将首播"
+        android:textSize="15sp"
+        android:textColor="@color/body_text_1"/>
+
+    <TextView
+        android:id="@+id/recommend_tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:text="王凯张鲁一对决"
+        android:textColor="@color/app_primary_text"
+        android:layout_margin="5dp"/>
+
+</LinearLayout>
