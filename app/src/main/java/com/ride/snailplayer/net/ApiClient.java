@@ -1,6 +1,6 @@
 package com.ride.snailplayer.net;
 
-import com.ride.snailplayer.common.config.SnailPlayerConfig;
+import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.net.service.IQiYiApiService;
 import com.ride.util.common.util.AppUtils;
 

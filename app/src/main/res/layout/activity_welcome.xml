@@ -4,8 +4,8 @@
     <data>
 
         <variable
-                name="welcomeHandler"
-                type="com.ride.snailplayer.framework.ui.welcome.WelcomeActivity"/>
+                name="welcomeActionHandler"
+                type="com.ride.snailplayer.framework.ui.intro.IntroActivity"/>
 
     </data>
 

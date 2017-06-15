@@ -15,14 +15,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-//        config {
-//            storeFile file(RELEASE_STORE_FILE)
+//        debug {
+//            storeFile file(DEBUG_STORE_FILE)
 //            keyAlias KEY_ALIAS
 //            keyPassword KEY_PASSWORD
 //            storePassword STORE_PASSWORD
 //        }
-//        debug {
-//            storeFile file(DEBUG_STORE_FILE)
+//        release {
+//            storeFile file(RELEASE_STORE_FILE)
 //            keyAlias KEY_ALIAS
 //            keyPassword KEY_PASSWORD
 //            storePassword STORE_PASSWORD
@@ -51,7 +51,7 @@ android {
             minifyEnabled false
             zipAlignEnabled true
             shrinkResources true
-            //signingConfig signingConfigs.config
+            //signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 if (variant.buildType.name == "release") {
@@ -102,10 +102,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testCompile 'junit:junit:4.12'
 
     compile rootProject.ext.dependencies["appcompat-v7"]
-    compile rootProject.ext.dependencies["support-annotations"]
     compile rootProject.ext.dependencies["design"]
+    compile rootProject.ext.dependencies["support-annotations"]
+    compile rootProject.ext.dependencies["recyclerview-v7"]
     compile rootProject.ext.dependencies["cardview-v7"]
 
     compile rootProject.ext.dependencies["lifecycle-runtime"]
@@ -138,7 +140,8 @@ dependencies {
     compile rootProject.ext.dependencies["rollviewpager"]
 
     compile files('libs/iQIYISdk.jar')
-    compile project(':util')
+    compile project(':util-lib')
+    compile project(':material-intro-lib')
     compile project(':smooth-refresh-lib')
-    compile project(':bmoblib')
+    compile project(':bmob-lib')
 }

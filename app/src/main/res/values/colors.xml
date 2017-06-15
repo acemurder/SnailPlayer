@@ -13,6 +13,8 @@
     <color name="divider">#BDBDBD</color>
     <color name="divider_dark">#1f000000</color>
     <color name="card">#fff</color>
+    <color name="ripple_dark">#B0B2B1</color>
+    <color name="ripple_normal">#CACCCB</color>
 
     <!-- App Primary Text Colors -->
     <color name="body_text_1">#de000000</color>
