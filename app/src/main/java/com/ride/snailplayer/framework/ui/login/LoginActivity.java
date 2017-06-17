@@ -3,13 +3,11 @@ package com.ride.snailplayer.framework.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Looper;
 import android.os.MessageQueue;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -18,25 +16,20 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ride.bmoblib.listener.SimpleFindListener;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityLoginBinding;
 import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
-import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.RegexUtils;
-import com.ride.util.common.util.ScreenUtils;
 import com.ride.util.common.util.ToastUtils;
 
-import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import me.dkzwm.smoothrefreshlayout.utils.PixelUtl;
-import rx.Subscriber;
+import cn.bmob.v3.listener.SaveListener;
 
 public class LoginActivity extends BaseActivity {
 
@@ -59,7 +52,6 @@ public class LoginActivity extends BaseActivity {
 
         setupToolbar();
         setupEditText();
-        setupProgressWheel();
 
         //打开软键盘
         MessageQueue queue = Looper.myQueue();
@@ -67,10 +59,6 @@ public class LoginActivity extends BaseActivity {
             KeyboardUtils.showSoftInput(mBinding.etAccount);
             return false;
         });
-    }
-
-    private void setupProgressWheel() {
-        mBinding.progressWheel.spin();
     }
 
     private void setupToolbar() {
@@ -193,27 +181,43 @@ public class LoginActivity extends BaseActivity {
         Timber.i("用户输入合法，开始登录");
 
         //查询用户
-        User.loginByAccountObservable(User.class, account, password)
-                .subscribe(new Subscriber<User>() {
-                    @Override
-                    public void onStart() {
-                        mBinding.progressWheel.spin();
-                    }
+        BmobUser bu2 = new BmobUser();
+        bu2.setUsername("lucky");
+        bu2.setPassword("123456");
+        bu2.login(new SaveListener<BmobUser>() {
 
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Timber.e(throwable);
-                    }
-
-                    @Override
-                    public void onNext(User user) {
-
-                    }
-                });
+            @Override
+            public void done(BmobUser bmobUser, BmobException e) {
+                if(e == null){
+                    Timber.i("登录成功");
+                    //通过BmobUser user = BmobUser.getCurrentUser()获取登录成功后的本地用户信息
+                    //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
+                }else{
+                    Timber.i("登录失败");
+                }
+            }
+        });
+//        User.loginByAccountObservable(User.class, account, password)
+//                .subscribe(new Subscriber<User>() {
+//                    @Override
+//                    public void onStart() {
+//                        mBinding.progressWheel.spin();
+//                    }
+//
+//                    @Override
+//                    public void onCompleted() {
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable throwable) {
+//                        Timber.e(throwable);
+//                    }
+//
+//                    @Override
+//                    public void onNext(User user) {
+//
+//                    }
+//                });
     }
 
     private void showErrorDialog() {

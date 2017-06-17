@@ -5,7 +5,7 @@
 
         <variable
                 name="registerActionHandler"
-                type="com.ride.snailplayer.framework.ui.login.RegisterActivity"/>
+                type="com.ride.snailplayer.framework.ui.register.RegisterActivity"/>
 
     </data>
 
@@ -17,12 +17,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@color/app_white"
-            tools:context="com.ride.snailplayer.framework.ui.login.RegisterActivity">
+            tools:context="com.ride.snailplayer.framework.ui.register.RegisterActivity">
 
         <LinearLayout
                 android:id="@+id/ll_register_indicator_layout"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="5dp"
                 android:orientation="horizontal">
 
             <View
@@ -50,24 +50,10 @@
 
         </LinearLayout>
 
-        <TextView
-                android:id="@+id/tv_register_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:textSize="18sp"
-                android:textColor="@color/body_text_2"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/input_phone"
-                android:textSize="24sp"
-                android:textColor="@color/body_text_1"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        <FrameLayout
+                android:id="@+id/register_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
     </LinearLayout>
 

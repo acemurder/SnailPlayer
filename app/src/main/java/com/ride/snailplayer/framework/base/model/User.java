@@ -8,4 +8,14 @@ import cn.bmob.v3.BmobUser;
  */
 
 public class User extends BmobUser {
+
+    private String avatraUrl;
+
+    public String getAvatraUrl() {
+        return avatraUrl;
+    }
+
+    public void setAvatraUrl(String avatraUrl) {
+        this.avatraUrl = avatraUrl;
+    }
 }

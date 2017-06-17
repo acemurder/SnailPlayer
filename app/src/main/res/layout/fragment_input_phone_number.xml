@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+                name="inputPNActionHandler"
+                type="com.ride.snailplayer.framework.ui.register.InputPhoneNumberFragment"/>
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <LinearLayout
+                android:id="@+id/ll_register_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingRight="8dp"
+                android:orientation="horizontal"
+                android:background="?selectableItemBackground"
+                android:onClick="@{inputPNActionHandler.onClick}">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_keyboard_arrow_left"
+                    android:tint="@color/body_text_2"
+                    android:contentDescription="@null"/>
+
+            <TextView
+                    android:id="@+id/tv_register_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/back"
+                    android:textSize="18sp"
+                    android:textColor="@color/body_text_2"/>
+
+        </LinearLayout>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"
+                android:text="@string/input_phone"
+                android:textSize="32sp"
+                android:textColor="@color/body_text_1"/>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+            <TextView
+                    android:id="@+id/tv_phone_number_suffix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="@dimen/padding_normal"
+                    android:text="+86"
+                    android:textColor="@color/body_text_2"
+                    android:textSize="24sp"/>
+
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp">
+
+                <EditText
+                        android:id="@+id/et_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:inputType="phone"
+                        android:imeOptions="actionDone"
+                        android:hint="@null"
+                        android:maxLength="11"
+                        android:textColorHint="@color/body_text_2"
+                        android:textColorHighlight="@color/body_text_1"
+                        android:textColor="@color/body_text_1"
+                        android:textCursorDrawable="@drawable/shape_text_cursor_dark"
+                        android:textSize="24sp"/>
+
+                <ImageView
+                        android:id="@+id/iv_clear_phone_number"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:padding="4dp"
+                        android:layout_gravity="center_vertical|end"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_close"
+                        android:tint="@color/body_text_2"
+                        android:contentDescription="@null"
+                        android:onClick="@{inputPNActionHandler.onClick}"
+                        android:visibility="gone"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+                android:id="@+id/account_underline"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:background="@color/app_grey"/>
+
+        <Button
+                android:id="@+id/next_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/selector_common_btn"
+                android:text="@string/next"
+                android:textColor="@color/selector_enabled_text"
+                android:textSize="@dimen/app_text_size_large"
+                android:onClick="@{inputPNActionHandler.onClick}"/>
+
+    </LinearLayout>
+
+</layout>

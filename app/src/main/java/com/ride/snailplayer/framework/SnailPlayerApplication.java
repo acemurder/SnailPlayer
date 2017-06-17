@@ -20,8 +20,6 @@ import cn.bmob.v3.Bmob;
 
 public class SnailPlayerApplication extends Application {
 
-    private static User mUser;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,14 +38,6 @@ public class SnailPlayerApplication extends Application {
 
     private void initBomb() {
         Bmob.initialize(this, SnailPlayerConfig.BMOB_APPLICATION_ID);
-    }
-
-    public static User getUser() {
-        return null;
-    }
-
-    public static void setUser(User user) {
-
     }
 
 }

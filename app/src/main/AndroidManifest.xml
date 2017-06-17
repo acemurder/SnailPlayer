@@ -66,13 +66,13 @@
         </activity>
 
         <activity
-                android:name=".framework.ui.login.RegisterActivity"
+                android:name=".framework.ui.register.RegisterActivity"
                 android:exported="false"
                 android:launchMode="singleTop"
                 android:screenOrientation="portrait"
                 android:parentActivityName=".framework.ui.login.LoginActivity"
                 android:theme="@style/Theme.SnailPlayer.FullScreen"
-                android:windowSoftInputMode="stateHidden|adjustResize">
+                android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
 
         <activity

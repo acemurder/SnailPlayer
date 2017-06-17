@@ -3,6 +3,7 @@
     <string name="positive_text">确定</string>
     <string name="negative_text">取消</string>
     <string name="back">返回</string>
+    <string name="next">下一步</string>
 
     <!-- Label for Activity-->
     <string name="label_search">查找</string>
@@ -29,4 +30,7 @@
 
     <!--RegisterActivity-->
     <string name="input_phone">输入手机号码</string>
+    <string name="input_sms_code">请输入短信验证码</string>
+    <string name="sms_code_info">我们已经给手机号码%1$s发送了一个6位数验证码</string>
+    <string name="resend_smd_code_with_countdown">重新发送%1$s</string>
 </resources>
