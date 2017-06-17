@@ -4,11 +4,12 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/recommend_iv_img"
+        android:id="@+id/item_recommend_iv_img"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"/>
     <TextView
-        android:id="@+id/recommend_tv_title"
+        android:id="@+id/item_recommend_tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -17,7 +18,7 @@
         android:textColor="@color/body_text_1"/>
 
     <TextView
-        android:id="@+id/recommend_tv_content"
+        android:id="@+id/item_recommend_tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="13sp"

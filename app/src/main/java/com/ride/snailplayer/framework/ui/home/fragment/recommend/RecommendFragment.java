@@ -8,26 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alibaba.android.vlayout.LayoutHelper;
+import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
-import com.alibaba.android.vlayout.layout.GridLayoutHelper;
-import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentMovieListBinding;
-import com.ride.snailplayer.framework.ui.home.adapter.LoopAdapter;
+import com.ride.snailplayer.framework.ui.home.adapter.LooperAdapter;
+import com.ride.snailplayer.framework.ui.home.adapter.RecommendListAdapter;
+import com.ride.snailplayer.framework.ui.home.adapter.TagAdapter;
 import com.ride.snailplayer.net.ApiClient;
 import com.ride.snailplayer.net.func.FuncMapResourceToData;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.RecommendItem;
 import com.ride.snailplayer.net.util.IQiYiApiParamsUtils;
+import com.ride.util.common.log.Timber;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import me.dkzwm.smoothrefreshlayout.SmoothRefreshLayout;
 
 /**
  * Created by ：AceMurder
@@ -37,79 +37,52 @@ import io.reactivex.disposables.Disposable;
  */
 
 public class RecommendFragment extends Fragment {
- //   private List<VideoInfo> videoInfoList = new ArrayList<>();
-    private LoopAdapter mLoopAdapter;
-    private List<RecommendItem> recommendItemList = new ArrayList<>();
-    final List<LayoutHelper> helperList = new LinkedList<>();
-    private VirtualLayoutManager manager;
-
     FragmentMovieListBinding mBinding;
 
-
-
-
-
-
-
+    private VirtualLayoutManager manager;
+    private DelegateAdapter delegateAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list,container,false);
         initView();
-//        setupLayoutHelpers();
         return mBinding.getRoot();
     }
 
     private void initView() {
-//        mLoopAdapter = new LoopAdapter(mBinding.loopPagerView,videoInfoList);
-//        mBinding.loopPagerView.getViewPager().setPageMargin(20);
-//        mBinding.loopPagerView.getViewPager().setOffscreenPageLimit(4);
-//
-//      //  mBinding.loopPagerView.getViewPager().setPageTransformer(true,new ScrollOffsetTransformer());
-//        RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) mBinding.loopPagerView.getViewPager().getLayoutParams();
-//        paramTest.leftMargin = 80;
-//        paramTest.rightMargin = 80;
-//        mBinding.loopPagerView.getViewPager().setLayoutParams(paramTest);
-//        mBinding.loopPagerView.getViewPager().setClipChildren(false);
-//        mBinding.loopPagerView.setAdapter(mLoopAdapter);
-//        mBinding.loopPagerView.setHintView(null);
         manager = new VirtualLayoutManager(getActivity());
         mBinding.rvVideoList.setLayoutManager(manager);
-
-
-
-    }
-
-    private void setupLayoutHelpers(List<RecommendItem> items) {
-        for (RecommendItem item: items){
-            if (item.title.equals("轮播图")){
-                LinearLayoutHelper helper = new LinearLayoutHelper();
-                helper.setItemCount(1);
-                helperList.add(helper);
-            }else {
-                LinearLayoutHelper l = new LinearLayoutHelper();
-                l.setItemCount(1);
-                helperList.add(l);
-                GridLayoutHelper helper = new GridLayoutHelper(2);
-                helper.setItemCount(item.videoInfoList.size());
-                helperList.add(helper);
+        delegateAdapter = new DelegateAdapter(manager, false);
+        mBinding.rvVideoList.setAdapter(delegateAdapter);
+        mBinding.smoothRefreshLayout.setOnRefreshListener(new SmoothRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefreshBegin(final boolean isRefresh) {
+                loadData();
             }
-        }
 
+            @Override
+            public void onRefreshComplete() {
 
-
+            }
+        });
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loadData();
+    }
+
+    private void loadData(){
         ApiClient.IQIYI.getIQiYiApiService().qiyiRecommendDetail(IQiYiApiParamsUtils.genRecommendDetailParams(1,30))
                 .compose(MainThreadObservableTransformer.instance())
                 .map(FuncMapResourceToData.instance())
                 .subscribe(new Observer<List<RecommendItem>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+                        mBinding.smoothRefreshLayout.autoRefresh();
 
                     }
 
@@ -118,32 +91,34 @@ public class RecommendFragment extends Fragment {
                         setupLayoutHelpers(recommendItems);
                     }
 
-
-
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        mBinding.smoothRefreshLayout.refreshComplete();
                     }
 
                     @Override
                     public void onComplete() {
+                        mBinding.smoothRefreshLayout.refreshComplete();
 
                     }
                 });
     }
 
-
-
-   /* private void showLoopView(List<RecommendItem> recommendItems) {
-        for (RecommendItem r : recommendItems){
-            if (r.title.equals("轮播图")){
-                for(VideoInfo v:r.videoInfoList)
-                    Timber.e(v.shortTitle);
-                videoInfoList.addAll(r.videoInfoList);
-
-                mLoopAdapter.notifyDataSetChanged();
+    private void setupLayoutHelpers(List<RecommendItem> items) {
+        for (RecommendItem r : items) {
+            if (r.title.equals("轮播图")) {
+                delegateAdapter.addAdapter(new LooperAdapter(r.videoInfoList,this));
                 break;
             }
         }
-    }*/
+        for (RecommendItem item: items){
+            Timber.i( item.title + ":"+ item.videoInfoList.size() + " ");
+            if (item.title.equals("轮播图")){
+
+            }else {
+                delegateAdapter.addAdapter(new TagAdapter(item.title));
+                delegateAdapter.addAdapter(new RecommendListAdapter(item.videoInfoList,this));
+            }
+        }
+    }
 }

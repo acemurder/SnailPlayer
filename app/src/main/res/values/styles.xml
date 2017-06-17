@@ -63,7 +63,6 @@
     </style>
 
     <style name="Widget.SnailPlayer.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/edit_text</item>
     </style>
 
     <style name="PlayActivityTheme" parent="@style/Theme.AppCompat.Light">

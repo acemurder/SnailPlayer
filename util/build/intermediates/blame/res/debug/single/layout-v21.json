@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/build/intermediates/res/merged/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/zhengyuxuan/.android/build-cache/0b19182cf27423c56cf29dbaa0a2597ae9dda3a3/output/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/build/intermediates/res/merged/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/zhengyuxuan/.android/build-cache/0b19182cf27423c56cf29dbaa0a2597ae9dda3a3/output/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/build/intermediates/res/merged/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/zhengyuxuan/.android/build-cache/0b19182cf27423c56cf29dbaa0a2597ae9dda3a3/output/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/zhengyuxuan/Documents/Project/Android/snailplayer/util/build/intermediates/res/merged/debug/layout-v21/notification_action.xml",
+        "source": "/Users/zhengyuxuan/.android/build-cache/0b19182cf27423c56cf29dbaa0a2597ae9dda3a3/output/res/layout-v21/notification_action.xml"
+    }
+]
