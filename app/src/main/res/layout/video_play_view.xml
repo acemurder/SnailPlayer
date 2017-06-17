@@ -6,10 +6,29 @@
 
 
 
-    <com.qiyi.video.playcore.QiyiVideoView
-        android:id="@+id/video_view"
-        android:layout_width="match_parent"
-        android:layout_height="25dp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.qiyi.video.playcore.QiyiVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+        <FrameLayout
+            android:id="@+id/fl_view_container_progress"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_view_container"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+        </FrameLayout>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/video_controller"
         android:layout_width="match_parent"
@@ -55,6 +74,9 @@
             android:layout_marginEnd="25dp"
             android:background="@drawable/ic_fullscreen" />
     </LinearLayout>
+
+
+
 
 
 </RelativeLayout>

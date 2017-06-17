@@ -7,7 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,6 +20,8 @@ import com.qiyi.video.playcore.ErrorCode;
 import com.qiyi.video.playcore.IQYPlayerHandlerCallBack;
 import com.qiyi.video.playcore.QiyiVideoView;
 import com.ride.snailplayer.R;
+import com.ride.snailplayer.widget.gesture.VideoPlayGestureController;
+import com.ride.util.common.log.Timber;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +43,9 @@ public class VideoPlayView extends RelativeLayout {
     private static final int PERMISSION_REQUEST_CODE = 7171;
     private static final int HANDLER_MSG_UPDATE_PROGRESS = 1;
     private static final int HANDLER_DEPLAY_UPDATE_PROGRESS = 1000; // 1s
+    private VideoPlayGestureController mGestureController;
+    private FrameLayout viewContainer;
+    private FrameLayout viewProgressContainer;
 
 
     IQYPlayerHandlerCallBack mCallBack = new IQYPlayerHandlerCallBack() {
@@ -137,13 +144,13 @@ public class VideoPlayView extends RelativeLayout {
         mControlLayout = (LinearLayout) findViewById(R.id.video_controller);
         mVideoView = (QiyiVideoView) findViewById(R.id.video_view);
         mVideoView.setPlayerCallBack(mCallBack);
-        mVideoView.setOnClickListener((v -> {
-            if (mControlLayout.getVisibility() == VISIBLE)
-                mControlLayout.setVisibility(INVISIBLE);
-            else
-                mControlLayout.setVisibility(VISIBLE);
-
-        }));
+//        mVideoView.setOnClickListener((v -> {
+//            if (mControlLayout.getVisibility() == VISIBLE)
+//                mControlLayout.setVisibility(INVISIBLE);
+//            else
+//                mControlLayout.setVisibility(VISIBLE);
+//
+//        }));
 
         mCurrentTimeText = (TextView) findViewById(R.id.tv_play_time);
 
@@ -184,13 +191,37 @@ public class VideoPlayView extends RelativeLayout {
                 mVideoView.seekTo(mProgress);
             }
         });
+        viewContainer = (FrameLayout) findViewById(R.id.fl_view_container);
+        viewProgressContainer = (FrameLayout) findViewById(R.id.fl_view_container_progress);
+        initGestureController();
 
+
+    }
+
+    private void initGestureController() {
+        mGestureController = new VideoPlayGestureController(getContext(), viewContainer,viewProgressContainer,this);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mGestureController.handleTouchEvent(event);
+        Timber.i("onTouchEvent");
+        return true;
+
+    }
+
+    public int getPostion(){
+        return mVideoView.getDuration();
+    }
+
+    public int getCurrentPostion(){
+        return mVideoView.getCurrentPosition();
     }
 
     @Override
@@ -277,4 +308,9 @@ public class VideoPlayView extends RelativeLayout {
     public QiyiVideoView getmVideoView() {
         return mVideoView;
     }
+
+    //private GestureDetector mGestureDetector = new GestureDetector()
+
+
+
 }
