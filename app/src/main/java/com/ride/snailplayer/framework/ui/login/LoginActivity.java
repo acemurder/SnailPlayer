@@ -3,11 +3,14 @@ package com.ride.snailplayer.framework.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Looper;
 import android.os.MessageQueue;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,13 +18,25 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.ride.bmoblib.listener.SimpleFindListener;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityLoginBinding;
+import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
+import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.util.TextWatcherAdapter;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.RegexUtils;
+import com.ride.util.common.util.ScreenUtils;
 import com.ride.util.common.util.ToastUtils;
+
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import me.dkzwm.smoothrefreshlayout.utils.PixelUtl;
+import rx.Subscriber;
 
 public class LoginActivity extends BaseActivity {
 
@@ -44,6 +59,7 @@ public class LoginActivity extends BaseActivity {
 
         setupToolbar();
         setupEditText();
+        setupProgressWheel();
 
         //打开软键盘
         MessageQueue queue = Looper.myQueue();
@@ -53,11 +69,20 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    private void setupProgressWheel() {
+        mBinding.progressWheel.spin();
+    }
+
     private void setupToolbar() {
         Toolbar toolbar = getToolbar();
         if (toolbar != null) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
             toolbar.setNavigationOnClickListener(v -> navigateUpOrBack(this, null));
+        }
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
         }
     }
 
@@ -84,7 +109,7 @@ public class LoginActivity extends BaseActivity {
         mBinding.etPassword.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               changeViewVisibility(mBinding.ivClearPassword, !TextUtils.isEmpty(s));
+                changeViewVisibility(mBinding.ivClearPassword, !TextUtils.isEmpty(s));
             }
         });
         mBinding.etPassword.setOnFocusChangeListener((v, hasFocus) -> {
@@ -145,33 +170,84 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void processLogin(String account, String password) {
-        if (!TextUtils.isEmpty(account)) {
-            if (!TextUtils.isEmpty(password)) {
-                //验证账号和密码是否合法
-                if (RegexUtils.checkMobile(account) && RegexUtils.IsCorrectUserPassword(password)) {
+        hideSoftInputAndDialog();
 
-                } else {
-                    if (mErrorDialog == null) {
-                        mErrorDialog = new MaterialDialog.Builder(this)
-                                .build();
-                    }
-                    mErrorDialog.show();
-                }
-            } else {
-                mBinding.etPassword.requestFocus();
-
-                ToastUtils.showShortToast("请输入密码");
-            }
-        } else {
+        if (TextUtils.isEmpty(account)) {
             mBinding.etAccount.requestFocus();
-
-            ToastUtils.showShortToast("请输入手机号");
+            ToastUtils.showShortToast("请输入账号");
+            return;
         }
+
+        if (TextUtils.isEmpty(password)) {
+            mBinding.etPassword.requestFocus();
+            ToastUtils.showShortToast("请输入密码");
+            return;
+        }
+
+        //验证账号和密码是否合法
+        if (!RegexUtils.checkMobile(account) || !RegexUtils.IsCorrectUserPassword(password)) {
+            Timber.i("用户输入不合法");
+            showErrorDialog();
+        }
+
+        Timber.i("用户输入合法，开始登录");
+
+        //查询用户
+        User.loginByAccountObservable(User.class, account, password)
+                .subscribe(new Subscriber<User>() {
+                    @Override
+                    public void onStart() {
+                        mBinding.progressWheel.spin();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Timber.e(throwable);
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+
+                    }
+                });
+    }
+
+    private void showErrorDialog() {
+        DialogCommonBinding binding = DialogCommonBinding.inflate(getLayoutInflater());
+        binding.setIsSingleChoice(true);
+        binding.setTitle(getResources().getString(R.string.error_dialog_title));
+        binding.setContent(getResources().getString(R.string.error_dialog_content));
+        binding.setListener(view -> {
+            int id = view.getId();
+            switch (id) {
+                case R.id.tv_common_dialog_single:
+                    if (mErrorDialog != null && mErrorDialog.isShowing()) {
+                        mErrorDialog.dismiss();
+                    }
+                    break;
+            }
+        });
+        mErrorDialog = new MaterialDialog.Builder(this)
+                .customView(binding.getRoot(), false)
+                .cancelable(true)
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        hideSoftInputAndDialog();
+    }
+
+    private void hideSoftInputAndDialog() {
+        if (mErrorDialog != null && mErrorDialog.isShowing()) {
+            mErrorDialog.dismiss();
+        }
         KeyboardUtils.hideSoftInput(mBinding.etAccount);
         KeyboardUtils.hideSoftInput(mBinding.etPassword);
     }

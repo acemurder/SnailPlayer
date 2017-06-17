@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SimpleProgressWheel">
+        <attr name="pwBarColor" format="color" />
+        <attr name="pwBarWidth" format="dimension" />
+        <attr name="pwRadius" format="dimension" />
+    </declare-styleable>
+</resources>

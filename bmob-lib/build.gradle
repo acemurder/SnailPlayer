@@ -33,4 +33,5 @@ dependencies {
     compile rootProject.ext.dependencies["bmob-sdk"]
     compile rootProject.ext.dependencies["support-v4"]
     compile rootProject.ext.dependencies["bmob-campat"]
+    compile project(':util-lib')
 }

@@ -71,4 +71,10 @@ public class HomeViewModel extends AndroidViewModel {
     public LiveData<List<Channel>> getPreloadChannelList() {
         return mPreloadChannelList;
     }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mPreloadChannelList.setValue(null);
+    }
 }

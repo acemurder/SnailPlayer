@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">骑着蜗牛</string>
+    <string name="positive_text">确定</string>
+    <string name="negative_text">取消</string>
+    <string name="back">返回</string>
 
     <!-- Label for Activity-->
     <string name="label_search">查找</string>
@@ -21,4 +24,9 @@
     <string name="password_hint">密码</string>
     <string name="forget_password">忘记密码？</string>
     <string name="new_user_register">新用户注册</string>
+    <string name="error_dialog_title">登录失败</string>
+    <string name="error_dialog_content">账号或密码错误，请重新输入。</string>
+
+    <!--RegisterActivity-->
+    <string name="input_phone">输入手机号码</string>
 </resources>

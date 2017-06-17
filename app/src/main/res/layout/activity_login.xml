@@ -25,6 +25,12 @@
                 android:src="@drawable/img_login_register"
                 android:contentDescription="@null"/>
 
+        <com.ride.snailplayer.widget.SimpleProgressWheel
+                android:id="@+id/progress_wheel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -169,10 +175,10 @@
                     android:onClick="@{loginActionHandler.onClick}"
                     android:alpha="0.9"/>
 
-            <LinearLayout
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_normal"
+                    android:layout_marginTop="@dimen/spacing_normal"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
                     android:orientation="horizontal">
@@ -181,6 +187,8 @@
                         android:id="@+id/tv_forget_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/spacing_normal"
+                        android:paddingBottom="@dimen/spacing_normal"
                         android:text="@string/forget_password"
                         android:textSize="@dimen/app_text_size_medium"
                         android:textColor="@color/selector_common_text"
@@ -189,16 +197,18 @@
 
                 <TextView
                         android:id="@+id/tv_new_user_register"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
+                        android:layout_gravity="end"
+                        android:paddingTop="@dimen/spacing_normal"
+                        android:paddingBottom="@dimen/spacing_normal"
                         android:text="@string/new_user_register"
                         android:textSize="@dimen/app_text_size_medium"
                         android:textColor="@color/selector_common_text"
                         android:clickable="true"
                         android:onClick="@{loginActionHandler.onClick}"/>
 
-            </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
 

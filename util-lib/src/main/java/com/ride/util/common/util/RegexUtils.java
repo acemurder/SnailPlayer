@@ -22,7 +22,6 @@ public final class RegexUtils {
      * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
      */
     public static boolean isCorrectUserAccount(@NonNull String str) {
-
         return str.length() >= 2 && str.length() <= 20;
     }
 
@@ -33,8 +32,7 @@ public final class RegexUtils {
      * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
      */
     public static boolean IsCorrectUserPassword(@NonNull String str) {
-
-        return str.length() >= 6 && str.length() <= 18;
+        return str.length() >= 6 && str.length() <= 16;
     }
 
     /**
@@ -56,5 +54,16 @@ public final class RegexUtils {
     public static boolean checkMobile(String mobile) {
         String regex = "(\\+\\d+)?1[34578]\\d{9}$";
         return Pattern.matches(regex, mobile);
+    }
+
+    /**
+     * 验证Email
+     *
+     * @param email email地址，格式：zhangsan@sina.com，zhangsan@xxx.com.cn，xxx代表邮件服务商
+     * @return 验证成功返回true，验证失败返回falsea
+     */
+    public static boolean checkEmail(String email) {
+        String regex = "\\w+@\\w+\\.[a-z]+(\\.[a-z]+)?";
+        return Pattern.matches(regex, email);
     }
 }
