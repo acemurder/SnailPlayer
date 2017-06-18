@@ -198,17 +198,19 @@ public class LoginActivity extends BaseActivity {
                 dismissProgress();
                 if (e != null || list == null || list.isEmpty()) {
                     Timber.i("用户不存在");
-
                     showErrorDialog(getResources().getString(R.string.login_error_dialog_title), getResources().getString(R.string.login_error_dialog_content));
                 } else {
                     Timber.i("用户存在");
-
                     User user = list.get(0);
                     user.login(new SaveListener<User>() {
                         @Override
                         public void done(User u, BmobException e) {
-                            EventBus.getDefault().post(new UserLoginEvent());
-                            ActivityCompat.finishAfterTransition(LoginActivity.this);
+                            if (BmobUser.getCurrentUser(User.class) == null) {
+                                Timber.d("登录陈工");
+                            } else {
+                                Timber.d("登录失败");
+                            }
+                            //EventBus.getDefault().post(new UserLoginEvent());
                         }
                     });
                 }

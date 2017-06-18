@@ -167,7 +167,10 @@ public class HomeActivity extends BaseActivity {
     @Subscribe
     public void onUserLogin(UserLoginEvent event) {
         User user = BmobUser.getCurrentUser(User.class);
-        mBinding.homeTvLoginStatus.setText(user.getUsername());
+        if (user != null) {
+            HomeActivity.launchActivity(this);
+            mBinding.homeTvLoginStatus.setText(user.getUsername());
+        }
     }
 
     public void onMenuSearchClick() {
