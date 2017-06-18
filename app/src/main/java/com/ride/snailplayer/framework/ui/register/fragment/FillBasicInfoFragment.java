@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentFillBasicInfoBinding;
 import com.ride.snailplayer.framework.base.model.User;
@@ -25,7 +24,6 @@ import com.ride.util.common.util.RegexUtils;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
-import rx.Subscriber;
 
 /**
  * @author Stormouble
@@ -84,6 +82,7 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //账号是否合法
                 mHasInputCorrectAccount = RegexUtils.isCorrectUserAccount(s.toString());
+                Timber.i(mHasInputCorrectAccount + ":  mBinding.etNickname");
 
                 changeViewVisibility(mBinding.ivClearNickname, !TextUtils.isEmpty(s));
             }
@@ -101,6 +100,7 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
                 changeViewVisibility(mBinding.ivClearPassword, !TextUtils.isEmpty(s));
 
                 //用户输入正确则使button enable
+                Timber.i("changeNextButtonEnabled  : " +(mHasInputCorrectAccount && RegexUtils.IsCorrectUserPassword(s.toString()) ));
                 changeNextButtonEnabled(mHasInputCorrectAccount && RegexUtils.IsCorrectUserPassword(s.toString()));
             }
         });
