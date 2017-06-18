@@ -4,8 +4,8 @@
     <data>
 
         <variable
-                name="checkSMSCodeActionHandler"
-                type="com.ride.snailplayer.framework.ui.register.fragment.CheckSMSCodeFragment"/>
+                name="fillBasicInfoActionHandler"
+                type="com.ride.snailplayer.framework.ui.register.fragment.FillBasicInfoFragment"/>
 
     </data>
 
@@ -25,7 +25,7 @@
                 android:paddingRight="8dp"
                 android:orientation="horizontal"
                 android:background="?selectableItemBackground"
-                android:onClick="@{checkSMSCodeActionHandler.onClick}">
+                android:onClick="@{fillBasicInfoActionHandler.onClick}">
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -52,17 +52,17 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:text="@string/input_sms_code"
+                android:text="@string/set_nickname_and_password"
                 android:textSize="32sp"
                 android:textColor="@color/body_text_1"/>
 
         <TextView
-                android:id="@+id/tv_sms_code_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
+                android:text="@string/set_basic_info_need_to_know"
                 android:textSize="14sp"
                 android:textColor="@color/body_text_2"/>
 
@@ -74,14 +74,14 @@
                 android:layout_marginRight="24dp">
 
             <EditText
-                    android:id="@+id/et_sms_code"
+                    android:id="@+id/et_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@null"
-                    android:inputType="number"
-                    android:imeOptions="actionDone"
-                    android:hint="@string/sms_code"
-                    android:maxLength="6"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:hint="@string/nickname"
+                    android:maxLength="16"
                     android:textColorHint="@color/app_grey"
                     android:textColorHighlight="@color/body_text_1"
                     android:textColor="@color/body_text_1"
@@ -89,7 +89,7 @@
                     android:textSize="18sp"/>
 
             <ImageView
-                    android:id="@+id/iv_clear_sms_code"
+                    android:id="@+id/iv_clear_nickname"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:padding="4dp"
@@ -98,44 +98,95 @@
                     android:src="@drawable/ic_close"
                     android:tint="@color/app_grey"
                     android:contentDescription="@null"
-                    android:onClick="@{checkSMSCodeActionHandler.onClick}"
+                    android:onClick="@{fillBasicInfoActionHandler.onClick}"
                     android:visibility="gone"/>
 
         </FrameLayout>
 
         <View
-                android:id="@+id/sms_code_underline"
+                android:id="@+id/nickname_underline"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:background="@color/app_grey"/>
 
-        <TextView
-                android:id="@+id/tv_resend_sms_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp">
+
+            <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@null"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone"
+                    android:maxLength="18"
+                    android:hint="@string/password_hint"
+                    android:textColorHint="@color/app_grey"
+                    android:textColorHighlight="@color/body_text_1"
+                    android:textColor="@color/body_text_1"
+                    android:textCursorDrawable="@drawable/shape_text_cursor_dark"
+                    android:textSize="18sp"/>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|end"
+                    android:gravity="center_vertical">
+
+                <ImageView
+                        android:id="@+id/iv_clear_password"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:padding="4dp"
+                        android:layout_marginRight="@dimen/spacing_normal"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_close"
+                        android:tint="@color/app_grey"
+                        android:contentDescription="@null"
+                        android:onClick="@{fillBasicInfoActionHandler.onClick}"
+                        android:visibility="gone"/>
+
+                <ImageView
+                        android:id="@+id/iv_visible_password"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:padding="4dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_no_visibility"
+                        android:tint="@color/app_grey"
+                        android:contentDescription="@null"
+                        android:onClick="@{fillBasicInfoActionHandler.onClick}"
+                        android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View
+                android:id="@+id/password_underline"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:paddingTop="@dimen/spacing_normal"
-                android:paddingBottom="@dimen/spacing_normal"
-                android:textSize="@dimen/app_text_size_medium"
-                android:clickable="true"
-                android:onClick="@{checkSMSCodeActionHandler.onClick}"/>
+                android:background="@color/app_grey"/>
 
         <Button
                 android:id="@+id/next_btn"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:background="@drawable/selector_common_btn"
-                android:text="@string/next"
+                android:text="@string/register"
                 android:textColor="@color/selector_enabled_text"
                 android:textSize="@dimen/app_text_size_large"
-                android:onClick="@{checkSMSCodeActionHandler.onClick}"/>
+                android:onClick="@{fillBasicInfoActionHandler.onClick}"/>
 
     </LinearLayout>
 

@@ -16,23 +16,25 @@ public final class RegexUtils {
     }
 
     /**
-     * 验证输入username长度 (2-20位)
+     * 验证用户账号，字母开头，允许5-16字节，允许字母数字下划线
      *
-     * @param str
+     * @param account
      * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
      */
-    public static boolean isCorrectUserAccount(@NonNull String str) {
-        return str.length() >= 2 && str.length() <= 20;
+    public static boolean isCorrectUserAccount(@NonNull String account) {
+        String regex = "^[a-zA-Z]\\w{4,15}$";
+        return Pattern.matches(regex, account);
     }
 
     /**
-     * 验证输入password长度 (6-18位)
+     * 验证用户密码，以字母开头，长度在6~18之间，只能包含字母、数字和下划线
      *
-     * @param str
+     * @param password
      * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
      */
-    public static boolean IsCorrectUserPassword(@NonNull String str) {
-        return str.length() >= 6 && str.length() <= 16;
+    public static boolean IsCorrectUserPassword(@NonNull String password) {
+        String regex = "^[a-zA-Z]\\w{5,18}$";
+        return Pattern.matches(regex, password);
     }
 
     /**
@@ -65,5 +67,16 @@ public final class RegexUtils {
     public static boolean checkEmail(String email) {
         String regex = "\\w+@\\w+\\.[a-z]+(\\.[a-z]+)?";
         return Pattern.matches(regex, email);
+    }
+
+    /**
+     * 判断是否匹配正则
+     *
+     * @param regex 正则表达式
+     * @param input 要匹配的字符串
+     * @return {@code true}: 匹配<br>{@code false}: 不匹配
+     */
+    public static boolean isMatch(String regex, CharSequence input) {
+        return input != null && input.length() > 0 && Pattern.matches(regex, input);
     }
 }

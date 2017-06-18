@@ -1,4 +1,4 @@
-package com.ride.snailplayer.framework.ui.register;
+package com.ride.snailplayer.framework.ui.register.fragment;
 
 import android.os.Bundle;
 import android.os.Looper;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentInputPhoneNumberBinding;
-import com.ride.snailplayer.framework.base.BaseFragment;
+import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.util.common.util.ActivityUtils;
 import com.ride.util.common.util.KeyboardUtils;
@@ -23,7 +23,9 @@ import com.ride.util.common.util.RegexUtils;
  * @since 2017/6/18.
  */
 
-public class InputPhoneNumberFragment extends BaseFragment {
+public class InputPhoneNumberFragment extends BaseRegisterFragment {
+
+    public static final String PHONE_NUMBER = "phone_number";
 
     private FragmentInputPhoneNumberBinding mBinding;
 
@@ -40,7 +42,7 @@ public class InputPhoneNumberFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = FragmentInputPhoneNumberBinding.inflate(inflater, container, false);
-        mBinding.setInputPNActionHandler(this);
+        mBinding.setInputPhoneNumberActionHandler(this);
         return mBinding.getRoot();
     }
 
@@ -57,8 +59,7 @@ public class InputPhoneNumberFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         //设置indicator
-        RegisterActivity activity = (RegisterActivity) mActivity;
-        activity.processIndicatorView(RegisterActivity.STEP_FIRST);
+        mHostActivity.processIndicatorView(RegisterActivity.STEP_FIRST);
 
         //打开软键盘
         MessageQueue queue = Looper.myQueue();
@@ -68,6 +69,9 @@ public class InputPhoneNumberFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 监听EditText以显示clear view
+     */
     private void setupEditText() {
         mBinding.etPhoneNumber.setOnFocusChangeListener((v, hasFocus) -> {
             String str = mBinding.etPhoneNumber.getText().toString();
@@ -107,8 +111,7 @@ public class InputPhoneNumberFragment extends BaseFragment {
         final int id = view.getId();
         switch (id) {
             case R.id.ll_register_back:
-                RegisterActivity activity = (RegisterActivity) mActivity;
-                activity.processBack();
+                mHostActivity.processBack();
                 break;
             case R.id.iv_clear_phone_number:
                 mBinding.etPhoneNumber.setText("");
@@ -126,9 +129,11 @@ public class InputPhoneNumberFragment extends BaseFragment {
     }
 
     private void processRegister() {
-        String phone = mBinding.etPhoneNumber.getText().toString();
+        hideSoftInput();
+
+        String phoneNumber = mBinding.etPhoneNumber.getText().toString();
         ActivityUtils.startAnotherFragment(getFragmentManager(), this,
-                CheckSMSCodeFragment.newInstance(phone), R.id.register_container);
+                CheckSMSCodeFragment.newInstance(phoneNumber), R.id.register_container);
     }
 
     private void hideSoftInput() {

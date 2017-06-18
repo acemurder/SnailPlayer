@@ -10,13 +10,18 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ride.snailplayer.R;
+import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.util.common.log.Timber;
+import com.ride.util.common.util.NetworkUtils;
 
 
 /**
@@ -31,6 +36,8 @@ public class BaseActivity extends AppCompatActivity implements LifecycleRegistry
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
     private Toolbar mToolbar;
+    private MaterialDialog mProgressDialog;
+    private MaterialDialog mErrorDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,11 +76,91 @@ public class BaseActivity extends AppCompatActivity implements LifecycleRegistry
     @Override
     protected void onPause() {
         super.onPause();
+        dismissProgress();
+        dismissErrorDialog();
     }
 
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
+    }
+
+    protected void showProgressDialog() {
+        mProgressDialog = new MaterialDialog.Builder(this)
+                .widgetColor(ContextCompat.getColor(this, R.color.theme_accent))
+                .progress(true, Integer.MAX_VALUE)
+                .content(R.string.loading)
+                .cancelable(true)
+                .canceledOnTouchOutside(false)
+                .show();
+    }
+
+    protected void dismissProgress() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    private void showErrorDialog() {
+        DialogCommonBinding binding = DialogCommonBinding.inflate(getLayoutInflater());
+        binding.setIsSingleChoice(true);
+        binding.setTitle(getResources().getString(R.string.login_error_dialog_title));
+        binding.setContent(getResources().getString(R.string.login_error_dialog_content));
+        binding.setListener(view -> {
+            int id = view.getId();
+            switch (id) {
+                case R.id.tv_common_dialog_single:
+                    if (mErrorDialog != null && mErrorDialog.isShowing()) {
+                        mErrorDialog.dismiss();
+                    }
+                    break;
+            }
+        });
+        mErrorDialog = new MaterialDialog.Builder(this)
+                .customView(binding.getRoot(), false)
+                .cancelable(true)
+                .canceledOnTouchOutside(false)
+                .show();
+    }
+
+    protected void showCommonErrorDialog(String title) {
+        if (!NetworkUtils.isNetworkAvailable()) {
+            showErrorDialog(title, getResources().getString(R.string.network_error));
+        } else {
+            showErrorDialog(title, getResources().getString(R.string.app_error));
+        }
+    }
+
+    protected void showErrorDialog(String title, String content) {
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
+            return;
+        }
+
+        DialogCommonBinding binding = DialogCommonBinding.inflate(getLayoutInflater());
+        binding.setIsSingleChoice(true);
+        binding.setTitle(title);
+        binding.setContent(content);
+        binding.setListener(view -> {
+            int id = view.getId();
+            switch (id) {
+                case R.id.tv_common_dialog_single:
+                    if (mErrorDialog != null && mErrorDialog.isShowing()) {
+                        mErrorDialog.dismiss();
+                    }
+                    break;
+            }
+        });
+        mErrorDialog = new MaterialDialog.Builder(this)
+                .customView(binding.getRoot(), false)
+                .cancelable(true)
+                .canceledOnTouchOutside(false)
+                .show();
+    }
+
+    protected void dismissErrorDialog() {
+        if (mErrorDialog != null && mErrorDialog.isShowing()) {
+            mErrorDialog.dismiss();
+        }
     }
 
     protected Toolbar getToolbar() {

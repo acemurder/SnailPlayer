@@ -42,6 +42,19 @@ public class SimpleProgressWheel extends ProgressWheel {
         setBarWidth(mBarWidth);
         setBarColor(mBarColor);
         setCircleRadius(mRadius);
+
+        setVisibility(INVISIBLE);
     }
 
+    @Override
+    public void spin() {
+        setVisibility(VISIBLE);
+        super.spin();
+    }
+
+    @Override
+    public void stopSpinning() {
+        setVisibility(INVISIBLE);
+        super.stopSpinning();
+    }
 }

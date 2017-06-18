@@ -4,8 +4,8 @@
     <data>
 
         <variable
-                name="inputPNActionHandler"
-                type="com.ride.snailplayer.framework.ui.register.InputPhoneNumberFragment"/>
+                name="inputPhoneNumberActionHandler"
+                type="com.ride.snailplayer.framework.ui.register.fragment.InputPhoneNumberFragment"/>
 
     </data>
 
@@ -25,7 +25,7 @@
                 android:paddingRight="8dp"
                 android:orientation="horizontal"
                 android:background="?selectableItemBackground"
-                android:onClick="@{inputPNActionHandler.onClick}">
+                android:onClick="@{inputPhoneNumberActionHandler.onClick}">
 
             <ImageView
                     android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                         android:src="@drawable/ic_close"
                         android:tint="@color/body_text_2"
                         android:contentDescription="@null"
-                        android:onClick="@{inputPNActionHandler.onClick}"
+                        android:onClick="@{inputPhoneNumberActionHandler.onClick}"
                         android:visibility="gone"/>
 
             </FrameLayout>
@@ -130,7 +130,7 @@
                 android:text="@string/next"
                 android:textColor="@color/selector_enabled_text"
                 android:textSize="@dimen/app_text_size_large"
-                android:onClick="@{inputPNActionHandler.onClick}"/>
+                android:onClick="@{inputPhoneNumberActionHandler.onClick}"/>
 
     </LinearLayout>
 

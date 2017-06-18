@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ride.snailplayer.widget;
+package com.ride.snailplayer.widget.imageview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

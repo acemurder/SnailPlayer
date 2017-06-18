@@ -48,7 +48,7 @@
                             android:src="@drawable/ic_menu"
                             android:contentDescription="@null"/>
 
-                    <com.ride.snailplayer.widget.CircleImageView
+                    <com.ride.snailplayer.widget.imageview.CircleImageView
                             android:id="@+id/iv_avatar"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
@@ -80,7 +80,8 @@
                             android:src="@drawable/ic_file_download"
                             android:background="?selectableItemBackgroundBorderless"
                             android:contentDescription="@string/menu_file_download"
-                            android:onClick="@{()->homeActionHandler.onMenuFileDownloadClick()}"/>
+                            android:onClick="@{()->homeActionHandler.onMenuFileDownloadClick()}"
+                            android:visibility="gone"/>
 
                     <ImageView
                             android:id="@+id/home_iv_search"

@@ -4,6 +4,10 @@
     <string name="negative_text">取消</string>
     <string name="back">返回</string>
     <string name="next">下一步</string>
+    <string name="loading">加载中</string>
+
+    <string name="app_error">应用发生未知错误。</string>
+    <string name="network_error">请检查您的网络连接。</string>
 
     <!-- Label for Activity-->
     <string name="label_search">查找</string>
@@ -14,23 +18,39 @@
     <string name="app_slogan">享受美妙时光</string>
 
     <!--IntroActivity-->
-    <string name="app_description">我们可能还年轻，但我们一直在努力</string>
+    <string name="app_description_1">我们可能还年轻，但我们一直在努力</string>
+    <string name="app_description_2">不负好时光</string>
 
-    <!--Home menu-->
+    <!--HomeActivity-->
     <string name="menu_search">@string/label_search</string>
     <string name="menu_file_download">下载</string>
+    <string name="no_login">未登录</string>
 
     <!--LoginActivity-->
     <string name="account_hint">手机号</string>
     <string name="password_hint">密码</string>
     <string name="forget_password">忘记密码？</string>
     <string name="new_user_register">新用户注册</string>
-    <string name="error_dialog_title">登录失败</string>
-    <string name="error_dialog_content">账号或密码错误，请重新输入。</string>
+    <string name="login_error_dialog_title">登录失败</string>
+    <string name="login_error_dialog_content">账号或密码错误，请重新输入。</string>
 
     <!--RegisterActivity-->
+    <string name="nickname">昵称</string>
+    <string name="register">注册</string>
     <string name="input_phone">输入手机号码</string>
     <string name="input_sms_code">请输入短信验证码</string>
     <string name="sms_code_info">我们已经给手机号码%1$s发送了一个6位数验证码</string>
-    <string name="resend_smd_code_with_countdown">重新发送%1$s</string>
+    <string name="sms_code">验证码</string>
+    <string name="resend_sms_code_with_countdown">重新发送%1$s</string>
+    <string name="sms_error_dialog_title">验证失败</string>
+    <string name="sms_error_dialog_content">请重新发送短信验证。</string>
+    <string name="set_nickname_and_password">设置昵称和密码</string>
+    <string name="set_basic_info_need_to_know">密码由8&#8211;16位数字、字母或符号组成，至少含有2种及以上的字符</string>
+    <string name="phone_bound">该手机号码已被以下账号绑定</string>
+    <string name="choices_when_phone_bound">你可以选择直接登录该账号或者继续注册新账号</string>
+    <string name="direct_login">直接登录</string>
+    <string name="continue_register">继续注册</string>
+    <string name="or">或</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_failed">注册失败</string>
 </resources>

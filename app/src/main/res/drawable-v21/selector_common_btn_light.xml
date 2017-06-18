@@ -5,7 +5,7 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="3dp"/>
-            <solid android:color="@color/ripple_normal"/>
+            <solid android:color="@color/theme_primary"/>
         </shape>
     </item>
 

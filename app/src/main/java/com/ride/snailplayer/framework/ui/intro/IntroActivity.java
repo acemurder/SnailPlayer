@@ -1,23 +1,18 @@
 package com.ride.snailplayer.framework.ui.intro;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.view.View;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.framework.ui.home.HomeActivity;
 import com.ride.snailplayer.util.SettingUtils;
 
 import agency.tango.materialintroscreen.MaterialIntroActivity;
-import agency.tango.materialintroscreen.MessageButtonBehaviour;
 import agency.tango.materialintroscreen.SlideFragmentBuilder;
-import agency.tango.materialintroscreen.animations.IViewTranslation;
 
 /**
  * @author Stormouble
@@ -50,42 +45,21 @@ public class IntroActivity extends MaterialIntroActivity {
                         .buttonsColor(R.color.theme_accent)
                         .image(R.drawable.img_intro_1)
                         .title(getResources().getString(R.string.app_name))
-                        .description(getResources().getString(R.string.app_description))
+                        .description(getResources().getString(R.string.app_description_2))
                         .build(), null);
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.theme_primary)
                         .buttonsColor(R.color.theme_accent)
-                        .possiblePermissions(new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_SMS})
-                        .image(R.drawable.img_intro_2)
-                        .title("title 3")
-                        .description("Description 3")
-                        .build(),
-                new MessageButtonBehaviour(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showMessage("We provide solutions to make you love your work");
-                    }
-                }, "Work with love"));
-        addSlide(new SlideFragmentBuilder()
-                        .backgroundColor(R.color.theme_primary)
-                        .buttonsColor(R.color.theme_accent)
-                        .possiblePermissions(new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_SMS})
                         .image(R.drawable.img_intro_3)
-                        .title("title 3")
-                        .description("Description 3")
-                        .build(),
-                new MessageButtonBehaviour(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showMessage("We provide solutions to make you love your work");
-                    }
-                }, "Work with love"));
+                        .title(getResources().getString(R.string.app_name))
+                        .description(getResources().getString(R.string.app_description_2))
+                        .build(), null);
     }
 
     @Override
     public void onFinish() {
         super.onFinish();
-        //SettingUtils.markAlreadyDisplayIntro(true);
+        SettingUtils.markAlreadyDisplayIntro(true);
         HomeActivity.launchActivity(this);
     }
 }

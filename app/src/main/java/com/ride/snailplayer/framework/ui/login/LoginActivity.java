@@ -15,11 +15,12 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityLoginBinding;
-import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
+import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.ui.home.HomeActivity;
+import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.util.common.log.Timber;
@@ -27,14 +28,19 @@ import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.RegexUtils;
 import com.ride.util.common.util.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 public class LoginActivity extends BaseActivity {
 
     private ActivityLoginBinding mBinding;
-    private MaterialDialog mErrorDialog;
 
     private boolean mIsPasswordVisibled;
 
@@ -158,7 +164,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void processLogin(String account, String password) {
-        hideSoftInputAndDialog();
+        reset();
 
         if (TextUtils.isEmpty(account)) {
             mBinding.etAccount.requestFocus();
@@ -175,83 +181,54 @@ public class LoginActivity extends BaseActivity {
         //验证账号和密码是否合法
         if (!RegexUtils.checkMobile(account) || !RegexUtils.IsCorrectUserPassword(password)) {
             Timber.i("用户输入不合法");
-            showErrorDialog();
+            showErrorDialog(getResources().getString(R.string.login_error_dialog_title),
+                    getResources().getString(R.string.login_error_dialog_content));
         }
 
+        //登录
         Timber.i("用户输入合法，开始登录");
 
-        //查询用户
-        BmobUser bu2 = new BmobUser();
-        bu2.setUsername("lucky");
-        bu2.setPassword("123456");
-        bu2.login(new SaveListener<BmobUser>() {
+        showProgressDialog();
 
+        BmobQuery<User> query = new BmobQuery<>();
+        query = query.addWhereEqualTo("mobilePhoneNumber", account);
+        query.findObjects(new FindListener<User>() {
             @Override
-            public void done(BmobUser bmobUser, BmobException e) {
-                if(e == null){
-                    Timber.i("登录成功");
-                    //通过BmobUser user = BmobUser.getCurrentUser()获取登录成功后的本地用户信息
-                    //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(MyUser.class)获取自定义用户信息
-                }else{
-                    Timber.i("登录失败");
+            public void done(List<User> list, BmobException e) {
+                dismissProgress();
+                if (e != null || list == null || list.isEmpty()) {
+                    Timber.i("用户不存在");
+
+                    showErrorDialog(getResources().getString(R.string.login_error_dialog_title),
+                            getResources().getString(R.string.login_error_dialog_content));
+                } else {
+                    Timber.i("用户存在");
+
+                    User user = list.get(0);
+                    user.login(new SaveListener<User>() {
+                        @Override
+                        public void done(User u, BmobException e) {
+                            EventBus.getDefault().post(new UserLoginEvent());
+                            HomeActivity.launchActivity(LoginActivity.this);
+                        }
+                    });
                 }
             }
         });
-//        User.loginByAccountObservable(User.class, account, password)
-//                .subscribe(new Subscriber<User>() {
-//                    @Override
-//                    public void onStart() {
-//                        mBinding.progressWheel.spin();
-//                    }
-//
-//                    @Override
-//                    public void onCompleted() {
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable throwable) {
-//                        Timber.e(throwable);
-//                    }
-//
-//                    @Override
-//                    public void onNext(User user) {
-//
-//                    }
-//                });
-    }
-
-    private void showErrorDialog() {
-        DialogCommonBinding binding = DialogCommonBinding.inflate(getLayoutInflater());
-        binding.setIsSingleChoice(true);
-        binding.setTitle(getResources().getString(R.string.error_dialog_title));
-        binding.setContent(getResources().getString(R.string.error_dialog_content));
-        binding.setListener(view -> {
-            int id = view.getId();
-            switch (id) {
-                case R.id.tv_common_dialog_single:
-                    if (mErrorDialog != null && mErrorDialog.isShowing()) {
-                        mErrorDialog.dismiss();
-                    }
-                    break;
-            }
-        });
-        mErrorDialog = new MaterialDialog.Builder(this)
-                .customView(binding.getRoot(), false)
-                .cancelable(true)
-                .canceledOnTouchOutside(false)
-                .show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        hideSoftInputAndDialog();
+        reset();
     }
 
-    private void hideSoftInputAndDialog() {
-        if (mErrorDialog != null && mErrorDialog.isShowing()) {
-            mErrorDialog.dismiss();
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void reset() {
         KeyboardUtils.hideSoftInput(mBinding.etAccount);
         KeyboardUtils.hideSoftInput(mBinding.etPassword);
     }

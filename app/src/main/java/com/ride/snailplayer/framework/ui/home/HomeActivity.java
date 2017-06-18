@@ -18,15 +18,23 @@ import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItem;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
+import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
 import com.ride.snailplayer.framework.ui.login.LoginActivity;
+import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
+import com.ride.snailplayer.framework.ui.me.MeActivity;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
 import com.ride.util.common.util.ScreenUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 public class HomeActivity extends BaseActivity {
     private ActivityHomeBinding mBinding;
@@ -50,7 +58,10 @@ public class HomeActivity extends BaseActivity {
         mBinding.setHomeActionHandler(this);
         mHomeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
+        EventBus.getDefault().register(this);
+
         setupTab();
+        setupUser();
     }
 
     private void setupTab() {
@@ -144,16 +155,42 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    private void setupUser() {
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user == null) {
+            mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
+        } else {
+            mBinding.homeTvLoginStatus.setText(user.getUsername());
+        }
+    }
+
+    @Subscribe
+    public void onUserLogin(UserLoginEvent event) {
+        User user = BmobUser.getCurrentUser(User.class);
+        mBinding.homeTvLoginStatus.setText(user.getUsername());
+    }
+
     public void onMenuSearchClick() {
         SearchActivity.launchActivity(this);
     }
 
     public void onMenuFileDownloadClick() {
-
+        //TODO
     }
 
     public void onAvatarClick() {
-        LoginActivity.launchActivity(this);
+        User user = BmobUser.getCurrentUser(User.class);
+        if (user == null) {
+            LoginActivity.launchActivity(this);
+        } else {
+            MeActivity.launchActivity(this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

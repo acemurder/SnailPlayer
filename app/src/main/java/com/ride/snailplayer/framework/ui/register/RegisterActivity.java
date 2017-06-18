@@ -3,28 +3,25 @@ package com.ride.snailplayer.framework.ui.register;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Looper;
-import android.os.MessageQueue;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityRegisterBinding;
-import com.ride.snailplayer.util.TextWatcherAdapter;
+import com.ride.snailplayer.framework.ui.register.fragment.InputPhoneNumberFragment;
 import com.ride.util.common.util.ActivityUtils;
-import com.ride.util.common.util.KeyboardUtils;
-import com.ride.util.common.util.RegexUtils;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final int STEP_ZERO = 0;
     public static final int STEP_FIRST = 1;
     public static final int STEP_SECOND = 2;
     public static final int STEP_THIRD = 3;
+    public static final int STEP_FOURTH = 4;
+    public static final int STEP_FIFTH = 5;
 
     private ActivityRegisterBinding mBinding;
 
@@ -75,5 +72,15 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         processBack();
+    }
+
+    public void showProgress() {
+        mBinding.progressWheel.spin();
+    }
+
+    public void dismissProgress() {
+        if (mBinding.progressWheel.isSpinning()) {
+            mBinding.progressWheel.stopSpinning();
+        }
     }
 }
