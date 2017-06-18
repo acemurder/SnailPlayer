@@ -41,6 +41,8 @@ public class VideoPlayGestureController {
     private FrameLayout mAdjustPanelContainer;
     private FrameLayout mProgressAdjustPanelContainer;
 
+    private boolean isVisible = true;
+
 
     public VideoPlayGestureController(Context context, FrameLayout viewContainer, FrameLayout viewProgressContainer,
                                       VideoPlayView mPlayView) {
@@ -160,6 +162,7 @@ public class VideoPlayGestureController {
         @Override
         public void run() {
             //  mGestureCallBack.onSingleTap();
+            mPlayView.setVisibilityGone();
         }
     };
 
