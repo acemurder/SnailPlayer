@@ -191,7 +191,7 @@ public class LoginActivity extends BaseActivity {
         showProgressDialog();
 
         BmobQuery<User> query = new BmobQuery<>();
-        query = query.addWhereEqualTo("mobilePhoneNumber", account);
+        query = query.addWhereEqualTo("mobilePhoneNumber", account).addWhereEqualTo("password", password);
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
@@ -199,8 +199,7 @@ public class LoginActivity extends BaseActivity {
                 if (e != null || list == null || list.isEmpty()) {
                     Timber.i("用户不存在");
 
-                    showErrorDialog(getResources().getString(R.string.login_error_dialog_title),
-                            getResources().getString(R.string.login_error_dialog_content));
+                    showErrorDialog(getResources().getString(R.string.login_error_dialog_title), getResources().getString(R.string.login_error_dialog_content));
                 } else {
                     Timber.i("用户存在");
 
@@ -209,7 +208,7 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void done(User u, BmobException e) {
                             EventBus.getDefault().post(new UserLoginEvent());
-                            HomeActivity.launchActivity(LoginActivity.this);
+                            ActivityCompat.finishAfterTransition(LoginActivity.this);
                         }
                     });
                 }

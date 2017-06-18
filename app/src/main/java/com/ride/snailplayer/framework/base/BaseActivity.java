@@ -101,28 +101,6 @@ public class BaseActivity extends AppCompatActivity implements LifecycleRegistry
         }
     }
 
-    private void showErrorDialog() {
-        DialogCommonBinding binding = DialogCommonBinding.inflate(getLayoutInflater());
-        binding.setIsSingleChoice(true);
-        binding.setTitle(getResources().getString(R.string.login_error_dialog_title));
-        binding.setContent(getResources().getString(R.string.login_error_dialog_content));
-        binding.setListener(view -> {
-            int id = view.getId();
-            switch (id) {
-                case R.id.tv_common_dialog_single:
-                    if (mErrorDialog != null && mErrorDialog.isShowing()) {
-                        mErrorDialog.dismiss();
-                    }
-                    break;
-            }
-        });
-        mErrorDialog = new MaterialDialog.Builder(this)
-                .customView(binding.getRoot(), false)
-                .cancelable(true)
-                .canceledOnTouchOutside(false)
-                .show();
-    }
-
     protected void showCommonErrorDialog(String title) {
         if (!NetworkUtils.isNetworkAvailable()) {
             showErrorDialog(title, getResources().getString(R.string.network_error));
