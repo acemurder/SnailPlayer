@@ -51,7 +51,13 @@ public class RecommendListAdapter  extends DelegateAdapter.Adapter<RecommendList
                 videoInfoList.get(position))));
         holder.title.setText(videoInfoList.get(position).title);
         holder.content.setText(videoInfoList.get(position).shortTitle);
-        Glide.with(fragment).load(videoInfoList.get(position).img).into(holder.img);
+        Glide.with(fragment).load(getUrl(videoInfoList.get(position).img)).into(holder.img);
+    }
+
+    private String getUrl(String oldUrl) {
+        int index = oldUrl.lastIndexOf(".");
+        String url = oldUrl.substring(0, index) +"_260_360";
+        return url + ".jpg";
     }
 
     @Override

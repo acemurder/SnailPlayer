@@ -46,6 +46,11 @@ public class VideoPlayView extends RelativeLayout {
     private VideoPlayGestureController mGestureController;
     private FrameLayout viewContainer;
     private FrameLayout viewProgressContainer;
+    private TextView mTitleText;
+    private ImageView mBackImage;
+    private LinearLayout mRemindLayout;
+
+    private OnBackClickListener listener;
 
 
     IQYPlayerHandlerCallBack mCallBack = new IQYPlayerHandlerCallBack() {
@@ -139,7 +144,18 @@ public class VideoPlayView extends RelativeLayout {
 
     }
 
+    public void setVisibilityGone(){
+        mRemindLayout.setVisibility(GONE);
+        mControlLayout.setVisibility(GONE);
+    }
+
+    public void setVisibilityVisible(){
+        mRemindLayout.setVisibility(VISIBLE);
+        mControlLayout.setVisibility(VISIBLE);
+    }
+
     private void initView() {
+
         LayoutInflater.from(mContext).inflate(R.layout.video_play_view, this);
         mControlLayout = (LinearLayout) findViewById(R.id.video_controller);
         mVideoView = (QiyiVideoView) findViewById(R.id.video_view);
@@ -170,6 +186,7 @@ public class VideoPlayView extends RelativeLayout {
         mFullScreenImage.setOnClickListener((v -> setOrientation()));
 
         mSeekBar = (SeekBar) findViewById(R.id.sb_progress);
+
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private int mProgress = 0;
 
@@ -177,6 +194,7 @@ public class VideoPlayView extends RelativeLayout {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     mProgress = progress;
+                    removeCallbacks(mGestureController.getDoubleTapRunnable());
                 }
             }
 
@@ -189,13 +207,32 @@ public class VideoPlayView extends RelativeLayout {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mSeekBar.setProgress(mProgress);
                 mVideoView.seekTo(mProgress);
+                postDelayed(mGestureController.getDoubleTapRunnable(),2000);
             }
         });
         viewContainer = (FrameLayout) findViewById(R.id.fl_view_container);
         viewProgressContainer = (FrameLayout) findViewById(R.id.fl_view_container_progress);
+        mTitleText = (TextView) findViewById(R.id.tv_title);
+
+        mBackImage = (ImageView) findViewById(R.id.iv_back);
+        mBackImage.setOnClickListener((v -> {
+            if (listener != null) {
+                listener.onClick();
+            }
+        }));
+
+        mRemindLayout = (LinearLayout) findViewById(R.id.remind_layout);
         initGestureController();
 
 
+    }
+
+    public void setTitle(String title){
+        mTitleText.setText(title);
+    }
+
+    public void setListener(OnBackClickListener listener) {
+        this.listener = listener;
     }
 
     private void initGestureController() {
@@ -210,6 +247,7 @@ public class VideoPlayView extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         mGestureController.handleTouchEvent(event);
         Timber.i("onTouchEvent");
         return true;
@@ -307,6 +345,10 @@ public class VideoPlayView extends RelativeLayout {
 
     public QiyiVideoView getmVideoView() {
         return mVideoView;
+    }
+
+    public interface OnBackClickListener{
+        void onClick();
     }
 
     //private GestureDetector mGestureDetector = new GestureDetector()

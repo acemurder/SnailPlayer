@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/play_layout"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -13,7 +14,57 @@
             android:layout_height="300dp"
             android:background="@android:color/darker_gray">
         </com.ride.snailplayer.widget.VideoPlayView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@id/video_play_view"
+            android:layout_marginBottom="46dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/comment_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:id="@+id/comment_notice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:text="还没有人评论，快来评论一发吧"/>
+        </RelativeLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/comment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="1dp"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/comment_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@drawable/bg_edittext"
+                android:hint="点此输入"
+                android:padding="3dp" />
+
+            <TextView
+
+                android:id="@+id/comment_send"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/theme_primary"
+                android:gravity="center"
+                android:text="发送"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
 </layout>
 
