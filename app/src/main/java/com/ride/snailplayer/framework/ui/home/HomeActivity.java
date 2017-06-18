@@ -8,10 +8,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -23,18 +26,25 @@ import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
 import com.ride.snailplayer.framework.ui.login.LoginActivity;
 import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
+import com.ride.snailplayer.framework.ui.me.AvatarActivity;
 import com.ride.snailplayer.framework.ui.me.MeActivity;
+import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UploadFileListener;
 
 public class HomeActivity extends BaseActivity {
     private ActivityHomeBinding mBinding;
@@ -157,19 +167,29 @@ public class HomeActivity extends BaseActivity {
 
     private void setupUser() {
         User user = BmobUser.getCurrentUser(User.class);
-        if (user == null) {
-            mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
-        } else {
+        if (user != null) {
             mBinding.homeTvLoginStatus.setText(user.getUsername());
+        } else {
+            mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
         }
     }
 
     @Subscribe
     public void onUserLogin(UserLoginEvent event) {
+        setupUser();
+    }
+
+    @Subscribe
+    public void onUserUpdate(UserUpdateEvent event) {
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
-            HomeActivity.launchActivity(this);
-            mBinding.homeTvLoginStatus.setText(user.getUsername());
+            Timber.i("onUserUpdate");
+            Glide.with(this)
+                    .load(user.getAvatraUrl())
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .placeholder(ContextCompat.getDrawable(this, R.drawable.default_profile))
+                    .into(mBinding.ivAvatar);
         }
     }
 

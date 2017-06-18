@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -28,6 +31,7 @@ import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItemAdapter;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
+import com.ride.util.common.util.KeyboardUtils;
 
 public class SearchActivity extends BaseActivity {
 
@@ -61,11 +65,18 @@ public class SearchActivity extends BaseActivity {
 
         doEnterAnim();
         overridePendingTransition(0, 0);
+
+        //打开软键盘
+        MessageQueue queue = Looper.myQueue();
+        queue.addIdleHandler(() -> {
+            KeyboardUtils.showSoftInput(mBinding.searchView);
+            return false;
+        });
     }
 
     private void setupToolbar() {
         Drawable up = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
-        DrawableCompat.setTint(up, ContextCompat.getColor(this, R.color.body_text_2));
+        DrawableCompat.setTint(up, ContextCompat.getColor(this, R.color.body_text_1));
         Toolbar toolbar = getToolbar();
         toolbar.setNavigationIcon(up);
         toolbar.setNavigationOnClickListener(v -> navigateUpOrBack(SearchActivity.this, null));

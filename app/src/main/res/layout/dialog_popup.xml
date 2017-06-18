@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+                name="firstBtnText"
+                type="String"/>
+
+        <variable
+                name="secondBtnText"
+                type="String"/>
+
+        <variable
+                name="thirdBtnText"
+                type="String"/>
+
+        <variable
+                name="popupCallback"
+                type="com.ride.snailplayer.framework.event.listener.DataBindingClickListener"/>
+
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <Button
+                android:id="@+id/dialog_popup_first_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="@{firstBtnText}"
+                android:textColor="@color/body_text_2"
+                android:textSize="16sp"
+                android:visibility="@{firstBtnText == null ? View.GONE : View.VISIBLE}"
+                android:onClick="@{popupCallback.onClick}"
+                tools:text="按钮1"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/app_grey"
+                android:clickable="false"
+                android:focusable="false"/>
+
+        <Button
+                android:id="@+id/dialog_popup_second_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="@{secondBtnText}"
+                android:textColor="@color/body_text_2"
+                android:textSize="16sp"
+                android:visibility="@{secondBtnText == null ? View.GONE : View.VISIBLE}"
+                android:onClick="@{popupCallback.onClick}"
+                tools:text="按钮2"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/app_grey"
+                android:clickable="false"
+                android:focusable="false"/>
+
+        <Button
+                android:id="@+id/dialog_popup_third_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:text="@{thirdBtnText}"
+                android:textColor="@color/body_text_2"
+                android:textSize="16sp"
+                android:visibility="@{thirdBtnText == null ? View.GONE : View.VISIBLE}"
+                android:onClick="@{popupCallback.onClick}"
+                tools:text="按钮3"/>
+
+    </LinearLayout>
+
+</layout>

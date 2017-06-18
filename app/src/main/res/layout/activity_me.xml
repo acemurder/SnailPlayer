@@ -6,6 +6,10 @@
 
     <data>
 
+        <variable
+                name="meActionHandler"
+                type="com.ride.snailplayer.framework.ui.me.MeActivity"/>
+
     </data>
 
     <LinearLayout
@@ -22,6 +26,63 @@
                 app:popupTheme="@style/ActionBarPopupThemeOverlay">
 
         </android.support.v7.widget.Toolbar>
+
+        <RelativeLayout
+                android:id="@+id/rl_me_basic_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingTop="@dimen/padding_normal"
+                android:paddingBottom="@dimen/padding_normal"
+                android:paddingLeft="@dimen/padding_normal"
+                android:paddingRight="@dimen/padding_normal"
+                android:background="@drawable/selector_common_background"
+                android:clickable="true"
+                android:onClick="@{meActionHandler.onClick}">
+
+            <com.ride.snailplayer.widget.imageview.CircleImageView
+                    android:id="@+id/circle_iv_me_avatar"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_profile"/>
+
+            <TextView
+                    android:id="@+id/tv_me_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="骑着蜗牛"
+                    android:textColor="@color/app_grey"
+                    android:layout_alignTop="@id/circle_iv_me_avatar"
+                    android:layout_toRightOf="@id/circle_iv_me_avatar"
+                    android:layout_marginLeft="@dimen/padding_normal"/>
+
+            <TextView
+                    android:id="@+id/tv_me_check_edit_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/check_or_edit_info"
+                    android:textSize="14sp"
+                    android:textColor="@color/app_grey"
+                    android:layout_alignBottom="@id/circle_iv_me_avatar"
+                    android:layout_toRightOf="@id/circle_iv_me_avatar"
+                    android:layout_marginLeft="@dimen/padding_normal"/>
+
+        </RelativeLayout>
+
+        <TextView
+                android:id="@+id/tv_me_exit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:background="@drawable/selector_common_background"
+                android:text="@string/exit"
+                android:textSize="16sp"
+                android:textColor="#FF3300"
+                android:onClick="@{meActionHandler.onClick}"/>
 
     </LinearLayout>
 

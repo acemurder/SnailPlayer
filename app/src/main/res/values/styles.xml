@@ -62,7 +62,9 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
-    <style name="Widget.SnailPlayer.EditText" parent="Widget.AppCompat.EditText">
+    <style name="PopupWindowAnimationStyle">
+        <item name="android:windowEnterAnimation">@anim/popup_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit_anim</item>
     </style>
 
     <style name="PlayActivityTheme" parent="@style/Theme.AppCompat.Light">

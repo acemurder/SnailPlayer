@@ -9,10 +9,14 @@
     <string name="app_error">应用发生未知错误。</string>
     <string name="network_error">请检查您的网络连接。</string>
 
+    <!--transition_name-->
+    <string name="transition_avatar">avatar</string>
+
     <!-- Label for Activity-->
     <string name="label_search">查找</string>
     <string name="label_login">登录</string>
     <string name="label_register">注册</string>
+    <string name="label_avatar">个人头像</string>
 
     <!--LaunchActivity-->
     <string name="app_slogan">享受美妙时光</string>
@@ -53,4 +57,13 @@
     <string name="or">或</string>
     <string name="register_success">注册成功</string>
     <string name="register_failed">注册失败</string>
+
+    <!--MeActivity-->
+    <string name="check_or_edit_info">查看或编辑个人主页</string>
+    <string name="setting">设置</string>
+    <string name="exit">退出登录</string>
+
+    <!--AvatarActivity-->
+    <string name="take_photo">拍摄</string>
+    <string name="pick_photo_from_album">从相册中选择</string>
 </resources>

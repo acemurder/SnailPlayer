@@ -19,16 +19,12 @@ import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityLoginBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
-import com.ride.snailplayer.framework.ui.home.HomeActivity;
-import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.RegexUtils;
 import com.ride.util.common.util.ToastUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -206,9 +202,9 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void done(User u, BmobException e) {
                             if (BmobUser.getCurrentUser(User.class) == null) {
-                                Timber.d("登录陈工");
-                            } else {
                                 Timber.d("登录失败");
+                            } else {
+                                Timber.d("登录成功");
                             }
                             //EventBus.getDefault().post(new UserLoginEvent());
                         }

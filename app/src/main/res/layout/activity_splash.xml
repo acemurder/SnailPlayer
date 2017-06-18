@@ -18,6 +18,7 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="@null"
                 app:siRadius="6dp"
+                app:siBorderColor="@color/theme_primary"
                 app:siSquare="true"/>
 
         <LinearLayout
