@@ -194,6 +194,7 @@ public class VideoPlayView extends RelativeLayout {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     mProgress = progress;
+                    removeCallbacks(mGestureController.getDoubleTapRunnable());
                 }
             }
 
@@ -206,6 +207,7 @@ public class VideoPlayView extends RelativeLayout {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mSeekBar.setProgress(mProgress);
                 mVideoView.seekTo(mProgress);
+                postDelayed(mGestureController.getDoubleTapRunnable(),2000);
             }
         });
         viewContainer = (FrameLayout) findViewById(R.id.fl_view_container);
@@ -245,6 +247,7 @@ public class VideoPlayView extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         mGestureController.handleTouchEvent(event);
         Timber.i("onTouchEvent");
         return true;

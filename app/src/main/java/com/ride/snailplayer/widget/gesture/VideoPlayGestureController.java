@@ -62,6 +62,7 @@ public class VideoPlayGestureController {
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
             mStartDragX = event.getRawX();
+            mPlayView.removeCallbacks(mDoubleTapRunnable);
             updateCurrentInfo();
         }
         mGestureDetector.onTouchEvent(event);
@@ -175,6 +176,9 @@ public class VideoPlayGestureController {
         }
     };
 
+    public Runnable getDoubleTapRunnable() {
+        return mDoubleTapRunnable;
+    }
 
     private void updateCurrentInfo() {
         AudioManager manager = (AudioManager)
