@@ -165,11 +165,12 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
                 }
                 break;
             case R.id.next_btn:
-                reset();
+                clear();
                 showProgress();
 
                 User user = new User();
-                user.setUsername(mBinding.etNickname.getText().toString());
+                user.setUsername(mPhoneNumber);
+                user.setNickName(mBinding.etNickname.getText().toString());
                 user.setPassword(mBinding.etPassword.getText().toString());
                 user.setMobilePhoneNumber(mPhoneNumber);
                 user.setMobilePhoneNumberVerified(true);
@@ -192,9 +193,10 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        reset();
+    protected void clear() {
+        super.clear();
+        KeyboardUtils.hideSoftInput(mBinding.etNickname);
+        KeyboardUtils.hideSoftInput(mBinding.etPassword);
     }
 
     private void changeVisibilityView() {
@@ -204,12 +206,6 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
             mBinding.ivVisiblePassword.setImageResource(R.drawable.ic_visibility);
         }
         mIsPasswordVisibled = !mIsPasswordVisibled;
-    }
-
-    private void reset() {
-        KeyboardUtils.hideSoftInput(mBinding.etNickname);
-        KeyboardUtils.hideSoftInput(mBinding.etPassword);
-        dismissErrorDialog();
     }
 
 }

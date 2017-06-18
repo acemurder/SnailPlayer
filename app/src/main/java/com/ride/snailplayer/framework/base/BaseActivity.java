@@ -69,13 +69,12 @@ public class BaseActivity extends AppCompatActivity implements LifecycleRegistry
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onDestroy() {
+        super.onDestroy();
+        clear();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    protected void clear() {
         dismissProgress();
         dismissErrorDialog();
     }

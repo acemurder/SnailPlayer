@@ -9,14 +9,8 @@ import android.view.ViewGroup;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.FragmentCompleteRegisterBinding;
-import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.HomeActivity;
-import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
-
-import org.greenrobot.eventbus.EventBus;
-
-import cn.bmob.v3.BmobUser;
 
 /**
  * @author Stormouble
@@ -65,8 +59,7 @@ public class CompleteRegisterFragment extends BaseRegisterFragment {
                 ActivityCompat.finishAfterTransition(mHostActivity);
                 break;
             case R.id.btn_fcr_login:
-                EventBus.getDefault().post(new UserLoginEvent());
-                HomeActivity.launchActivity(getActivity());
+                HomeActivity.launchActivity(getActivity(), true);
                 break;
         }
     }

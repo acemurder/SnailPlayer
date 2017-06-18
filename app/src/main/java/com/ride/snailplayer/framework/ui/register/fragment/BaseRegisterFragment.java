@@ -85,8 +85,12 @@ public class BaseRegisterFragment extends BaseFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
+        clear();
+    }
+
+    protected void clear() {
         dismissProgress();
         dismissErrorDialog();
     }

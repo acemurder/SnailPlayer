@@ -6,17 +6,20 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -28,42 +31,58 @@ import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
 import com.ride.snailplayer.framework.ui.login.LoginActivity;
 import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
-import com.ride.snailplayer.framework.ui.me.AvatarActivity;
 import com.ride.snailplayer.framework.ui.me.MeActivity;
 import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
+import com.ride.snailplayer.net.ApiClient;
+import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
 import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
+import com.ride.util.common.util.BitmapUtils;
 import com.ride.util.common.util.ScreenUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UploadFileListener;
+import io.reactivex.Observable;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeActivity extends BaseActivity {
+
+    public static final String USER_UPDATE_SIGNAL = "user_update_signal";
+
     private ActivityHomeBinding mBinding;
     private HomeViewModel mHomeViewModel;
     private LiveData<List<Channel>> mPreloadChannelList;
     private FragmentStatePagerItemAdapter mAdapter;
     private FragmentPagerItems mItems;
-
     private Handler mHanlder;
 
+    private User mUser;
     private boolean mIsTabClicked;
+    private boolean mUserUpdated;
 
     public static void launchActivity(Activity startingActivity) {
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeBasic();
         Intent intent = new Intent(startingActivity, HomeActivity.class);
+        ActivityCompat.startActivity(startingActivity, intent, optionsCompat.toBundle());
+    }
+
+    public static void launchActivity(Activity startingActivity, boolean updated) {
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeBasic();
+        Intent intent = new Intent(startingActivity, HomeActivity.class);
+        intent.putExtra(USER_UPDATE_SIGNAL, updated);
         ActivityCompat.startActivity(startingActivity, intent, optionsCompat.toBundle());
     }
 
@@ -78,7 +97,6 @@ public class HomeActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         setupTab();
-        setupUser();
     }
 
     private void setupTab() {
@@ -172,11 +190,31 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void setupUser() {
-        User user = BmobUser.getCurrentUser(User.class);
-        if (user != null) {
-            mBinding.homeTvLoginStatus.setText(user.getUsername());
-            setUserAvatar(user.getAvatraUrl());
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mUserUpdated = getIntent().getBooleanExtra(USER_UPDATE_SIGNAL, false);
+        if (mUserUpdated) {
+            updateUser();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mUserUpdated = intent.getBooleanExtra(USER_UPDATE_SIGNAL, false);
+        if (mUserUpdated) {
+            updateUser();
+        }
+
+        Timber.i("onNewIntent,updated=" + mUserUpdated);
+    }
+
+    private void updateUser() {
+        mUser = BmobUser.getCurrentUser(User.class);
+        if (mUser != null) {
+            mBinding.homeTvLoginStatus.setText(mUser.getNickName());
+            updateUserAvatar();
         } else {
             mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
             mBinding.ivAvatar.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_profile));
@@ -184,36 +222,45 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onUserLogin(UserLoginEvent event) {
-        setupUser();
-    }
-
-    @Subscribe
     public void onUserUpdate(UserUpdateEvent event) {
-        User user = BmobUser.getCurrentUser(User.class);
-        if (user != null) {
-            Timber.i("onUserUpdate");
-            setUserAvatar(user.getAvatraUrl());
+        mUser = BmobUser.getCurrentUser(User.class);
+        if (mUser != null) {
+            updateUserAvatar();
         }
+
+        Timber.i("onUserUpdate");
     }
 
-    private void setUserAvatar(String url) {
-        AppExecutors.getInstance().getDiskIOExecutor().execute(() -> {
-            try {
-                Bitmap bitmap = Glide.with(HomeActivity.this)
-                        .load(url)
-                        .asBitmap()
-                        .centerCrop()
-                        .into(ScreenUtils.dp2px(56), ScreenUtils.dp2px(56))
-                        .get();
+    private void updateUserAvatar() {
+        if (!TextUtils.isEmpty(mUser.getAvatarUrl())) {
+            Observable.just(mUser.getAvatarUrl())
+                    .compose(MainThreadObservableTransformer.instance())
+                    .map(s -> {
+                        OkHttpClient client = ApiClient.IQIYI.getOkHttpClient();
+                        Request request = new Request.Builder().url(s).build();
+                        return client.newCall(request);
+                    })
+                    .subscribe(call -> call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            Timber.i("下载bitmap失败");
+                        }
 
-                mHanlder.post(() -> mBinding.ivAvatar.setImageBitmap(bitmap));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        });
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Timber.i("下载bitmap成功");
+                                Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                                AppExecutors.getInstance().getMainThreadExecutor().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mBinding.ivAvatar.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }
+                    }));
+        }
     }
 
     public void onMenuSearchClick() {

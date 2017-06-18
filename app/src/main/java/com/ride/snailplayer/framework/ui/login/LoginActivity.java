@@ -19,6 +19,8 @@ import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityLoginBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.db.UserContract;
+import com.ride.snailplayer.framework.ui.home.HomeActivity;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.util.common.log.Timber;
@@ -26,6 +28,8 @@ import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.RegexUtils;
 import com.ride.util.common.util.ToastUtils;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -33,6 +37,9 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
+import rx.Observable;
+import rx.functions.Func1;
 
 public class LoginActivity extends BaseActivity {
 
@@ -160,7 +167,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void processLogin(String account, String password) {
-        reset();
+        clear();
 
         if (TextUtils.isEmpty(account)) {
             mBinding.etAccount.requestFocus();
@@ -179,15 +186,16 @@ public class LoginActivity extends BaseActivity {
             Timber.i("用户输入不合法");
             showErrorDialog(getResources().getString(R.string.login_error_dialog_title),
                     getResources().getString(R.string.login_error_dialog_content));
+        } else {
+            Timber.i("用户输入合法，开始登录");
         }
-
-        //登录
-        Timber.i("用户输入合法，开始登录");
 
         showProgressDialog();
 
         BmobQuery<User> query = new BmobQuery<>();
-        query = query.addWhereEqualTo("mobilePhoneNumber", account).addWhereEqualTo("password", password);
+        query = query.addWhereEqualTo(UserContract.USER_TABLE_USERNAME, account)
+                .addWhereEqualTo(UserContract.USER_TABLE_PHONE_NUMBER, account)
+                .addWhereEqualTo(UserContract.USER_TABLE_PASSWORD, password);
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
@@ -197,16 +205,19 @@ public class LoginActivity extends BaseActivity {
                     showErrorDialog(getResources().getString(R.string.login_error_dialog_title), getResources().getString(R.string.login_error_dialog_content));
                 } else {
                     Timber.i("用户存在");
-                    User user = list.get(0);
-                    user.login(new SaveListener<User>() {
+                    User newUser = new User();
+                    newUser.setUsername(account);
+                    newUser.setMobilePhoneNumber(account);
+                    newUser.setPassword(password);
+                    newUser.login(new SaveListener<User>() {
                         @Override
-                        public void done(User u, BmobException e) {
-                            if (BmobUser.getCurrentUser(User.class) == null) {
-                                Timber.d("登录失败");
+                        public void done(User result, BmobException e) {
+                            if (e == null) {
+                                Timber.i("登录成功");
+                                HomeActivity.launchActivity(LoginActivity.this, true);
                             } else {
-                                Timber.d("登录成功");
+                                Timber.e("登录失败," + e.getMessage());
                             }
-                            //EventBus.getDefault().post(new UserLoginEvent());
                         }
                     });
                 }
@@ -215,17 +226,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        reset();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    private void reset() {
+    protected void clear() {
+        super.clear();
         KeyboardUtils.hideSoftInput(mBinding.etAccount);
         KeyboardUtils.hideSoftInput(mBinding.etPassword);
     }

@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.databinding.FragmentCheckSmsCodeBinding;
-import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.util.common.log.Timber;
@@ -26,12 +25,8 @@ import com.ride.util.common.util.ActivityUtils;
 import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.RegexUtils;
 
-import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -178,39 +173,13 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
                 mBinding.etSmsCode.setText("");
                 break;
             case R.id.next_btn:
-                reset();
-                showProgress();
-
-                BmobQuery<User> query = new BmobQuery<>();
-                query = query.addWhereEqualTo("mobilePhoneNumber", mPhoneNumber);
-                query.findObjects(new FindListener<User>() {
-                    @Override
-                    public void done(List<User> list, BmobException e) {
-                        dismissProgress();
-                        if (e != null) {
-                            Timber.i("查询用户是否存在失败");
-                        } else {
-                            Timber.i("查询用户是否存在成功");
-                            if (list != null) {
-                                if (list.isEmpty()) {
-                                    Timber.i("用户不存在");
-                                    ActivityUtils.startAnotherFragment(getFragmentManager(), CheckSMSCodeFragment.this,
-                                            FillBasicInfoFragment.newInstance(mPhoneNumber), R.id.register_container);
-                                } else {
-                                    Timber.i("用户已存在");
-                                    ActivityUtils.startAnotherFragment(getFragmentManager(), CheckSMSCodeFragment.this,
-                                            PhoneBoundFragment.newInstance(list.get(0)), R.id.register_container);
-                                }
-                            }
-                        }
-                    }
-                });
+                processNext();
                 break;
         }
     }
 
     private void processNext() {
-        reset();
+        clear();
         showProgress();
 
         //验证
@@ -225,28 +194,8 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
                             getResources().getString(R.string.sms_error_dialog_content));
                 } else {
                     Timber.i("验证成功");
-                    BmobQuery<User> query = new BmobQuery<>();
-                    query = query.addWhereEqualTo("mobilePhoneNumber", mPhoneNumber);
-                    query.findObjects(new FindListener<User>() {
-                        @Override
-                        public void done(List<User> list, BmobException e) {
-                            if (e != null) {
-                                Timber.i("查询用户是否存在失败");
-                                showCommonErrorDialog(getResources().getString(R.string.sms_error_dialog_title));
-                            } else {
-                                Timber.i("查询用户是否存在成功");
-                                if (list != null && list.isEmpty()) {
-                                    Timber.i("用户不存在");
-                                    ActivityUtils.startAnotherFragment(getFragmentManager(), CheckSMSCodeFragment.this,
-                                            FillBasicInfoFragment.newInstance(mPhoneNumber), R.id.register_container);
-                                } else {
-                                    Timber.i("用户已存在");
-                                    ActivityUtils.startAnotherFragment(getFragmentManager(), CheckSMSCodeFragment.this,
-                                            PhoneBoundFragment.newInstance(list.get(0)), R.id.register_container);
-                                }
-                            }
-                        }
-                    });
+                    ActivityUtils.startAnotherFragment(getFragmentManager(), CheckSMSCodeFragment.this,
+                            FillBasicInfoFragment.newInstance(mPhoneNumber), R.id.register_container);
                 }
             }
         });
@@ -275,20 +224,18 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        reset();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mTimer != null) {
             mTimer.cancel();
         }
+        clear();
     }
 
-    private void reset() {
+    @Override
+    protected void clear() {
+        super.clear();
         KeyboardUtils.hideSoftInput(mBinding.etSmsCode);
     }
+
 }

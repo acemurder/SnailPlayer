@@ -8,14 +8,22 @@ import cn.bmob.v3.BmobUser;
  */
 
 public class User extends BmobUser {
+    private String nickName;
+    private String avatarUrl;
 
-    private String avatraUrl;
-
-    public String getAvatraUrl() {
-        return avatraUrl;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setAvatraUrl(String avatraUrl) {
-        this.avatraUrl = avatraUrl;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

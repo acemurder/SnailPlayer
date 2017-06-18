@@ -32,7 +32,6 @@ import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.util.Utils;
 import com.ride.snailplayer.util.ucrop.UCropClient;
 import com.ride.util.common.log.Timber;
-import com.ride.util.common.util.ScreenUtils;
 import com.ride.util.common.util.ToastUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -112,7 +111,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
 
         if (mUser != null) {
             Glide.with(this)
-                    .load(mUser.getAvatraUrl())
+                    .load(mUser.getAvatarUrl())
                     .placeholder(ContextCompat.getDrawable(this, R.drawable.default_profile))
                     .centerCrop()
                     .into(mBinding.ivAvatar);

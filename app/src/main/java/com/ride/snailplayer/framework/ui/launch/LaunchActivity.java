@@ -51,10 +51,6 @@ public class LaunchActivity extends BaseActivity {
         } else {
             mHandler.postDelayed(mStartHomeActivityRunnable, 2000);
         }
-
-        Glide.with(this)
-                .load(R.mipmap.ic_launcher)
-                .into(mBinding.ivLogo);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class PhoneBoundFragment extends BaseFragment {
         mBinding.tvPhoneNumber.setText(hidedPhoneNumber);
 
         Glide.with(getContext())
-                .load(mExistedUser.getAvatraUrl())
+                .load(mExistedUser.getAvatarUrl())
                 .placeholder(ContextCompat.getDrawable(getContext(), R.drawable.default_profile))
                 .into(mBinding.ivAvatar);
     }

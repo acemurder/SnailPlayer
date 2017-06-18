@@ -4,41 +4,48 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityMeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.HomeActivity;
-import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
+import com.ride.snailplayer.net.ApiClient;
+import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
-import com.ride.util.common.util.ScreenUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
+import java.io.IOException;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MeActivity extends BaseActivity {
 
@@ -58,9 +65,9 @@ public class MeActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_me);
         mBinding.setMeActionHandler(this);
 
-        EventBus.getDefault().register(this);
         mHandler = new Handler();
         mUser = BmobUser.getCurrentUser(User.class);
+        EventBus.getDefault().register(this);
 
         setupToolbar();
         setupBasicInfo();
@@ -68,8 +75,8 @@ public class MeActivity extends BaseActivity {
 
     private void setupBasicInfo() {
         if (mUser != null) {
-            setUserAvatar(mUser.getAvatraUrl());
-            mBinding.tvMeName.setText(mUser.getUsername());
+            updateUser(mUser.getAvatarUrl());
+            mBinding.tvMeName.setText(mUser.getNickName());
         }
     }
 
@@ -95,10 +102,8 @@ public class MeActivity extends BaseActivity {
                 break;
             case R.id.tv_me_exit:
                 new Handler().post(() -> {
-                    User.logOut();
-                    EventBus.getDefault().post(new UserLoginEvent());
-
-                    HomeActivity.launchActivity(MeActivity.this);
+                    BmobUser.logOut();
+                    HomeActivity.launchActivity(MeActivity.this, true);
                     onBackPressed();
                 });
                 break;
@@ -126,12 +131,12 @@ public class MeActivity extends BaseActivity {
     }
 
     private void updateUser(String avatarUrl) {
-        setUserAvatar(avatarUrl);
+        updateUserAvatar(avatarUrl);
 
         User currentUser = BmobUser.getCurrentUser(User.class);
         if (currentUser != null) {
             User newUser = new User();
-            newUser.setAvatraUrl(avatarUrl);
+            newUser.setAvatarUrl(avatarUrl);
             newUser.update(currentUser.getObjectId(), new UpdateListener() {
                 @Override
                 public void done(BmobException e) {
@@ -146,28 +151,41 @@ public class MeActivity extends BaseActivity {
         }
     }
 
-    private void setUserAvatar(String url) {
-        AppExecutors.getInstance().getDiskIOExecutor().execute(() -> {
-            try {
-                Bitmap bitmap = Glide.with(MeActivity.this)
-                        .load(url)
-                        .asBitmap()
-                        .centerCrop()
-                        .into(ScreenUtils.dp2px(56), ScreenUtils.dp2px(56))
-                        .get();
+    private void updateUserAvatar(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            Observable.just(url)
+                    .compose(MainThreadObservableTransformer.instance())
+                    .map(s -> {
+                        OkHttpClient client = ApiClient.IQIYI.getOkHttpClient();
+                        Request request = new Request.Builder().url(s).build();
+                        return client.newCall(request);
+                    })
+                    .subscribe(call -> call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            Timber.i("下载bitmap失败");
+                        }
 
-                mHandler.post(() -> mBinding.circleIvMeAvatar.setImageBitmap(bitmap));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        });
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Timber.i("下载bitmap成功");
+                                Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                                AppExecutors.getInstance().getMainThreadExecutor().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mBinding.circleIvMeAvatar.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }
+                    }));
+        }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void clear() {
+        super.clear();
         EventBus.getDefault().unregister(this);
         mHandler.removeCallbacksAndMessages(null);
     }
