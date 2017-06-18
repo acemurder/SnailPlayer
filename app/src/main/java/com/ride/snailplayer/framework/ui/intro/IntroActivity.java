@@ -45,7 +45,7 @@ public class IntroActivity extends MaterialIntroActivity {
                         .buttonsColor(R.color.theme_accent)
                         .image(R.drawable.img_intro_1)
                         .title(getResources().getString(R.string.app_name))
-                        .description(getResources().getString(R.string.app_description_2))
+                        .description(getResources().getString(R.string.app_description_1))
                         .build(), null);
         addSlide(new SlideFragmentBuilder()
                         .backgroundColor(R.color.theme_primary)
