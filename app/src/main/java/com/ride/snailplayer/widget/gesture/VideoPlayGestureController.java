@@ -52,6 +52,7 @@ public class VideoPlayGestureController {
         setProgressAdjustPanelContainer(viewProgressContainer);
         initGestureDetector();
         mCurrentBrightness = VideoUtil.getSystemBrightnessPercent(context);
+        mPlayView.setVisibilityGone();
 
     }
 
@@ -65,15 +66,15 @@ public class VideoPlayGestureController {
         }
         mGestureDetector.onTouchEvent(event);
         if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+            mPlayView.postDelayed(mDoubleTapRunnable,1500);
             if (mGestureType == FastBackwardOrForward) {
                 //   mGestureCallBack.onEndDragProgress(mDragProgressPosition, event.getRawX() - mStartDragX);
-
                 mStartDragProgressPosition = INVALID_DRAG_PROGRESS;
                 mDragProgressPosition = 0;
                 mStartDragX = 0;
             }
-
             reset();
+
         }
 
     }
@@ -90,7 +91,7 @@ public class VideoPlayGestureController {
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onSingleTapUp(MotionEvent e) {
-                        mPlayView.postDelayed(mDoubleTapRunnable, 200);
+                        mPlayView.postDelayed(mShowRunable, 200);
                         return true;
                     }
 
@@ -163,8 +164,17 @@ public class VideoPlayGestureController {
         public void run() {
             //  mGestureCallBack.onSingleTap();
             mPlayView.setVisibilityGone();
+
         }
     };
+
+    private Runnable mShowRunable = new Runnable() {
+        @Override
+        public void run() {
+            mPlayView.setVisibilityVisible();
+        }
+    };
+
 
     private void updateCurrentInfo() {
         AudioManager manager = (AudioManager)

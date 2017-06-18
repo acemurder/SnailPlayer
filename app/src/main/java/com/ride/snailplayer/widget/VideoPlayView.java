@@ -344,7 +344,7 @@ public class VideoPlayView extends RelativeLayout {
         return mVideoView;
     }
 
-    interface OnBackClickListener{
+    public interface OnBackClickListener{
         void onClick();
     }
 

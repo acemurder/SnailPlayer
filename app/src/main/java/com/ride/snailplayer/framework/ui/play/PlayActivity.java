@@ -68,6 +68,8 @@ public class PlayActivity extends AppCompatActivity {
         mCommentAdapter = new CommentAdapter(R.layout.item_comment,comments,this);
         mBinding.commentList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.commentList.setAdapter(mCommentAdapter);
+        mBinding.videoPlayView.setListener(this::onBackPressed);
+        mBinding.videoPlayView.setTitle(videoInfo.title);
 
 
         mBinding.commentSend.setOnClickListener((v -> {
