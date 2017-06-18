@@ -5,7 +5,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +34,7 @@ import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
+import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
 
@@ -40,6 +43,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -52,6 +56,8 @@ public class HomeActivity extends BaseActivity {
     private LiveData<List<Channel>> mPreloadChannelList;
     private FragmentStatePagerItemAdapter mAdapter;
     private FragmentPagerItems mItems;
+
+    private Handler mHanlder;
 
     private boolean mIsTabClicked;
 
@@ -68,6 +74,7 @@ public class HomeActivity extends BaseActivity {
         mBinding.setHomeActionHandler(this);
         mHomeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
+        mHanlder = new Handler();
         EventBus.getDefault().register(this);
 
         setupTab();
@@ -169,8 +176,10 @@ public class HomeActivity extends BaseActivity {
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
             mBinding.homeTvLoginStatus.setText(user.getUsername());
+            setUserAvatar(user.getAvatraUrl());
         } else {
             mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
+            mBinding.ivAvatar.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_profile));
         }
     }
 
@@ -184,13 +193,27 @@ public class HomeActivity extends BaseActivity {
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {
             Timber.i("onUserUpdate");
-            Glide.with(this)
-                    .load(user.getAvatraUrl())
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(ContextCompat.getDrawable(this, R.drawable.default_profile))
-                    .into(mBinding.ivAvatar);
+            setUserAvatar(user.getAvatraUrl());
         }
+    }
+
+    private void setUserAvatar(String url) {
+        AppExecutors.getInstance().getDiskIOExecutor().execute(() -> {
+            try {
+                Bitmap bitmap = Glide.with(HomeActivity.this)
+                        .load(url)
+                        .asBitmap()
+                        .centerCrop()
+                        .into(ScreenUtils.dp2px(56), ScreenUtils.dp2px(56))
+                        .get();
+
+                mHanlder.post(() -> mBinding.ivAvatar.setImageBitmap(bitmap));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void onMenuSearchClick() {
@@ -214,6 +237,7 @@ public class HomeActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        mHanlder.removeCallbacksAndMessages(null);
     }
 
     @Override

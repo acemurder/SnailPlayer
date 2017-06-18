@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +16,6 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.FutureTarget;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityMeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -26,8 +24,7 @@ import com.ride.snailplayer.framework.ui.home.HomeActivity;
 import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
-import com.ride.snailplayer.net.ApiClient;
-import com.ride.snailplayer.util.AppExecutors;
+import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
 
@@ -35,7 +32,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import cn.bmob.v3.BmobUser;
@@ -43,14 +39,11 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MeActivity extends BaseActivity {
 
     private ActivityMeBinding mBinding;
+    private Handler mHandler;
     private User mUser;
 
     public static void launchActivity(Activity startingActivity) {
@@ -66,21 +59,16 @@ public class MeActivity extends BaseActivity {
         mBinding.setMeActionHandler(this);
 
         EventBus.getDefault().register(this);
-
+        mHandler = new Handler();
         mUser = BmobUser.getCurrentUser(User.class);
+
         setupToolbar();
         setupBasicInfo();
     }
 
     private void setupBasicInfo() {
         if (mUser != null) {
-            Glide.with(this)
-                    .load(mUser.getAvatraUrl())
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(ContextCompat.getDrawable(this, R.drawable.default_profile))
-                    .into(mBinding.circleIvMeAvatar);
-
+            setUserAvatar(mUser.getAvatraUrl());
             mBinding.tvMeName.setText(mUser.getUsername());
         }
     }
@@ -138,6 +126,8 @@ public class MeActivity extends BaseActivity {
     }
 
     private void updateUser(String avatarUrl) {
+        setUserAvatar(avatarUrl);
+
         User currentUser = BmobUser.getCurrentUser(User.class);
         if (currentUser != null) {
             User newUser = new User();
@@ -156,10 +146,30 @@ public class MeActivity extends BaseActivity {
         }
     }
 
+    private void setUserAvatar(String url) {
+        AppExecutors.getInstance().getDiskIOExecutor().execute(() -> {
+            try {
+                Bitmap bitmap = Glide.with(MeActivity.this)
+                        .load(url)
+                        .asBitmap()
+                        .centerCrop()
+                        .into(ScreenUtils.dp2px(56), ScreenUtils.dp2px(56))
+                        .get();
+
+                mHandler.post(() -> mBinding.circleIvMeAvatar.setImageBitmap(bitmap));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
