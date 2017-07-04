@@ -76,7 +76,7 @@ public class MeActivity extends BaseActivity {
     private void setupBasicInfo() {
         if (mUser != null) {
             updateUser(mUser.getAvatarUrl());
-            mBinding.tvMeName.setText(mUser.getNickName());
+            //mBinding..setText(mUser.getNickName());
         }
     }
 
@@ -96,17 +96,17 @@ public class MeActivity extends BaseActivity {
     public void onClick(View view) {
         final int id = view.getId();
         switch (id) {
-            case R.id.rl_me_basic_info:
-                AvatarActivity.launchActivity(this, mBinding.circleIvMeAvatar,
-                        getResources().getString(R.string.transition_avatar));
-                break;
-            case R.id.tv_me_exit:
-                new Handler().post(() -> {
-                    BmobUser.logOut();
-                    HomeActivity.launchActivity(MeActivity.this, true);
-                    onBackPressed();
-                });
-                break;
+//            case R.id.rl_me_basic_info:
+//                AvatarActivity.launchActivity(this, mBinding.circleIvMeAvatar,
+//                        getResources().getString(R.string.transition_avatar));
+//                break;
+//            case R.id.tv_me_exit:
+//                new Handler().post(() -> {
+//                    BmobUser.logOut();
+//                    HomeActivity.launchActivity(MeActivity.this, true);
+//                    onBackPressed();
+//                });
+//                break;
         }
     }
 
@@ -174,7 +174,7 @@ public class MeActivity extends BaseActivity {
                                 AppExecutors.getInstance().getMainThreadExecutor().execute(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mBinding.circleIvMeAvatar.setImageBitmap(bitmap);
+                                        //mBinding.circleIvMeAvatar.setImageBitmap(bitmap);
                                     }
                                 });
                             }
@@ -184,8 +184,8 @@ public class MeActivity extends BaseActivity {
     }
 
     @Override
-    protected void clear() {
-        super.clear();
+    protected void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
         mHandler.removeCallbacksAndMessages(null);
     }

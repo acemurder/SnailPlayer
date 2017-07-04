@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ride.snailplayer.util;
+package com.ride.snailplayer.util.lifecycle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

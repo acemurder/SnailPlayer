@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 
-import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivitySplashBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;

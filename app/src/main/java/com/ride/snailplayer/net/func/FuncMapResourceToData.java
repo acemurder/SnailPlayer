@@ -26,7 +26,7 @@ public class FuncMapResourceToData <T> implements Function<Resource<T>, T> {
         if (resource.code == 100000 || resource.code == 0) {
             return resource.data;
         } else {
-            throw new SnailPlayerApiException("code=" + resource.code + ",errorMssage=" + resource.errorMessage);
+            return null;
         }
     }
 }

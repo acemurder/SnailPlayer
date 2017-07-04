@@ -1,13 +1,5 @@
 package com.ride.bmoblib;
 
-import android.content.Context;
-
-import com.ride.util.common.log.Timber;
-import com.ride.util.common.util.AppUtils;
-import com.ride.util.common.util.Utils;
-
-import cn.bmob.v3.Bmob;
-
 /**
  * @author Stormouble
  * @since 2017/6/12.
@@ -15,6 +7,18 @@ import cn.bmob.v3.Bmob;
 
 public class BmobManager {
 
-    private volatile static BmobManager INSTNCE;
+    private volatile static BmobManager sInstance;
+
+    public static BmobManager getInstance() {
+        if (sInstance == null) {
+            synchronized (BmobManager.class) {
+                if (sInstance == null) {
+                    sInstance = new BmobManager();
+                }
+            }
+        }
+        return sInstance;
+    }
+
 
 }

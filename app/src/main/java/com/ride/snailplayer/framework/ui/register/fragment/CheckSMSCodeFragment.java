@@ -20,6 +20,9 @@ import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.databinding.FragmentCheckSmsCodeBinding;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
+import com.ride.snailplayer.widget.dialog.BaseDialog;
+import com.ride.snailplayer.widget.dialog.ErrorDialog;
+import com.ride.snailplayer.widget.dialog.ProgressDialog;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ActivityUtils;
 import com.ride.util.common.util.KeyboardUtils;
@@ -38,6 +41,8 @@ import cn.bmob.v3.listener.UpdateListener;
 public class CheckSMSCodeFragment extends BaseRegisterFragment {
 
     private FragmentCheckSmsCodeBinding mBinding;
+    private BaseDialog mProgressDialog;
+    private BaseDialog mErrorDialog;
     private CountDownTimer mTimer;
     private String mPhoneNumber;
 
@@ -124,6 +129,10 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mProgressDialog = new ProgressDialog(getActivity()).initProgressDialog();
+        mErrorDialog = new ErrorDialog(getActivity()).initSingleButtonDialog(getResources().getString(R.string.sms_error_dialog_title),
+                getResources().getString(R.string.sms_error_dialog_content));
+
         //设置indicator
         mHostActivity.processIndicatorView(RegisterActivity.STEP_SECOND);
 
@@ -179,19 +188,18 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
     }
 
     private void processNext() {
-        clear();
-        showProgress();
+        KeyboardUtils.hideSoftInput(getActivity());
+        mProgressDialog.show();
 
         //验证
         String inputCode = mBinding.etSmsCode.getText().toString();
         BmobSMS.verifySmsCode(mPhoneNumber, inputCode, new UpdateListener() {
             @Override
             public void done(BmobException e) {
-                dismissProgress();
+                mProgressDialog.dismiss();
                 if (e != null) {
                     Timber.i("验证失败");
-                    showErrorDialog(getResources().getString(R.string.sms_error_dialog_title),
-                            getResources().getString(R.string.sms_error_dialog_content));
+                    mErrorDialog.show();
                 } else {
                     Timber.i("验证成功");
                     ActivityUtils.startAnotherFragment(getFragmentManager(), CheckSMSCodeFragment.this,
@@ -224,18 +232,16 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        KeyboardUtils.hideSoftInput(getActivity());
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mTimer != null) {
             mTimer.cancel();
         }
-        clear();
     }
-
-    @Override
-    protected void clear() {
-        super.clear();
-        KeyboardUtils.hideSoftInput(mBinding.etSmsCode);
-    }
-
 }

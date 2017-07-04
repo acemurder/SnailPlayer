@@ -187,8 +187,7 @@
                         android:textSize="@dimen/app_text_size_medium"
                         android:textColor="@color/selector_common_text_light"
                         android:clickable="true"
-                        android:onClick="@{loginActionHandler.onClick}"
-                        android:visibility="gone"/>
+                        android:onClick="@{loginActionHandler.onClick}"/>
 
                 <TextView
                         android:id="@+id/tv_new_user_register"
@@ -206,12 +205,6 @@
             </FrameLayout>
 
         </LinearLayout>
-
-        <com.ride.snailplayer.widget.SimpleProgressWheel
-                android:id="@+id/progress_wheel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
 
     </FrameLayout>
 

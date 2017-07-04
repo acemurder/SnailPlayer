@@ -23,27 +23,26 @@ import com.ride.snailplayer.framework.db.UserContract;
 import com.ride.snailplayer.framework.ui.home.HomeActivity;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
+import com.ride.snailplayer.widget.dialog.BaseDialog;
+import com.ride.snailplayer.widget.dialog.ErrorDialog;
+import com.ride.snailplayer.widget.dialog.ProgressDialog;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.KeyboardUtils;
+import com.ride.util.common.util.NetworkUtils;
 import com.ride.util.common.util.RegexUtils;
 import com.ride.util.common.util.ToastUtils;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
-import rx.Observable;
-import rx.functions.Func1;
 
 public class LoginActivity extends BaseActivity {
 
     private ActivityLoginBinding mBinding;
+    private BaseDialog mProgressDialog;
 
     private boolean mIsPasswordVisibled;
 
@@ -58,6 +57,8 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         mBinding.setLoginActionHandler(this);
+
+        mProgressDialog = new ProgressDialog(this).initProgressDialog();
 
         setupToolbar();
         setupEditText();
@@ -167,7 +168,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void processLogin(String account, String password) {
-        clear();
+        KeyboardUtils.hideSoftInput(this);
 
         if (TextUtils.isEmpty(account)) {
             mBinding.etAccount.requestFocus();
@@ -184,13 +185,14 @@ public class LoginActivity extends BaseActivity {
         //验证账号和密码是否合法
         if (!RegexUtils.checkMobile(account) || !RegexUtils.IsCorrectUserPassword(password)) {
             Timber.i("用户输入不合法");
-            showErrorDialog(getResources().getString(R.string.login_error_dialog_title),
+            ErrorDialog dialog = new ErrorDialog(this);
+            dialog.initSingleButtonDialog(getResources().getString(R.string.login_error_dialog_title),
                     getResources().getString(R.string.login_error_dialog_content));
+            dialog.show();
         } else {
             Timber.i("用户输入合法，开始登录");
         }
-
-        showProgressDialog();
+        mProgressDialog.show();
 
         BmobQuery<User> query = new BmobQuery<>();
         query = query.addWhereEqualTo(UserContract.USER_TABLE_USERNAME, account)
@@ -199,10 +201,17 @@ public class LoginActivity extends BaseActivity {
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
-                dismissProgress();
+                mProgressDialog.dismiss();
                 if (e != null || list == null || list.isEmpty()) {
                     Timber.i("用户不存在");
-                    showErrorDialog(getResources().getString(R.string.login_error_dialog_title), getResources().getString(R.string.login_error_dialog_content));
+
+                    ErrorDialog dialog = new ErrorDialog(LoginActivity.this);
+                    if (NetworkUtils.isNetworkAvailable()) {
+                        dialog.initSingleButtonDialog(getResources().getString(R.string.login_error_dialog_title),
+                                getResources().getString(R.string.login_error_dialog_content));
+                    } else {
+                        dialog.initNetworkDialog(getResources().getString(R.string.login_error_dialog_title));
+                    }
                 } else {
                     Timber.i("用户存在");
                     User newUser = new User();
@@ -226,10 +235,9 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    protected void clear() {
-        super.clear();
-        KeyboardUtils.hideSoftInput(mBinding.etAccount);
-        KeyboardUtils.hideSoftInput(mBinding.etPassword);
+    protected void onDestroy() {
+        super.onDestroy();
+        KeyboardUtils.hideSoftInput(this);
     }
 
     @Override

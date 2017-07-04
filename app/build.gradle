@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.antfortune.freeline'
 
@@ -12,6 +13,8 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
+        multiDexEnabled true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -48,7 +51,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             //signingConfig signingConfigs.release
@@ -86,7 +89,12 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
-
+        exclude 'META-INF/maven/com.squareup.okhttp3/okhttp/pom.xml'
+        exclude 'META-INF/maven/com.squareup.okhttp3/okhttp/pom.properties'
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.xml'
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.properties'
+        exclude 'META-INF/maven/com.google.code.gson/gson/pom.xml'
+        exclude 'META-INF/maven/com.google.code.gson/gson/pom.properties'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
@@ -95,6 +103,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    configurations {
+        all*.exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+        all*.exclude group: 'com.squareup.okio', module: 'okio'
+    }
 }
 
 dependencies {
@@ -102,12 +114,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testCompile 'junit:junit:4.12'
 
     compile rootProject.ext.dependencies["appcompat-v7"]
     compile rootProject.ext.dependencies["design"]
     compile rootProject.ext.dependencies["support-annotations"]
     compile rootProject.ext.dependencies["recyclerview-v7"]
     compile rootProject.ext.dependencies["cardview-v7"]
+    compile rootProject.ext.dependencies["multidex"]
 
     compile rootProject.ext.dependencies["lifecycle-runtime"]
     compile rootProject.ext.dependencies["lifecycle-extensions"]
@@ -116,6 +130,7 @@ dependencies {
     compile rootProject.ext.dependencies["room-runtime"]
     annotationProcessor rootProject.ext.dependencies["room-compiler"]
 
+    compile rootProject.ext.dependencies["kotlin"]
     compile rootProject.ext.dependencies["rxandroid"]
     compile rootProject.ext.dependencies["rxjava"]
     compile rootProject.ext.dependencies["okhttp"]
@@ -139,8 +154,7 @@ dependencies {
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util-lib')
+    compile project(':bmob-lib')
     compile project(':material-intro-lib')
     compile project(':smooth-refresh-lib')
-    compile project(':bmob-lib')
-    testCompile 'junit:junit:4.12'
 }

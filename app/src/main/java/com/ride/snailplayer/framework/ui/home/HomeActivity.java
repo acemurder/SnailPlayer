@@ -19,8 +19,8 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
+import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItem;
@@ -30,7 +30,6 @@ import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
 import com.ride.snailplayer.framework.ui.login.LoginActivity;
-import com.ride.snailplayer.framework.ui.login.event.UserLoginEvent;
 import com.ride.snailplayer.framework.ui.me.MeActivity;
 import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
@@ -40,7 +39,6 @@ import com.ride.snailplayer.net.model.Channel;
 import com.ride.snailplayer.widget.GradientTextView;
 import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
-import com.ride.util.common.util.BitmapUtils;
 import com.ride.util.common.util.ScreenUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,8 +46,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import io.reactivex.Observable;
 import okhttp3.Call;
@@ -193,7 +191,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mUserUpdated = getIntent().getBooleanExtra(USER_UPDATE_SIGNAL, false);
+        mUserUpdated = getIntent().getBooleanExtra(USER_UPDATE_SIGNAL, true);
         if (mUserUpdated) {
             updateUser();
         }
@@ -206,7 +204,6 @@ public class HomeActivity extends BaseActivity {
         if (mUserUpdated) {
             updateUser();
         }
-
         Timber.i("onNewIntent,updated=" + mUserUpdated);
     }
 
@@ -223,12 +220,8 @@ public class HomeActivity extends BaseActivity {
 
     @Subscribe
     public void onUserUpdate(UserUpdateEvent event) {
-        mUser = BmobUser.getCurrentUser(User.class);
-        if (mUser != null) {
-            updateUserAvatar();
-        }
-
         Timber.i("onUserUpdate");
+        updateUserAvatar();
     }
 
     private void updateUserAvatar() {
@@ -259,7 +252,7 @@ public class HomeActivity extends BaseActivity {
                                 });
                             }
                         }
-                    }));
+                    }), throwable -> Timber.i("下载bitmap失败"));
         }
     }
 

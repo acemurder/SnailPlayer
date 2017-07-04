@@ -17,9 +17,13 @@ import com.ride.snailplayer.databinding.FragmentFillBasicInfoBinding;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
+import com.ride.snailplayer.widget.dialog.BaseDialog;
+import com.ride.snailplayer.widget.dialog.ErrorDialog;
+import com.ride.snailplayer.widget.dialog.ProgressDialog;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ActivityUtils;
 import com.ride.util.common.util.KeyboardUtils;
+import com.ride.util.common.util.NetworkUtils;
 import com.ride.util.common.util.RegexUtils;
 
 import cn.bmob.v3.exception.BmobException;
@@ -33,6 +37,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class FillBasicInfoFragment extends BaseRegisterFragment {
 
     private FragmentFillBasicInfoBinding mBinding;
+    private BaseDialog mProgressDialog;
 
     private String mPhoneNumber;
     private boolean mIsPasswordVisibled;
@@ -131,6 +136,9 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mProgressDialog = new ProgressDialog(getActivity()).initProgressDialog();
+
+
         //设置indicator
         mHostActivity.processIndicatorView(RegisterActivity.STEP_FOURTH);
 
@@ -165,8 +173,8 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
                 }
                 break;
             case R.id.next_btn:
-                clear();
-                showProgress();
+                KeyboardUtils.hideSoftInput(getActivity());
+                mProgressDialog.show();
 
                 User user = new User();
                 user.setUsername(mPhoneNumber);
@@ -177,14 +185,22 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
                 user.signUp(new SaveListener<User>() {
                     @Override
                     public void done(User user, BmobException e) {
-                        dismissProgress();
+                        mProgressDialog.dismiss();
                         if (e == null) {
                             Timber.i("注册成功");
                             ActivityUtils.startAnotherFragment(getFragmentManager(), FillBasicInfoFragment.this,
                                     CompleteRegisterFragment.newInstance(), R.id.register_container);
                         } else {
                             Timber.i("注册失败");
-                            showCommonErrorDialog(getResources().getString(R.string.register_failed));
+
+                            ErrorDialog dialog = new ErrorDialog(getActivity());
+                            if (NetworkUtils.isNetworkAvailable()) {
+                                dialog.initSingleButtonDialog(getResources().getString(R.string.register_failed),
+                                        getResources().getString(R.string.app_error));
+                            } else {
+                                dialog.initNetworkDialog(getResources().getString(R.string.register_failed));
+                            }
+                            dialog.show();
                         }
                     }
                 });
@@ -193,10 +209,9 @@ public class FillBasicInfoFragment extends BaseRegisterFragment {
     }
 
     @Override
-    protected void clear() {
-        super.clear();
-        KeyboardUtils.hideSoftInput(mBinding.etNickname);
-        KeyboardUtils.hideSoftInput(mBinding.etPassword);
+    public void onPause() {
+        super.onPause();
+        KeyboardUtils.hideSoftInput(getActivity());
     }
 
     private void changeVisibilityView() {

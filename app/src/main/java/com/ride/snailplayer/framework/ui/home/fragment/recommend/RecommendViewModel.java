@@ -16,6 +16,7 @@ import java.util.List;
  */
 
 public class RecommendViewModel extends AndroidViewModel {
+
     private MutableLiveData<List<RecommendItem>> data = new MutableLiveData<>();
     public RecommendViewModel(Application application) {
         super(application);

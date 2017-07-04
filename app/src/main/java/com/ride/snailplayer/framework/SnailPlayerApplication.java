@@ -1,11 +1,11 @@
 package com.ride.snailplayer.framework;
 
 import android.app.Application;
-import android.preference.PreferenceManager;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.qiyi.video.playcore.QiyiVideoView;
 import com.ride.snailplayer.config.SnailPlayerConfig;
-import com.ride.snailplayer.framework.base.model.User;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.AppUtils;
 import com.ride.util.common.util.Utils;
@@ -19,6 +19,12 @@ import cn.bmob.v3.Bmob;
  */
 
 public class SnailPlayerApplication extends Application {
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

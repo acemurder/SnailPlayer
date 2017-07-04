@@ -125,18 +125,14 @@ public class InputPhoneNumberFragment extends BaseRegisterFragment {
     @Override
     public void onPause() {
         super.onPause();
-        hideSoftInput();
+        KeyboardUtils.hideSoftInput(getActivity());
     }
 
     private void processRegister() {
-        hideSoftInput();
+        KeyboardUtils.hideSoftInput(getActivity());
 
         String phoneNumber = mBinding.etPhoneNumber.getText().toString();
         ActivityUtils.startAnotherFragment(getFragmentManager(), this,
                 CheckSMSCodeFragment.newInstance(phoneNumber), R.id.register_container);
-    }
-
-    private void hideSoftInput() {
-        KeyboardUtils.hideSoftInput(mBinding.etPhoneNumber);
     }
 }

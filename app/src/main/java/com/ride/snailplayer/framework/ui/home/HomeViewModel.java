@@ -1,14 +1,16 @@
 package com.ride.snailplayer.framework.ui.home;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.Channel;
+import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.IOUtils;
 
 import java.io.BufferedReader;
@@ -62,7 +64,7 @@ public class HomeViewModel extends AndroidViewModel {
                     }
                 })
                 .compose(MainThreadObservableTransformer.<ArrayList<Channel>>instance())
-                .subscribe(mPreloadChannelList::setValue, ignored -> {});
+                .subscribe(mPreloadChannelList::setValue, ignored -> Timber.e("读取assets channel.json文件错误"));
     }
 
     public LiveData<List<Channel>> getPreloadChannelList() {

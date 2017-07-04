@@ -33,4 +33,5 @@ public class BaseFragment extends Fragment implements LifecycleOwner {
     public Lifecycle getLifecycle() {
         return lifecycleRegistry;
     }
+
 }
