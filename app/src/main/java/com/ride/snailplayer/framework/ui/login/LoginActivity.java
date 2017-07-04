@@ -189,9 +189,11 @@ public class LoginActivity extends BaseActivity {
             dialog.initSingleButtonDialog(getResources().getString(R.string.login_error_dialog_title),
                     getResources().getString(R.string.login_error_dialog_content));
             dialog.show();
+            return;
         } else {
             Timber.i("用户输入合法，开始登录");
         }
+
         mProgressDialog.show();
 
         BmobQuery<User> query = new BmobQuery<>();
