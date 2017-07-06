@@ -11,6 +11,7 @@
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
         <item name="colorAccent">@color/theme_primary</item>
 
+        <item name="android:actionBarSize">@dimen/action_bar_size</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
 
@@ -60,6 +61,10 @@
     <style name="Theme.SnailPlayer.FullScreen" parent="Theme.SnailPlayer">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="Theme.SnailPlayer.Translucent" parent="Theme.SnailPlayer">
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="PopupWindowAnimationStyle">

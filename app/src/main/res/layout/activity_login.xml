@@ -162,7 +162,7 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
-                    android:background="@drawable/selector_common_btn_light"
+                    android:background="@drawable/selector_light_btn"
                     android:text="@string/label_login"
                     android:textColor="@color/app_white"
                     android:textSize="@dimen/app_text_size_large"

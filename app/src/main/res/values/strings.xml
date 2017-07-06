@@ -59,9 +59,11 @@
     <string name="register_failed">注册失败</string>
 
     <!--MeActivity-->
-    <string name="check_or_edit_info">查看或编辑个人主页</string>
+    <string name="my_info">我的资料</string>
     <string name="setting">设置</string>
     <string name="exit">退出登录</string>
+    <string name="attention_frag_title">收藏</string>
+    <string name="about_me_frag_title">关于我</string>
 
     <!--AvatarActivity-->
     <string name="take_photo">拍摄</string>

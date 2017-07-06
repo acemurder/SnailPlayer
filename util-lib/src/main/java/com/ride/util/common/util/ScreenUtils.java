@@ -62,4 +62,26 @@ public final class ScreenUtils {
         return (int) (px / scale + 0.5f * (px >= 0 ? 1 : -1));
     }
 
+    /**
+     * sp转px
+     *
+     * @param spValue sp值
+     * @return px值
+     */
+    public static int sp2px(final float spValue) {
+        final float fontScale = Utils.getContext().getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     * px转sp
+     *
+     * @param pxValue px值
+     * @return sp值
+     */
+    public static int px2sp(final float pxValue) {
+        final float fontScale = Utils.getContext().getResources().getDisplayMetrics().scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
+    }
+
 }

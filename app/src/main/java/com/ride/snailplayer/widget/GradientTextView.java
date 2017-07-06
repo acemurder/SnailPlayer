@@ -123,6 +123,18 @@ public class GradientTextView extends View {
         invalidate();
     }
 
+    public void setSourceTextColor(int sourceTextColor) {
+        mSourceTextColor = sourceTextColor;
+        mSourceTextPaint.setColor(mSourceTextColor);
+        invalidate();
+    }
+
+    public void setTargetTextColor(int targetTextColor) {
+        mTargetTextColor = targetTextColor;
+        mTargetTextPaint.setColor(mTargetTextColor);
+        invalidate();
+    }
+
     public void setAlphaRatio(@FloatRange(from = 0.0, to = 1.0) float alphaRatio) {
         mAlphaRatio = alphaRatio;
         invalidate();

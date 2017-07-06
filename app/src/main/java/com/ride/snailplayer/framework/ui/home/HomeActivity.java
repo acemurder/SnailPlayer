@@ -267,7 +267,8 @@ public class HomeActivity extends BaseActivity {
     public void onAvatarClick() {
         User user = BmobUser.getCurrentUser(User.class);
         if (user == null) {
-            LoginActivity.launchActivity(this);
+            MeActivity.launchActivity(this);
+            //LoginActivity.launchActivity(this);
         } else {
             MeActivity.launchActivity(this);
         }

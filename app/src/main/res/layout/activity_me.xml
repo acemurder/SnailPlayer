@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:ignore="RtlHardcoded">
+<layout>
 
     <data>
 
@@ -13,91 +10,165 @@
     </data>
 
     <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/coordinator_me_root"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar_me"
                 android:layout_width="match_parent"
-                android:layout_height="256dp">
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:elevation="0dp">
 
-                <ImageView
+            <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_layout_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/me_header_height"
+                    android:fitsSystemWindows="true"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:contentScrim="?attr/colorPrimary">
+
+                <LinearLayout
+                        android:id="@+id/ll_me_header"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/d"
-                        android:clickable="false"
-                        android:contentDescription="@null"/>
+                        android:layout_height="@dimen/me_header_height"
+                        android:background="@drawable/d"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:fitsSystemWindows="true"
+                        app:layout_collapseMode="parallax">
 
+                    <com.ride.snailplayer.widget.imageview.CircleImageView
+                            android:id="@+id/circle_iv_me_avatar"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/default_profile"
+                            android:scaleType="centerCrop"
+                            android:clickable="true"
+                            android:onClick="@{meActionHandler.onClick}"
+                            app:civ_border_color="@color/app_white"
+                            app:civ_border_width="1dp"/>
+
+                    <TextView
+                            android:id="@+id/tv_me_user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Stromouble"
+                            android:textColor="@color/app_white"
+                            android:textSize="14sp"/>
+
+                    <LinearLayout
+                            android:id="@+id/ll_me_my_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="24dp"
+                            android:paddingLeft="24dp"
+                            android:paddingRight="24dp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:clickable="true"
+                            android:onClick="@{meActionHandler.onClick}"
+                            android:background="@drawable/selector_outline_btn">
+
+                        <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_edit"
+                                android:scaleType="centerCrop"
+                                android:contentDescription="@null"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:text="@string/my_info"
+                                android:textColor="@color/app_white"
+                                android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/transparent"
+                        android:theme="@style/ActionBarThemeOverlay"
+                        android:fitsSystemWindows="false"
+                        app:contentInsetStart="0dp"
+                        app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                        app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical">
+
+                        <ImageView
+                                android:id="@+id/iv_me_back"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="12dp"
+                                android:padding="4dp"
+                                android:clickable="true"
+                                android:onClick="@{meActionHandler.onClick}"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_arrow_back"
+                                android:scaleType="centerCrop"
+                                android:contentDescription="@null"/>
+
+                        <TextView
+                                android:id="@+id/tv_me_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="12dp"
+                                android:text="Stormouble"
+                                android:textColor="@color/app_white"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:alpha="0"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout
+                    android:id="@+id/smart_tab_layout_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/app_white"
+                    app:stl_indicatorColor="@color/theme_accent"
+                    app:stl_indicatorThickness="3dp"
+                    app:stl_indicatorCornerRadius="0dp"
+                    app:stl_indicatorWithoutPadding="true"
+                    app:stl_overlineColor="@color/transparent"
+                    app:stl_overlineThickness="0dp"
+                    app:stl_underlineColor="@color/transparent"
+                    app:stl_underlineThickness="0dp"
+                    app:stl_dividerColor="@color/transparent"
+                    app:stl_dividerThickness="0dp"
+                    app:stl_clickable="true"
+                    app:stl_distributeEvenly="true"
+                    app:stl_titleOffset="auto_center"/>
 
         </android.support.design.widget.AppBarLayout>
 
-        <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:background="@color/theme_primary"-->
-                <!--app:theme="@style/ActionBarThemeOverlay"-->
-                <!--app:popupTheme="@style/ActionBarPopupThemeOverlay">-->
-
-
-        <!--</android.support.v7.widget.Toolbar>-->
-
-        <!--<RelativeLayout-->
-                <!--android:id="@+id/rl_me_basic_info"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:paddingTop="@dimen/padding_normal"-->
-                <!--android:paddingBottom="@dimen/padding_normal"-->
-                <!--android:paddingLeft="@dimen/padding_normal"-->
-                <!--android:paddingRight="@dimen/padding_normal"-->
-                <!--android:background="@drawable/selector_common_background"-->
-                <!--android:clickable="true"-->
-                <!--android:onClick="@{meActionHandler.onClick}">-->
-
-            <!--<com.ride.snailplayer.widget.imageview.CircleImageView-->
-                    <!--android:id="@+id/circle_iv_me_avatar"-->
-                    <!--android:layout_width="56dp"-->
-                    <!--android:layout_height="56dp"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:src="@drawable/default_profile"/>-->
-
-            <!--<TextView-->
-                    <!--android:id="@+id/tv_me_name"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:text="骑着蜗牛"-->
-                    <!--android:textColor="@color/app_grey"-->
-                    <!--android:layout_alignTop="@id/circle_iv_me_avatar"-->
-                    <!--android:layout_toRightOf="@id/circle_iv_me_avatar"-->
-                    <!--android:layout_marginLeft="@dimen/padding_normal"/>-->
-
-            <!--<TextView-->
-                    <!--android:id="@+id/tv_me_check_edit_info"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/check_or_edit_info"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:textColor="@color/app_grey"-->
-                    <!--android:layout_alignBottom="@id/circle_iv_me_avatar"-->
-                    <!--android:layout_toRightOf="@id/circle_iv_me_avatar"-->
-                    <!--android:layout_marginLeft="@dimen/padding_normal"/>-->
-
-        <!--</RelativeLayout>-->
-
-        <!--<TextView-->
-                <!--android:id="@+id/tv_me_exit"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="48dp"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:gravity="center"-->
-                <!--android:background="@drawable/selector_common_background"-->
-                <!--android:text="@string/exit"-->
-                <!--android:textSize="16sp"-->
-                <!--android:textColor="#FF3300"-->
-                <!--android:onClick="@{meActionHandler.onClick}"/>-->
+        <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager_me"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_background"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

@@ -21,4 +21,8 @@
     <dimen name="divider_padding_top">7dp</dimen>
     <dimen name="divider_padding_bottom">8dp</dimen>
 
+    <dimen name="action_bar_size">52dp</dimen>
+
+    <!--MeActivity-->
+    <dimen name="me_header_height">280dp</dimen>
 </resources>

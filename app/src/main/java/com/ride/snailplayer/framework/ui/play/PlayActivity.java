@@ -106,18 +106,21 @@ public class PlayActivity extends AppCompatActivity {
         query.findObjectsByTable(new QueryListener<JSONArray>() {
             @Override
             public void done(JSONArray jsonArray, BmobException e) {
-                Timber.e(jsonArray.toString());
-                Gson gson = new Gson();
-                List<Comment> commentList = gson.fromJson(jsonArray.toString(),
-                        new TypeToken<List<Comment>>() {}.getType());
-                if (commentList != null && commentList.size() != 0){
-                    mBinding.commentNotice.setVisibility(View.GONE);
-                }else {
-                    mBinding.commentNotice.setVisibility(View.VISIBLE);
+                if (jsonArray != null) {
+                    Timber.e(jsonArray.toString());
+                    Gson gson = new Gson();
+                    List<Comment> commentList = gson.fromJson(jsonArray.toString(),
+                            new TypeToken<List<Comment>>() {
+                            }.getType());
+                    if (commentList != null && commentList.size() != 0) {
+                        mBinding.commentNotice.setVisibility(View.GONE);
+                    } else {
+                        mBinding.commentNotice.setVisibility(View.VISIBLE);
+                    }
+                    comments.clear();
+                    comments.addAll(commentList);
+                    mCommentAdapter.notifyDataSetChanged();
                 }
-                comments.clear();
-                comments.addAll(commentList);
-                mCommentAdapter.notifyDataSetChanged();
             }
         });
 

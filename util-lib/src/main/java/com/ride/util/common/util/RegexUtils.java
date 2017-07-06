@@ -32,8 +32,7 @@ public final class RegexUtils {
      * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
      */
     public static boolean IsCorrectUserPassword(@NonNull String password) {
-        String regex = "^[a-zA-Z]\\w{5,18}$";
-        return Pattern.matches(regex, password);
+        return isMatch("^[a-zA-Z]\\w{5,18}$", password);
     }
 
     /**
@@ -53,8 +52,7 @@ public final class RegexUtils {
      * @return 验证成功返回true，验证失败返回false
      */
     public static boolean checkMobile(String mobile) {
-        String regex = "(\\+\\d+)?1[34578]\\d{9}$";
-        return Pattern.matches(regex, mobile);
+        return isMatch("(\\+\\d+)?1[34578]\\d{9}$", mobile);
     }
 
     /**
@@ -64,8 +62,17 @@ public final class RegexUtils {
      * @return 验证成功返回true，验证失败返回falsea
      */
     public static boolean checkEmail(String email) {
-        String regex = "\\w+@\\w+\\.[a-z]+(\\.[a-z]+)?";
-        return Pattern.matches(regex, email);
+        return isMatch("\\w+@\\w+\\.[a-z]+(\\.[a-z]+)?", email);
+    }
+
+    /**
+     * 验证URL
+     *
+     * @param input 待验证文本
+     * @return {@code true}: 匹配<br>{@code false}: 不匹配
+     */
+    public static boolean isURL(final CharSequence input) {
+        return isMatch("[a-zA-z]+://[^\\\\s]*", input);
     }
 
     /**

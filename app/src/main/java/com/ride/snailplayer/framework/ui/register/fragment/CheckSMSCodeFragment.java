@@ -119,7 +119,7 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
     private void changeNextButtonEnabled(boolean enabled) {
         mBinding.nextBtn.setEnabled(enabled);
         if (enabled) {
-            mBinding.nextBtn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.selector_common_btn));
+            mBinding.nextBtn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.selector_dark_btn));
         } else {
             mBinding.nextBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.app_light_grey));
         }
