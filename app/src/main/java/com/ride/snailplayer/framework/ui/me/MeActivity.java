@@ -42,14 +42,11 @@ import com.ride.util.common.util.ScreenUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.File;
 import java.io.IOException;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
 import io.reactivex.Observable;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -207,22 +204,22 @@ public class MeActivity extends BaseActivity {
 
     @Subscribe
     public void onAvatarChange(OnAvatarChangeEvent event) {
-        BmobFile bmobFile = new BmobFile(new File(AvatarActivity.AVATAR_FILE_PATH));
-        bmobFile.uploadblock(new UploadFileListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Timber.i("上传文件成功:" + bmobFile.getFileUrl());
-                    updateUser(bmobFile.getFileUrl());
-                } else {
-                    Timber.i("上传文件失败：" + e.getMessage());
-                }
-            }
-
-            @Override
-            public void onProgress(Integer value) {
-            }
-        });
+//        BmobFile bmobFile = new BmobFile(new File(AvatarActivity.AVATAR_FILE_PATH));
+//        bmobFile.uploadblock(new UploadFileListener() {
+//            @Override
+//            public void done(BmobException e) {
+//                if (e == null) {
+//                    Timber.i("上传文件成功:" + bmobFile.getFileUrl());
+//                    updateUser(bmobFile.getFileUrl());
+//                } else {
+//                    Timber.i("上传文件失败：" + e.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onProgress(Integer value) {
+//            }
+//        });
     }
 
     private void updateUser(String avatarUrl) {

@@ -1,13 +1,9 @@
 package com.ride.snailplayer.framework.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.ride.snailplayer.framework.base.model.User;
-import com.ride.util.common.util.RegexUtils;
 
 import cn.bmob.v3.BmobUser;
 import io.reactivex.Completable;

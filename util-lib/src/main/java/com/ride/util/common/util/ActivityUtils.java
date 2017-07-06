@@ -1,7 +1,6 @@
 package com.ride.util.common.util;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;

@@ -69,4 +69,10 @@
     <string name="take_photo">拍摄</string>
     <string name="pick_photo_from_album">从相册中选择</string>
     <string name="change_avatar">更换头像</string>
+    <string name="perm_rational_of_store_camera_photo">保存拍摄的照片需要访问您的存储空间</string>
+    <string name="perm_rational_of_read_mobile_photo">读取照片需要访问您的存储空间</string>
+    <string name="perm_rational_of_camera">拍摄需要访问您的相机</string>
+    <string name="permissions_dialog_title">提示</string>
+    <string name="when_camera_perms_denied">您拒绝了系统授权摄像头权限，将不能正常使用拍摄。您可以通过以下操作开启权限以恢复拍摄功能：\n设置/应用/骑着蜗牛/权限/相机</string>
+    <string name="when_read_photo_perms_denied">您拒绝了系统授权访问存储空间权限，将不能正常从相册中选取图片。您可以通过以下操作开启权限以从相册中选取图片：\n设置/应用/骑着蜗牛/权限/存储空间</string>
 </resources>

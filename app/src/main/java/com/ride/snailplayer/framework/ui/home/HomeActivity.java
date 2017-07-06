@@ -20,7 +20,6 @@ import android.util.TypedValue;
 import android.widget.LinearLayout;
 
 import com.ride.snailplayer.R;
-import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItem;
@@ -29,7 +28,6 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePag
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
-import com.ride.snailplayer.framework.ui.login.LoginActivity;
 import com.ride.snailplayer.framework.ui.me.MeActivity;
 import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
@@ -47,7 +45,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import io.reactivex.Observable;
 import okhttp3.Call;

@@ -1,4 +1,4 @@
-package com.ride.util.common.net;
+package com.ride.util.net;
 
 /**
  * @author Stormouble
