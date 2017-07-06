@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_pw_bar_width">5sp</dimen>
+    <dimen name="default_pw_bar_width">4sp</dimen>
     <color name="default_pw_bar_color">#FFC107</color>
     <dimen name="default_pw_radius">56dp</dimen>
 </resources>

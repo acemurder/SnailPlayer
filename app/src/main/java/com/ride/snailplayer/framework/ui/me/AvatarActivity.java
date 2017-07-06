@@ -30,6 +30,7 @@ import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityAvatarBinding;
 import com.ride.snailplayer.databinding.DialogChangeAvatarBinding;
 import com.ride.snailplayer.databinding.DialogPopupBinding;
+import com.ride.snailplayer.databinding.DialogProgressBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.event.listener.DataBindingClickListener;
