@@ -102,7 +102,7 @@
                   android:label=""
                   android:launchMode="singleTop"
                   android:screenOrientation="portrait"
-                  android:theme="@style/Theme.SnailPlayer.Translucent"
+                  android:theme="@style/MeActivityTheme"
                   android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
 
@@ -112,7 +112,7 @@
                 android:label=""
                 android:launchMode="singleTop"
                 android:screenOrientation="portrait"
-                android:theme="@style/Theme.SnailPlayer.FullScreen"
+                android:theme="@style/AvatarActivityTheme"
                 android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
                 android:name="com.yalantis.ucrop.UCropActivity"

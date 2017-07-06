@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+                name="changeAvatarCallback"
+                type="com.ride.snailplayer.framework.event.listener.DataBindingClickListener"/>
+
+    </data>
+
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_round_dialog">
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/theme_primary"/>
+
+        <Button
+                android:id="@+id/btn_avatar_take_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="@string/take_photo"
+                android:textColor="@color/body_text_1"
+                android:textSize="14sp"
+                android:onClick="@{changeAvatarCallback.onClick}"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/app_grey"
+                android:clickable="false"
+                android:focusable="false"/>
+
+        <Button
+                android:id="@+id/btn_avatar_pick_from_album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="@string/pick_photo_from_album"
+                android:textColor="@color/body_text_1"
+                android:textSize="14sp"
+                android:onClick="@{changeAvatarCallback.onClick}"/>
+
+    </LinearLayout>
+
+</layout>

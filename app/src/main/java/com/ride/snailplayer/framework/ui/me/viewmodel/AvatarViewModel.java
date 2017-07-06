@@ -1,4 +1,4 @@
-package com.ride.snailplayer.framework.ui.me;
+package com.ride.snailplayer.framework.ui.me.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -8,9 +8,12 @@ import android.arch.lifecycle.AndroidViewModel;
  * @since 2017/7/6.
  */
 
-public class MeViewModel extends AndroidViewModel {
+public class AvatarViewModel extends AndroidViewModel {
 
-    public MeViewModel(Application application) {
+
+    public AvatarViewModel(Application application) {
         super(application);
     }
+
+
 }

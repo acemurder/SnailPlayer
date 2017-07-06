@@ -13,8 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -31,6 +29,7 @@ import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.fragment.AboutMeFragement;
 import com.ride.snailplayer.framework.ui.me.fragment.AttentionFragment;
+import com.ride.snailplayer.framework.ui.me.viewmodel.MeViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
 import com.ride.snailplayer.net.ApiClient;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
@@ -198,8 +197,7 @@ public class MeActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.circle_iv_me_avatar:
-                AvatarActivity.launchActivity(this, mBinding.circleIvMeAvatar,
-                        getResources().getString(R.string.transition_avatar));
+                AvatarActivity.launchActivity(this, mBinding.circleIvMeAvatar, getResources().getString(R.string.transition_avatar));
                 break;
             case R.id.ll_me_my_info:
 

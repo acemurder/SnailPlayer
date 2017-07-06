@@ -2,6 +2,7 @@ package com.ride.snailplayer.framework.ui.me;
 
 import android.Manifest;
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -17,18 +18,24 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityAvatarBinding;
+import com.ride.snailplayer.databinding.DialogChangeAvatarBinding;
 import com.ride.snailplayer.databinding.DialogPopupBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.event.listener.DataBindingClickListener;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
+import com.ride.snailplayer.framework.ui.me.viewmodel.AvatarViewModel;
+import com.ride.snailplayer.framework.viewmodel.UserViewModel;
 import com.ride.snailplayer.util.Utils;
 import com.ride.snailplayer.util.ucrop.UCropClient;
 import com.ride.util.common.log.Timber;
@@ -57,9 +64,12 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
     private static final int REQUEST_CODE_ALBUM = 91;
 
     private ActivityAvatarBinding mBinding;
-    private PhotoViewAttacher mPhotoViewAttacher;
+    private AvatarViewModel mAvatarViewModel;
+    private UserViewModel mUserViewModel;
 
     private User mUser;
+
+    private MaterialDialog mChangeAvatarDialog;
 
     private Uri mCameraPhotoUri;
     private Uri mCropResultUri;
@@ -84,17 +94,8 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_avatar);
         mBinding.setAvatarActionHandler(this);
-        mBinding.layoutToolbar.setTitle(getResources().getString(R.string.label_avatar));
-        mBinding.layoutToolbar.setNavIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
-        mBinding.layoutToolbar.setMoreActionIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_a_photo));
-        mBinding.layoutToolbar.setToolbarActionHandler(view -> {
-            final int id = view.getId();
-            if (id == R.id.iv_toolbar_nav) {
-                onBackPressed();
-            } else {
-                showPopupWindow();
-            }
-        });
+        mAvatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel.class);
+        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
 
         init();
     }
@@ -109,21 +110,47 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                 .compressQuality(95)
                 .build();
 
-        if (mUser != null) {
-            Glide.with(this)
-                    .load(mUser.getAvatarUrl())
-                    .placeholder(ContextCompat.getDrawable(this, R.drawable.default_profile))
-                    .centerCrop()
-                    .into(mBinding.ivAvatar);
-        }
-
-        mPhotoViewAttacher = new PhotoViewAttacher(mBinding.ivAvatar);
-        mPhotoViewAttacher.setOnLongClickListener(v -> {
-            showPopupWindow();
-            return true;
-        });
+        mBinding.ivAvatar.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_profile));
     }
 
+    public void onClick(View view) {
+        final int id = view.getId();
+        switch (id) {
+            case R.id.tv_change_avatar:
+                DialogChangeAvatarBinding binding = DialogChangeAvatarBinding.inflate(getLayoutInflater());
+                binding.setChangeAvatarCallback(v -> {
+                    dismissDialog();
+                    switch (v.getId()) {
+                        case R.id.btn_avatar_take_photo:
+                            break;
+                        case R.id.btn_avatar_pick_from_album:
+                            break;
+                    }
+                });
+
+                mChangeAvatarDialog = new MaterialDialog.Builder(this)
+                        .customView(binding.getRoot(), false)
+                        .cancelable(true)
+                        .canceledOnTouchOutside(true)
+                        .show();
+                break;
+        }
+    }
+
+    public void dismissDialog() {
+        if (mChangeAvatarDialog != null && mChangeAvatarDialog.isShowing()) {
+            mChangeAvatarDialog.dismiss();
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean handled = super.onTouchEvent(event);
+        if (!handled) {
+            onBackPressed();
+        }
+        return true;
+    }
 
     private void showPopupWindow() {
         DialogPopupBinding binding = DialogPopupBinding.inflate(LayoutInflater.from(this));
@@ -273,7 +300,6 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .centerCrop()
                                 .into(mBinding.ivAvatar);
-                        mPhotoViewAttacher.update();
                     }
                 }
                 break;
