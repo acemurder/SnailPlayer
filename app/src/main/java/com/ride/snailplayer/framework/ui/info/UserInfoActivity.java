@@ -17,13 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.config.contants.PermissionsConstants;
 import com.ride.snailplayer.databinding.ActivityUserInfoBinding;
 import com.ride.snailplayer.databinding.DialogChangeAvatarBinding;
 import com.ride.snailplayer.databinding.DialogCommonBinding;
+import com.ride.snailplayer.databinding.DialogSelectedBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
@@ -82,6 +82,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
 
     private UCropClient mUCropClient;
     private MaterialDialog mChangeAvatarDialog;
+    private MaterialDialog mSelectSexDialog;
     private MaterialDialog mPromptPermNeededDialog;
     private BaseDialog mProgressDialog;
 
@@ -116,8 +117,15 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
         if (user != null) {
             Glide.with(UserInfoActivity.this).load(user.getAvatarUrl()).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
             mBinding.setUser(user);
+            initUserSex(user.getSex());
         } else {
             Glide.with(UserInfoActivity.this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
+        }
+    }
+
+    private void initUserSex(String sex) {
+        if (!TextUtils.isEmpty(sex)) {
+            mBinding.tvUserInfoSex.setText(sex.equals("1") ? getResources().getString(R.string.male) : getResources().getString(R.string.female));
         }
     }
 
@@ -127,8 +135,8 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 onBackPressed();
                 break;
             case R.id.ll_user_info_avatar:
-                DialogChangeAvatarBinding binding = DialogChangeAvatarBinding.inflate(getLayoutInflater());
-                binding.setChangeAvatarCallback(v -> {
+                DialogChangeAvatarBinding dialogChangeAvatarBinding = DialogChangeAvatarBinding.inflate(getLayoutInflater());
+                dialogChangeAvatarBinding.setChangeAvatarCallback(v -> {
                     dismissChangeAvatarDialog();
                     switch (v.getId()) {
                         case R.id.btn_avatar_take_photo:
@@ -141,7 +149,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 });
 
                 mChangeAvatarDialog = new MaterialDialog.Builder(this)
-                        .customView(binding.getRoot(), false)
+                        .customView(dialogChangeAvatarBinding.getRoot(), false)
                         .cancelable(true)
                         .canceledOnTouchOutside(true)
                         .show();
@@ -150,6 +158,28 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 EditNickNameActivity.launchActivity(this);
                 break;
             case R.id.ll_user_info_sex:
+                User user = mUserViewModel.getUser();
+                boolean isMale = TextUtils.isEmpty(user.getSex()) || user.getSex().equals("1");
+                DialogSelectedBinding dialogSelectedBinding = DialogSelectedBinding.inflate(getLayoutInflater());
+                dialogSelectedBinding.setFirstChoiceText(getResources().getString(R.string.male));
+                dialogSelectedBinding.setSecondChoiceText(getResources().getString(R.string.female));
+                changeChoiceViewVisibility(dialogSelectedBinding, isMale);
+                dialogSelectedBinding.setDialogSelectedCallback(onClickView -> {
+                    dismissSelectedDialog();
+                    switch (onClickView.getId()) {
+                        case R.id.fl_dialog_selected_first_choice:
+                            updateUserSexInfo(user, "1");
+                            break;
+                        case R.id.fl_dialog_selected_second_choice:
+                            updateUserSexInfo(user, "0");
+                            break;
+                    }
+                });
+                mSelectSexDialog = new MaterialDialog.Builder(this)
+                        .customView(dialogSelectedBinding.getRoot(), false)
+                        .cancelable(true)
+                        .canceledOnTouchOutside(true)
+                        .show();
                 break;
             case R.id.ll_user_info_birthday:
                 Calendar calendar = Calendar.getInstance();
@@ -167,6 +197,56 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 EditSignActivity.launchActivity(this);
                 break;
         }
+    }
+
+    private void dismissSelectedDialog() {
+        if (mSelectSexDialog != null && mSelectSexDialog.isShowing()) {
+            mSelectSexDialog.dismiss();
+        }
+    }
+
+    private void changeChoiceViewVisibility(DialogSelectedBinding binding, boolean isMale) {
+        binding.ivDialogSelectedFirstChoice.setVisibility(isMale ? View.VISIBLE : View.INVISIBLE);
+        binding.ivDialogSelectedSecondChoice.setVisibility(isMale ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void updateUserSexInfo(User user, String sexChoice) {
+        mUserInfoViewModel.isUserSexChanged(user, sexChoice)
+                .flatMap(new Function<String, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(@io.reactivex.annotations.NonNull String sex) throws Exception {
+                        return mUserInfoViewModel.updateUserSex(user, sex);
+                    }
+                })
+                .compose(MainThreadObservableTransformer.instance())
+                .doAfterNext(birthday -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                        if (!d.isDisposed()) {
+                            mProgressDialog.show();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.annotations.NonNull String sex) {
+                        dismissProgressDialog();
+                        initUserSex(sex);
+                        ToastUtils.showShortToast(UserInfoActivity.this, "保存成功");
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                        dismissProgressDialog();
+                        Timber.e(e);
+                        ToastUtils.showShortToast(UserInfoActivity.this, "保存失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        dismissProgressDialog();
+                    }
+                });
     }
 
     @Override
@@ -411,6 +491,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
         EventBus.getDefault().unregister(this);
         KeyboardUtils.hideSoftInput(UserInfoActivity.this);
         dismissChangeAvatarDialog();
+        dismissSelectedDialog();
         dismissPromptPermNeededDialog();
         dismissProgressDialog();
     }
