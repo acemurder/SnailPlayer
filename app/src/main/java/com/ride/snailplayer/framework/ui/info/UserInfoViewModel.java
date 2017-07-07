@@ -30,28 +30,14 @@ public class UserInfoViewModel extends ViewModel {
     public UserInfoViewModel() {
     }
 
-    public Observable<String> isUserNicknameChanged(User user, @NonNull String currentNickname) {
-        return Observable.just(currentNickname)
-                .filter(nickname -> {
-                    if (user != null) {
-                        if (user.getNickName() != null) {
-                            return !user.getNickName().equals(nickname);
-                        }
-                    }
-                    return false;
-                });
+    public Observable<String> isUserNicknameChanged(User user, @NonNull String newNickname) {
+        return Observable.just(newNickname)
+                .filter(nickname -> user != null && !nickname.equals(user.getNickName()));
     }
 
-    public Observable<String> isUserSignChanged(User user, @NonNull String currentSign) {
-        return Observable.just(currentSign)
-                .filter(sign -> {
-                    if (user != null) {
-                        if (user.getSign() != null) {
-                            return !user.getSign().equals(sign);
-                        }
-                    }
-                    return false;
-                });
+    public Observable<String> isUserSignChanged(User user, @NonNull String newSign) {
+        return Observable.just(newSign)
+                .filter(sign -> user != null && !sign.equals(user.getSign()));
     }
 
     public Observable<String> isUserBirthdayChanged(User user, @NonNull String newBirthday) {
@@ -60,7 +46,7 @@ public class UserInfoViewModel extends ViewModel {
     }
 
 
-    public Observable<User> updateUserNickname(User user, String nickname) {
+    public Observable<String> updateUserNickname(User user, String nickname) {
         return Observable.create(emitter -> {
             if (user != null && !TextUtils.isEmpty(nickname)) {
                 User newUser = new User();
@@ -69,7 +55,7 @@ public class UserInfoViewModel extends ViewModel {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            emitter.onNext(user);
+                            emitter.onNext(nickname);
                             emitter.onComplete();
                         } else {
                             emitter.onError(e);
@@ -82,7 +68,7 @@ public class UserInfoViewModel extends ViewModel {
         });
     }
 
-    public Observable<User> updateUserSign(User user, String sign) {
+    public Observable<String> updateUserSign(User user, String sign) {
         return Observable.create(emitter -> {
             if (user != null && !TextUtils.isEmpty(sign)) {
                 User newUser = new User();
@@ -91,7 +77,7 @@ public class UserInfoViewModel extends ViewModel {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            emitter.onNext(user);
+                            emitter.onNext(sign);
                             emitter.onComplete();
                         } else {
                             emitter.onError(e);

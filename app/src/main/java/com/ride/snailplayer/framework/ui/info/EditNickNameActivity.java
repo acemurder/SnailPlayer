@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityEditNicknameBinding;
-import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
@@ -46,7 +45,6 @@ public class EditNickNameActivity extends BaseActivity {
     private ActivityEditNicknameBinding mBinding;
     private UserInfoViewModel mUserInfoViewModel;
     private UserViewModel mUserViewModel;
-    private User mUser;
     private BaseDialog mProgressDialog;
 
     public static void launchActivity(Activity startingActivity) {
@@ -62,7 +60,6 @@ public class EditNickNameActivity extends BaseActivity {
         mBinding.setEditNickNameActionHandler(this);
         mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        mUser = mUserViewModel.getUser();
 
         setupEditText();
         setupProgress();
@@ -73,6 +70,12 @@ public class EditNickNameActivity extends BaseActivity {
             KeyboardUtils.showSoftInput(mBinding.etNickname);
             return false;
         });
+
+        initUserInfo();
+    }
+
+    private void initUserInfo() {
+        mBinding.setUser(mUserViewModel.getUser());
     }
 
     private void setupEditText() {
@@ -83,6 +86,11 @@ public class EditNickNameActivity extends BaseActivity {
             }
         });
         mBinding.etNickname.setOnFocusChangeListener((v, hasFocus) -> {
+            //设置光标位置
+            if (hasFocus) {
+                mBinding.etNickname.setSelection(mBinding.etNickname.getText().length());
+            }
+
             String str = mBinding.etNickname.getText().toString();
             changeViewVisibility(mBinding.ivClearNickname, hasFocus && !TextUtils.isEmpty(str));
         });
@@ -91,7 +99,6 @@ public class EditNickNameActivity extends BaseActivity {
     private void setupProgress() {
         mProgressDialog = new ProgressDialog(this).initProgressDialog();
     }
-
 
     private void changeViewVisibility(View view, boolean shouldVisible) {
         if (shouldVisible) {
@@ -104,19 +111,22 @@ public class EditNickNameActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_edit_nickname_back:
+                KeyboardUtils.hideSoftInput(this);
                 onBackPressed();
                 break;
             case R.id.tv_edit_nickname_save:
-                mUserInfoViewModel.isUserNicknameChanged(mUser, mBinding.etNickname.getText().toString())
-                        .flatMap(new Function<String, ObservableSource<User>>() {
+                KeyboardUtils.hideSoftInput(this);
+                User user = mUserViewModel.getUser();
+                mUserInfoViewModel.isUserNicknameChanged(user, mBinding.etNickname.getText().toString())
+                        .flatMap(new Function<String, ObservableSource<String>>() {
                             @Override
-                            public ObservableSource<User> apply(@NonNull String nickname) throws Exception {
-                                return mUserInfoViewModel.updateUserNickname(mUser, nickname);
+                            public ObservableSource<String> apply(@NonNull String nickname) throws Exception {
+                                return mUserInfoViewModel.updateUserNickname(user, nickname);
                             }
                         })
                         .compose(MainThreadObservableTransformer.instance())
-                        .doAfterNext(user -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
-                        .subscribe(new Observer<User>() {
+                        .doAfterNext(nickname -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
+                        .subscribe(new Observer<String>() {
                             @Override
                             public void onSubscribe(@NonNull Disposable d) {
                                 if (!d.isDisposed()) {
@@ -125,7 +135,7 @@ public class EditNickNameActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onNext(@NonNull User user) {
+                            public void onNext(@NonNull String nickname) {
                                 dismissProgressDialog();
                                 ToastUtils.showShortToast(EditNickNameActivity.this, "保存成功");
                             }
@@ -140,7 +150,6 @@ public class EditNickNameActivity extends BaseActivity {
                             @Override
                             public void onComplete() {
                                 dismissProgressDialog();
-                                KeyboardUtils.hideSoftInput(EditNickNameActivity.this);
                                 onBackPressed();
                             }
                         });
@@ -160,7 +169,6 @@ public class EditNickNameActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        KeyboardUtils.hideSoftInput(this);
         dismissProgressDialog();
     }
 

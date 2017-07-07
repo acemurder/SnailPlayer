@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.config.contants.PermissionsConstants;
@@ -40,6 +41,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Calendar;
 import java.util.List;
@@ -99,6 +101,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mAvatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel.class);
         mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        EventBus.getDefault().register(this);
 
         initUserInfo();
         mUCropClient = new UCropClient.Builder(this)
@@ -397,9 +400,15 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
         }
     }
 
+    @Subscribe
+    public void onUserInfoUpdate(OnUserInfoUpdateEvent event) {
+        mBinding.setUser(mUserViewModel.getUser());
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         KeyboardUtils.hideSoftInput(UserInfoActivity.this);
         dismissChangeAvatarDialog();
         dismissPromptPermNeededDialog();

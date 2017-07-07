@@ -7,6 +7,10 @@
                 name="editNickNameActionHandler"
                 type="com.ride.snailplayer.framework.ui.info.EditNickNameActivity"/>
 
+        <variable
+                name="user"
+                type="com.ride.snailplayer.framework.base.model.User"/>
+
     </data>
 
     <LinearLayout
@@ -106,10 +110,12 @@
                         android:hint="@string/nickname_hint"
                         android:maxLength="16"
                         android:maxLines="1"
+                        android:text="@{user.nickName}"
                         android:textColorHint="@color/body_text_3"
                         android:textColorHighlight="@color/body_text_3"
                         android:textColor="@color/body_text_1"
                         android:textCursorDrawable="@drawable/shape_text_cursor_dark"
+                        android:scrollHorizontally="false"
                         android:textSize="14sp"/>
 
                 <ImageView

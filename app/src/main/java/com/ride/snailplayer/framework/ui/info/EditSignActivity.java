@@ -10,6 +10,7 @@ import android.os.MessageQueue;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.text.Editable;
 import android.view.View;
 
 import com.ride.snailplayer.R;
@@ -44,7 +45,6 @@ public class EditSignActivity extends BaseActivity {
     private ActivityEditSignBinding mBinding;
     private UserInfoViewModel mUserInfoViewModel;
     private UserViewModel mUserViewModel;
-    private User mUser;
     private BaseDialog mProgressDialog;
 
     public static void launchActivity(Activity startingActivity) {
@@ -60,7 +60,6 @@ public class EditSignActivity extends BaseActivity {
         mBinding.setEditSignActionHandler(this);
         mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        mUser = mUserViewModel.getUser();
 
         setupEditText();
         setupProgress();
@@ -71,13 +70,24 @@ public class EditSignActivity extends BaseActivity {
             KeyboardUtils.showSoftInput(mBinding.etDescription);
             return false;
         });
+
+        initSign();
+    }
+
+    private void initSign() {
+        mBinding.setUser(mUserViewModel.getUser());
     }
 
     private void setupEditText() {
+        mBinding.etDescription.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                mBinding.etDescription.setSelection(mBinding.etDescription.getText().length());
+            }
+        });
         mBinding.etDescription.addTextChangedListener(new TextWatcherAdapter() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mBinding.tvWordCount.setText(150 - s.length());
+            public void afterTextChanged(Editable s) {
+                mBinding.tvWordCount.setText(String.valueOf(150 - s.length()));
             }
         });
     }
@@ -89,19 +99,26 @@ public class EditSignActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_edit_sign_back:
+                KeyboardUtils.hideSoftInput(this);
                 onBackPressed();
                 break;
             case R.id.tv_edit_sign_save:
-                mUserInfoViewModel.isUserSignChanged(mUser, mBinding.etDescription.getText().toString())
-                        .flatMap(new Function<String, ObservableSource<User>>() {
+                KeyboardUtils.hideSoftInput(this);
+                User user = mUserViewModel.getUser();
+                mUserInfoViewModel.isUserSignChanged(user, mBinding.etDescription.getText().toString())
+                        .flatMap(new Function<String, ObservableSource<String>>() {
                             @Override
-                            public ObservableSource<User> apply(@NonNull String sign) throws Exception {
-                                return mUserInfoViewModel.updateUserSign(mUser, sign);
+                            public ObservableSource<String> apply(@NonNull String sign) throws Exception {
+                                return mUserInfoViewModel.updateUserSign(user, sign);
                             }
                         })
                         .compose(MainThreadObservableTransformer.instance())
-                        .doAfterNext(user -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
-                        .subscribe(new Observer<User>() {
+                        .doAfterNext(sign -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
+                        .doFinally(() -> {
+                            dismissProgressDialog();
+                            onBackPressed();
+                        })
+                        .subscribe(new Observer<String>() {
                             @Override
                             public void onSubscribe(@NonNull Disposable d) {
                                 if (!d.isDisposed()) {
@@ -110,7 +127,7 @@ public class EditSignActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onNext(@NonNull User user) {
+                            public void onNext(@NonNull String sign) {
                                 dismissProgressDialog();
                                 ToastUtils.showShortToast(EditSignActivity.this, "保存成功");
                             }
@@ -124,9 +141,6 @@ public class EditSignActivity extends BaseActivity {
 
                             @Override
                             public void onComplete() {
-                                dismissProgressDialog();
-                                KeyboardUtils.hideSoftInput(EditSignActivity.this);
-                                onBackPressed();
                             }
                         });
                 break;
@@ -142,7 +156,6 @@ public class EditSignActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        KeyboardUtils.hideSoftInput(this);
         dismissProgressDialog();
     }
 
