@@ -83,7 +83,7 @@ public class PlayActivity extends AppCompatActivity {
         mBinding.videoPlayView.setListener(this::onBackPressed);
         mBinding.videoPlayView.setTitle(videoInfo.title);
 
-
+        mBinding.lottieView.setOnClickListener((v ->   mBinding.lottieView.playAnimation()));
         mBinding.commentSend.setOnClickListener((v -> {
             if (!TextUtils.isEmpty(mBinding.commentEdit.getText())){
                 String content = mBinding.commentEdit.getText().toString();
@@ -107,6 +107,8 @@ public class PlayActivity extends AppCompatActivity {
                             //TODO
                         }else {
                             Toast.makeText(PlayActivity.this,"网络错误",Toast.LENGTH_LONG).show();
+                            mBinding.commentEdit.setText(content);
+
 
                         }
                     }

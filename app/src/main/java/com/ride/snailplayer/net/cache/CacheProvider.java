@@ -20,12 +20,12 @@ import io.rx_cache2.Reply;
  */
 
 public interface CacheProvider {
-    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    @LifeCache(duration = 60, timeUnit = TimeUnit.MINUTES)
     Observable<Reply<List<RecommendItem>>>qiyiRecommendDetail(Observable<List<RecommendItem>>  recommendItem,
                                                                  DynamicKey key,
                                                                  EvictDynamicKey evictDynamicKey);
 
-    @LifeCache(duration = 2, timeUnit = TimeUnit.DAYS)
+    @LifeCache(duration = 5, timeUnit = TimeUnit.HOURS)
     Observable<Reply<ChannelDetail>> qiyiChannelDetail(Observable<ChannelDetail>
                                                                               channelDetail,
                                                         DynamicKey key,

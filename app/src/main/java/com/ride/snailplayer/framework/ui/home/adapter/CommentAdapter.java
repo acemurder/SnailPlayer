@@ -40,7 +40,7 @@ public class CommentAdapter extends DataBoundAdapter<ItemCommentBinding> {
         holder.binding.commentTime.setText(commentList.get(position).getUpdatedAt());
         holder.binding.userName.setText(commentList.get(position).getUserName());
         if (!TextUtils.isEmpty(commentList.get(position).getUserAvatar())){
-            Glide.with(context).load(commentList.get(position).getUserAvatar())
+            Glide.with(context).load(commentList.get(position).getUserAvatar()).dontAnimate()
                     .into(holder.binding.userAvatar);
         }
     }
