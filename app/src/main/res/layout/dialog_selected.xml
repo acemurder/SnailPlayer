@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+                name="firstChoiceText"
+                type="String"/>
+
+        <variable
+                name="secondChoiceText"
+                type="String"/>
+
+        <variable
+                name="dialogSelectedCallback"
+                type="com.ride.snailplayer.framework.event.listener.DataBindingClickListener"/>
+
+    </data>
+
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <FrameLayout
+                android:id="@+id/fl_dialog_selected_first_choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingTop="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="12dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{dialogSelectedCallback.onClick}"
+                android:visibility="@{firstChoiceText == null ? View.GONE : View.VISIBLE}">
+
+            <TextView
+                    android:id="@+id/tv_dialog_selected_first_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@{firstChoiceText}"
+                    android:textColor="@color/body_text_1"
+                    android:textSize="14sp"/>
+
+            <ImageView
+                    android:id="@+id/iv_dialog_selected_first_choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_done"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/theme_primary"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+                android:id="@+id/fl_dialog_selected_second_choice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="4dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{dialogSelectedCallback.onClick}"
+                android:visibility="@{firstChoiceText == null ? View.GONE : View.VISIBLE}">
+
+            <TextView
+                    android:id="@+id/tv_dialog_selected_second_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@{secondChoiceText}"
+                    android:textColor="@color/body_text_1"
+                    android:textSize="14sp"/>
+
+            <ImageView
+                    android:id="@+id/iv_dialog_selected_second_choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_done"
+                    android:scaleType="centerCrop"
+                    android:tint="@color/theme_primary"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</layout>

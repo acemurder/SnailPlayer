@@ -1,24 +1,14 @@
 package com.ride.snailplayer.framework.ui.info;
 
 import android.arch.lifecycle.ViewModel;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.ride.snailplayer.framework.base.model.User;
-import com.ride.snailplayer.net.ApiClient;
-
-import java.io.IOException;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import io.reactivex.Observable;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * @author Stormouble
@@ -45,6 +35,10 @@ public class UserInfoViewModel extends ViewModel {
                 .filter(birthday -> user != null && !birthday.equals(user.getBirthday()));
     }
 
+    public Observable<String> isUserSexChanged(User user, @NonNull String newSex) {
+        return Observable.just(newSex)
+                .filter(sex -> user != null && !sex.equals(user.getSex()));
+    }
 
     public Observable<String> updateUserNickname(User user, String nickname) {
         return Observable.create(emitter -> {
@@ -108,6 +102,28 @@ public class UserInfoViewModel extends ViewModel {
                 });
             } else {
                 emitter.onError(new Exception("user=" + user + ", birthday=" + birthday));
+            }
+        });
+    }
+
+    public Observable<String> updateUserSex(User user, String sex) {
+        return Observable.create(emitter -> {
+            if (user != null && !TextUtils.isEmpty(sex)) {
+                User newUser = new User();
+                newUser.setSex(sex);
+                newUser.update(user.getObjectId(), new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            emitter.onNext(sex);
+                            emitter.onComplete();
+                        } else {
+                            emitter.onError(e);
+                        }
+                    }
+                });
+            } else {
+                emitter.onError(new Exception("user=" + user + ", sex=" + sex));
             }
         });
     }

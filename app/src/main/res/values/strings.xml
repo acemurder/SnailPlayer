@@ -77,6 +77,8 @@
     <string name="sign">签名</string>
     <string name="no_setting">未设置</string>
     <string name="no_fill">未填写</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
 
     <!--EditNicknameActivity-->
     <string name="nickname_hint">请输入昵称</string>
