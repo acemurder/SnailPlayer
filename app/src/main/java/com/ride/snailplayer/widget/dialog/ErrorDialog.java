@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.DialogCommonBinding;
+import com.ride.snailplayer.framework.event.listener.DataBindingClickListener;
 import com.ride.util.common.log.Timber;
 
 /**
@@ -51,7 +52,26 @@ public class ErrorDialog extends BaseDialog{
                 .canceledOnTouchOutside(false)
                 .build();
         setDialog(dialog);
+        return this;
+    }
 
+    public BaseDialog initMultiButtonDialog(String title, String content, DataBindingClickListener listener) {
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content) || listener == null) {
+            Timber.d("dialog title=" + title + ", content=" + content + ", listener=" + listener);
+            return null;
+        }
+
+        DialogCommonBinding binding = DialogCommonBinding.inflate(LayoutInflater.from(mContext));
+        binding.setIsSingleChoice(false);
+        binding.setTitle(title);
+        binding.setContent(content);
+        binding.setListener(listener);
+        MaterialDialog dialog =  new MaterialDialog.Builder(mContext)
+                .customView(binding.getRoot(), false)
+                .cancelable(true)
+                .canceledOnTouchOutside(false)
+                .build();
+        setDialog(dialog);
         return this;
     }
 }

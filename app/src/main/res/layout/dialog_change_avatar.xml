@@ -16,11 +16,6 @@
             android:layout_height="match_parent"
             android:background="@drawable/shape_round_dialog">
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/theme_primary"/>
-
         <Button
                 android:id="@+id/btn_avatar_take_photo"
                 android:layout_width="match_parent"

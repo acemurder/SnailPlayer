@@ -8,8 +8,19 @@ import cn.bmob.v3.BmobUser;
  */
 
 public class User extends BmobUser {
-    private String nickName;
     private String avatarUrl;
+    private String nickName;
+    private String sex;
+    private String birthday;
+    private String sign;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public String getNickName() {
         return nickName;
@@ -19,11 +30,27 @@ public class User extends BmobUser {
         this.nickName = nickName;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getSex() {
+        return sex;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

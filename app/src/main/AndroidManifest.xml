@@ -105,7 +105,30 @@
                   android:theme="@style/MeActivityTheme"
                   android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
-
+        <activity android:name=".framework.ui.info.UserInfoActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                  android:label=""
+                  android:launchMode="singleTop"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.SnailPlayer"
+                  android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+        <activity android:name=".framework.ui.info.EditNickNameActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                  android:label=""
+                  android:launchMode="singleTop"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.SnailPlayer"
+                  android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+        <activity android:name=".framework.ui.info.EditSignActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                  android:label=""
+                  android:launchMode="singleTop"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.SnailPlayer"
+                  android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
         <activity
                 android:name=".framework.ui.me.AvatarActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

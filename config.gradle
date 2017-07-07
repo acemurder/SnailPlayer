@@ -59,5 +59,6 @@ ext {
                     "smart-tab"                    : "com.ogaclejapan.smarttablayout:library:1.6.1@aar",
                     "rollviewpager"                : "com.jude:rollviewpager:1.4.6",
                     "rxcache"                      : "com.github.VictorAlbertos.RxCache:runtime:1.8.0-2.x",
-                    "jolyglot_gson"                : "com.github.VictorAlbertos.Jolyglot:gson:0.0.3"]
+                    "jolyglot_gson"                : "com.github.VictorAlbertos.Jolyglot:gson:0.0.3",
+                    "datepicker"               : "com.wdullaer:materialdatetimepicker:3.0.0"]
 }

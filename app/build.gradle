@@ -155,6 +155,7 @@ dependencies {
     compile rootProject.ext.dependencies["jolyglot_gson"]
 
 
+    compile rootProject.ext.dependencies["datepicker"]
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util-lib')

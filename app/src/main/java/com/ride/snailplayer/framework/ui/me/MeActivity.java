@@ -4,20 +4,17 @@ import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityMeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -25,37 +22,19 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerIte
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.ui.info.UserInfoActivity;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
-import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.fragment.AboutMeFragement;
 import com.ride.snailplayer.framework.ui.me.fragment.AttentionFragment;
 import com.ride.snailplayer.framework.ui.me.viewmodel.MeViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
-import com.ride.snailplayer.net.ApiClient;
-import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.widget.GradientTextView;
-import com.ride.util.common.AppExecutors;
-import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.BarUtils;
 import com.ride.util.common.util.ScreenUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.io.File;
-import java.io.IOException;
-
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
-import io.reactivex.Observable;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MeActivity extends BaseActivity {
 
@@ -64,7 +43,6 @@ public class MeActivity extends BaseActivity {
     private FragmentStatePagerItemAdapter mAdapter;
     private MeViewModel mMeViewModel;
     private UserViewModel mUserViewModel;
-    private User mUser;
 
     private boolean mIsTabClicked;
 
@@ -81,7 +59,6 @@ public class MeActivity extends BaseActivity {
         mBinding.setMeActionHandler(this);
         mMeViewModel = ViewModelProviders.of(this).get(MeViewModel.class);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        mUser = mUserViewModel.getUser();
         EventBus.getDefault().register(this);
 
         initAppBar();
@@ -89,7 +66,9 @@ public class MeActivity extends BaseActivity {
     }
 
     private void initAppBar() {
-        //设置Title渐变效果
+        setupUserInfo();
+
+        //设置Appbar渐变效果
         mBinding.appbarMe.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             int actionBarHeight = getResources().getDimensionPixelSize(R.dimen.action_bar_size);
             int collapsingLayoutMaxOffset = getResources().getDimensionPixelSize(R.dimen.me_header_height)
@@ -97,16 +76,42 @@ public class MeActivity extends BaseActivity {
             int titleAutoTransparentTotalOffset = 2 * actionBarHeight;
             int titleAutoTransparentMinOffset = collapsingLayoutMaxOffset - titleAutoTransparentTotalOffset;
 
+            int appbarContentAutoTransparentTotalOffset = (int) (1.5 * actionBarHeight);
+            int appbarContentAutoTransparentMaxOffset = collapsingLayoutMaxOffset - appbarContentAutoTransparentTotalOffset;
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                //渐变Toolbar Title
                 if (Math.abs(verticalOffset) >= titleAutoTransparentMinOffset) {
                     float fraction = (Math.abs(verticalOffset) - titleAutoTransparentMinOffset) / (float) (titleAutoTransparentTotalOffset);
                     mBinding.tvMeTitle.setAlpha(fraction);
                 } else {
                     mBinding.tvMeTitle.setAlpha(0f);
                 }
+
+                //渐变Appbar内容区域：头像等
+                if (Math.abs(verticalOffset) >= appbarContentAutoTransparentMaxOffset) {
+                    mBinding.circleIvMeAvatar.setAlpha(0f);
+                    mBinding.tvMeUserName.setAlpha(0f);
+                    mBinding.llMeMyInfo.setAlpha(0f);
+                } else {
+                    float fraction = (appbarContentAutoTransparentMaxOffset - Math.abs(verticalOffset)) / (float) (appbarContentAutoTransparentTotalOffset);
+                    mBinding.circleIvMeAvatar.setAlpha(fraction);
+                    mBinding.tvMeUserName.setAlpha(fraction);
+                    mBinding.llMeMyInfo.setAlpha(fraction);
+                }
             }
         });
+    }
+
+    private void setupUserInfo() {
+        User user = mUserViewModel.getUser();
+        if (user != null) {
+            Glide.with(this).load(user.getAvatarUrl()).dontAnimate().into(mBinding.circleIvMeAvatar);
+            mBinding.setUser(user);
+        } else {
+            Glide.with(this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvMeAvatar);
+        }
     }
 
     private void initTabLayout() {
@@ -183,13 +188,6 @@ public class MeActivity extends BaseActivity {
         }
     }
 
-    private void setupBasicInfo() {
-        if (mUser != null) {
-            updateUser(mUser.getAvatarUrl());
-            //mBinding..setText(mUser.getNickName());
-        }
-    }
-
     public void onClick(View view) {
         final int id = view.getId();
         switch (id) {
@@ -200,82 +198,19 @@ public class MeActivity extends BaseActivity {
                 AvatarActivity.launchActivity(this, mBinding.circleIvMeAvatar, getResources().getString(R.string.transition_avatar));
                 break;
             case R.id.ll_me_my_info:
-
+                UserInfoActivity.launchActivity(this);
                 break;
         }
     }
 
     @Subscribe
     public void onAvatarChange(OnAvatarChangeEvent event) {
-        BmobFile bmobFile = new BmobFile(new File(AvatarActivity.AVATAR_FILE_PATH));
-        bmobFile.uploadblock(new UploadFileListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Timber.i("上传文件成功:" + bmobFile.getFileUrl());
-                    updateUser(bmobFile.getFileUrl());
-                } else {
-                    Timber.i("上传文件失败：" + e.getMessage());
-                }
-            }
-
-            @Override
-            public void onProgress(Integer value) {
-            }
-        });
+        setupUserInfo();
     }
 
-    private void updateUser(String avatarUrl) {
-        updateUserAvatar(avatarUrl);
-
-        User currentUser = BmobUser.getCurrentUser(User.class);
-        if (currentUser != null) {
-            User newUser = new User();
-            newUser.setAvatarUrl(avatarUrl);
-            newUser.update(currentUser.getObjectId(), new UpdateListener() {
-                @Override
-                public void done(BmobException e) {
-                    if (e == null) {
-                        EventBus.getDefault().post(new UserUpdateEvent());
-                        Timber.i("更新用户信息成功");
-                    } else {
-                        Timber.i("更新用户信息失败:" + e.getMessage());
-                    }
-                }
-            });
-        }
-    }
-
-    private void updateUserAvatar(String url) {
-        if (!TextUtils.isEmpty(url)) {
-            Observable.just(url)
-                    .compose(MainThreadObservableTransformer.instance())
-                    .map(s -> {
-                        OkHttpClient client = ApiClient.IQIYI.getOkHttpClient();
-                        Request request = new Request.Builder().url(s).build();
-                        return client.newCall(request);
-                    })
-                    .subscribe(call -> call.enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Timber.i("下载bitmap失败");
-                        }
-
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                            if (response.isSuccessful() && response.body() != null) {
-                                Timber.i("下载bitmap成功");
-                                Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                                AppExecutors.getInstance().getMainThreadExecutor().execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //mBinding.circleIvMeAvatar.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }
-                    }));
-        }
+    @Subscribe
+    public void onUserInfoUpdated(OnUserInfoUpdateEvent event) {
+        setupUserInfo();
     }
 
     @Override

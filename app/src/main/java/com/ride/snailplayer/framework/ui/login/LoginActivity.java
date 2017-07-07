@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.MessageQueue;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
@@ -17,10 +18,12 @@ import android.view.View;
 
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityLoginBinding;
+import com.ride.snailplayer.databinding.DialogPopupBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.db.UserContract;
 import com.ride.snailplayer.framework.ui.home.HomeActivity;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.snailplayer.widget.dialog.BaseDialog;
@@ -32,6 +35,8 @@ import com.ride.util.common.util.NetworkUtils;
 import com.ride.util.common.util.RegexUtils;
 import com.ride.util.common.util.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -42,7 +47,10 @@ import cn.bmob.v3.listener.SaveListener;
 public class LoginActivity extends BaseActivity {
 
     private ActivityLoginBinding mBinding;
+    private DialogPopupBinding mDialogPopupBinding;
+    private BottomSheetDialog mBottomSheetDialog;
     private BaseDialog mProgressDialog;
+    private ErrorDialog mErrorDialog;
 
     private boolean mIsPasswordVisibled;
 
@@ -155,6 +163,20 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_forget_password:
+                KeyboardUtils.hideSoftInput(this);
+                mDialogPopupBinding = DialogPopupBinding.inflate(getLayoutInflater());
+                mDialogPopupBinding.setFirstBtnText(getResources().getString(R.string.find_password));
+                mDialogPopupBinding.setThirdBtnText(getResources().getString(R.string.negative_text));
+                mDialogPopupBinding.setPopupCallback(v -> {
+                    dismissBottomSheetDialog();
+                    switch (v.getId()) {
+                        case R.id.dialog_popup_first_btn:
+                            break;
+                    }
+                });
+                mBottomSheetDialog = new BottomSheetDialog(this);
+                mBottomSheetDialog.setContentView(mDialogPopupBinding.getRoot());
+                mBottomSheetDialog.show();
                 break;
             case R.id.tv_new_user_register:
                 RegisterActivity.launchActivity(this);
@@ -167,18 +189,24 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    private void dismissBottomSheetDialog() {
+        if (mBottomSheetDialog != null && mBottomSheetDialog.isShowing()) {
+            mBottomSheetDialog.dismiss();
+        }
+    }
+
     private void processLogin(String account, String password) {
         KeyboardUtils.hideSoftInput(this);
 
         if (TextUtils.isEmpty(account)) {
             mBinding.etAccount.requestFocus();
-            ToastUtils.showShortToast("请输入账号");
+            ToastUtils.showShortToast(LoginActivity.this, "请输入账号");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
             mBinding.etPassword.requestFocus();
-            ToastUtils.showShortToast("请输入密码");
+            ToastUtils.showShortToast(LoginActivity.this, "请输入密码");
             return;
         }
 
@@ -207,12 +235,12 @@ public class LoginActivity extends BaseActivity {
                 if (e != null || list == null || list.isEmpty()) {
                     Timber.i("用户不存在");
 
-                    ErrorDialog dialog = new ErrorDialog(LoginActivity.this);
+                    mErrorDialog = new ErrorDialog(LoginActivity.this);
                     if (NetworkUtils.isNetworkAvailable()) {
-                        dialog.initSingleButtonDialog(getResources().getString(R.string.login_error_dialog_title),
-                                getResources().getString(R.string.login_error_dialog_content));
+                        mErrorDialog.initSingleButtonDialog(getResources().getString(R.string.login_error_dialog_title),
+                                getResources().getString(R.string.login_error_dialog_content)).show();
                     } else {
-                        dialog.initNetworkDialog(getResources().getString(R.string.login_error_dialog_title));
+                        mErrorDialog.initNetworkDialog(getResources().getString(R.string.login_error_dialog_title)).show();
                     }
                 } else {
                     Timber.i("用户存在");
@@ -225,7 +253,8 @@ public class LoginActivity extends BaseActivity {
                         public void done(User result, BmobException e) {
                             if (e == null) {
                                 Timber.i("登录成功");
-                                HomeActivity.launchActivity(LoginActivity.this, true);
+                                EventBus.getDefault().post(new OnUserInfoUpdateEvent());
+                                HomeActivity.launchActivity(LoginActivity.this);
                             } else {
                                 Timber.e("登录失败," + e.getMessage());
                             }
@@ -236,10 +265,25 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    private void dismissProgressDialog() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    private void dismissErrorDialog() {
+        if (mErrorDialog != null) {
+            mErrorDialog.dismiss();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         KeyboardUtils.hideSoftInput(this);
+        dismissBottomSheetDialog();
+        dismissProgressDialog();
+        dismissErrorDialog();
     }
 
     @Override

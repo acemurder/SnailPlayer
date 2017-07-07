@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
 import android.support.v4.app.ActivityCompat;
@@ -24,13 +23,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 
-import com.ride.snailplayer.BR;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivitySearchBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
-import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItemAdapter;
-import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
-import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.util.common.util.KeyboardUtils;
 
 public class SearchActivity extends BaseActivity {

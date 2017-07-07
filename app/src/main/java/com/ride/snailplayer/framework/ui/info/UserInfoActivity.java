@@ -1,4 +1,4 @@
-package com.ride.snailplayer.framework.ui.me;
+package com.ride.snailplayer.framework.ui.info;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
@@ -6,27 +6,27 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.config.contants.PermissionsConstants;
-import com.ride.snailplayer.databinding.ActivityAvatarBinding;
+import com.ride.snailplayer.databinding.ActivityUserInfoBinding;
 import com.ride.snailplayer.databinding.DialogChangeAvatarBinding;
 import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.viewmodel.AvatarViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
@@ -35,11 +35,15 @@ import com.ride.snailplayer.util.ucrop.UCropClient;
 import com.ride.snailplayer.widget.dialog.BaseDialog;
 import com.ride.snailplayer.widget.dialog.ProgressDialog;
 import com.ride.util.common.log.Timber;
+import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.ToastUtils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.ObservableSource;
@@ -48,8 +52,15 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/**
+ * @author Stormouble
+ * @since 2017/7/6.
+ */
 
-public class AvatarActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+public class UserInfoActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener,
+        EasyPermissions.PermissionCallbacks {
+
+    private static final String DATE_DIALOG_TAG_BIRTHDAY = "birthday";
 
     /**
      * 申请拍摄照片所需权限的RequestCode
@@ -64,10 +75,10 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
     private static final int REQUEST_CODE_CAMERA = 90;
     private static final int REQUEST_CODE_ALBUM = 91;
 
-    private ActivityAvatarBinding mBinding;
-    private AvatarViewModel mAvatarViewModel;
+    private ActivityUserInfoBinding mBinding;
     private UserViewModel mUserViewModel;
-    private User mUser;
+    private AvatarViewModel mAvatarViewModel;
+    private UserInfoViewModel mUserInfoViewModel;
 
     private UCropClient mUCropClient;
     private MaterialDialog mChangeAvatarDialog;
@@ -76,57 +87,46 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
 
     private Uri mPhotoUriFromCamera;
 
-    public static void launchActivity(Activity activity, View element, String elementName) {
-        Intent intent = new Intent(activity, AvatarActivity.class);
-        ActivityOptionsCompat optionsCompat = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            optionsCompat = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(activity, element, elementName);
-        } else {
-            optionsCompat = ActivityOptionsCompat
-                    .makeScaleUpAnimation(element, element.getWidth() / 2, element.getHeight() / 2, 0, 0);
-        }
-        ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+    public static void launchActivity(@NonNull Activity startingActivity) {
+        ActivityOptionsCompat compat = ActivityOptionsCompat.makeBasic();
+        Intent intent = new Intent(startingActivity, UserInfoActivity.class);
+        ActivityCompat.startActivity(startingActivity, intent, compat.toBundle());
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_avatar);
-        mBinding.setAvatarActionHandler(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_info);
+        mBinding.setUserInfoActionHandler(this);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mAvatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel.class);
-        mUser = mUserViewModel.getUser();
+        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        EventBus.getDefault().register(this);
 
-        init();
-    }
-
-    private void init() {
+        initUserInfo();
         mUCropClient = new UCropClient.Builder(this)
                 .compressionFormat(Bitmap.CompressFormat.JPEG)
                 .compressQuality(95)
                 .build();
-        if (mUser != null) {
-            Glide.with(this).load(mUser.getAvatarUrl()).crossFade().centerCrop().into(mBinding.ivAvatar);
-        } else {
-            Glide.with(this).load(R.drawable.default_profile).into(mBinding.ivAvatar);
-            Timber.w("应用发生错误，user ==  null");
-        }
+        mProgressDialog = new ProgressDialog(this).initProgressDialog();
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        boolean handled = super.onTouchEvent(event);
-        if (!handled) {
-            onBackPressed();
+    private void initUserInfo() {
+        User user = mUserViewModel.getUser();
+        if (user != null) {
+            Glide.with(UserInfoActivity.this).load(user.getAvatarUrl()).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
+            mBinding.setUser(user);
+        } else {
+            Glide.with(UserInfoActivity.this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
         }
-        return true;
     }
 
     public void onClick(View view) {
-        final int id = view.getId();
-        switch (id) {
-            case R.id.tv_change_avatar:
+        switch (view.getId()) {
+            case R.id.iv_user_info_back:
+                onBackPressed();
+                break;
+            case R.id.ll_user_info_avatar:
                 DialogChangeAvatarBinding binding = DialogChangeAvatarBinding.inflate(getLayoutInflater());
                 binding.setChangeAvatarCallback(v -> {
                     dismissChangeAvatarDialog();
@@ -145,6 +145,72 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                         .cancelable(true)
                         .canceledOnTouchOutside(true)
                         .show();
+                break;
+            case R.id.ll_user_info_nickname:
+                EditNickNameActivity.launchActivity(this);
+                break;
+            case R.id.ll_user_info_sex:
+                break;
+            case R.id.ll_user_info_birthday:
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog dialog = DatePickerDialog.newInstance(this,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+
+                dialog.dismissOnPause(true);
+                dialog.showYearPickerFirst(false);
+                dialog.setVersion(DatePickerDialog.Version.VERSION_2);
+                dialog.show(getFragmentManager(), DATE_DIALOG_TAG_BIRTHDAY);
+                break;
+            case R.id.ll_user_info_sign:
+                EditSignActivity.launchActivity(this);
+                break;
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        switch (view.getTag()) {
+            case DATE_DIALOG_TAG_BIRTHDAY:
+                String input = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                User user = mUserViewModel.getUser();
+                mUserInfoViewModel.isUserBirthdayChanged(user, input)
+                        .flatMap(new Function<String, ObservableSource<String>>() {
+                            @Override
+                            public ObservableSource<String> apply(@io.reactivex.annotations.NonNull String birthday) throws Exception {
+                                return mUserInfoViewModel.updateUserBirthday(user, birthday);
+                            }
+                        })
+                        .compose(MainThreadObservableTransformer.instance())
+                        .doAfterNext(birthday -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
+                        .subscribe(new Observer<String>() {
+                            @Override
+                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                                if (!d.isDisposed()) {
+                                    mProgressDialog.show();
+                                }
+                            }
+
+                            @Override
+                            public void onNext(@io.reactivex.annotations.NonNull String birthday) {
+                                dismissProgressDialog();
+                                mBinding.tvUserInfoBirthday.setText(birthday);
+                                ToastUtils.showShortToast(UserInfoActivity.this, "保存成功");
+                            }
+
+                            @Override
+                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                                dismissProgressDialog();
+                                Timber.e(e);
+                                ToastUtils.showShortToast(UserInfoActivity.this, "保存失败");
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                dismissProgressDialog();
+                            }
+                        });
                 break;
         }
     }
@@ -267,7 +333,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                 if (resultCode == RESULT_OK) {
                     Timber.i("拍摄的图片所在路径=" + mPhotoUriFromCamera.getPath());
                     mAvatarViewModel.getTempPhotoFileUri(getCacheDir())
-                            .subscribe(destinationUri -> mUCropClient.newCrop(mPhotoUriFromCamera, destinationUri, AvatarActivity.this));
+                            .subscribe(destinationUri -> mUCropClient.newCrop(mPhotoUriFromCamera, destinationUri, this));
                 }
                 break;
             case REQUEST_CODE_ALBUM:
@@ -276,7 +342,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                     if (sourceUri != null) {
                         Timber.i("所选图片的路径=" + sourceUri.getPath());
                         mAvatarViewModel.getTempPhotoFileUri(getCacheDir())
-                                .subscribe(destinationUri -> mUCropClient.newCrop(sourceUri, destinationUri, AvatarActivity.this));
+                                .subscribe(destinationUri -> mUCropClient.newCrop(sourceUri, destinationUri, this));
                     }
                 }
                 break;
@@ -297,7 +363,6 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                     @Override
                                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                                         if (!d.isDisposed()) {
-                                            mProgressDialog = new ProgressDialog(AvatarActivity.this).initProgressDialog();
                                             mProgressDialog.show();
                                         }
                                     }
@@ -305,19 +370,15 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                     @Override
                                     public void onNext(@io.reactivex.annotations.NonNull String url) {
                                         dismissProgressDialog();
-                                        ToastUtils.showShortToast(AvatarActivity.this, "头像更改成功");
-                                        Glide.with(AvatarActivity.this)
-                                                .load(url)
-                                                .centerCrop()
-                                                .crossFade()
-                                                .into(mBinding.ivAvatar);
+                                        ToastUtils.showShortToast(UserInfoActivity.this, "上传头像成功");
+                                        Glide.with(UserInfoActivity.this).load(url).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
                                     }
 
                                     @Override
                                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                                         dismissProgressDialog();
                                         Timber.e(e);
-                                        ToastUtils.showShortToast(AvatarActivity.this, "头像更改失败");
+                                        ToastUtils.showShortToast(UserInfoActivity.this, "上传头像失败");
                                     }
 
                                     @Override
@@ -328,7 +389,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                 }
                 break;
             case UCrop.RESULT_ERROR:
-                ToastUtils.showShortToast(AvatarActivity.this, "剪裁失败");
+                ToastUtils.showShortToast(UserInfoActivity.this, "剪裁失败");
                 break;
         }
     }
@@ -339,9 +400,16 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
         }
     }
 
+    @Subscribe
+    public void onUserInfoUpdate(OnUserInfoUpdateEvent event) {
+        mBinding.setUser(mUserViewModel.getUser());
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        KeyboardUtils.hideSoftInput(UserInfoActivity.this);
         dismissChangeAvatarDialog();
         dismissPromptPermNeededDialog();
         dismissProgressDialog();

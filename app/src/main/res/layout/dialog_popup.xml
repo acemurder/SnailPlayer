@@ -38,8 +38,8 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:text="@{firstBtnText}"
-                android:textColor="@color/body_text_2"
-                android:textSize="16sp"
+                android:textColor="@color/body_text_1"
+                android:textSize="18sp"
                 android:visibility="@{firstBtnText == null ? View.GONE : View.VISIBLE}"
                 android:onClick="@{popupCallback.onClick}"
                 tools:text="按钮1"/>
@@ -58,16 +58,16 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:text="@{secondBtnText}"
-                android:textColor="@color/body_text_2"
-                android:textSize="16sp"
+                android:textColor="@color/body_text_1"
+                android:textSize="18sp"
                 android:visibility="@{secondBtnText == null ? View.GONE : View.VISIBLE}"
                 android:onClick="@{popupCallback.onClick}"
                 tools:text="按钮2"/>
 
         <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/app_grey"
+                android:layout_height="10dp"
+                android:background="@color/dark_background"
                 android:clickable="false"
                 android:focusable="false"/>
 
@@ -77,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:text="@{thirdBtnText}"
-                android:textColor="@color/body_text_2"
-                android:textSize="16sp"
+                android:textColor="@color/body_text_1"
+                android:textSize="18sp"
                 android:visibility="@{thirdBtnText == null ? View.GONE : View.VISIBLE}"
                 android:onClick="@{popupCallback.onClick}"
                 tools:text="按钮3"/>

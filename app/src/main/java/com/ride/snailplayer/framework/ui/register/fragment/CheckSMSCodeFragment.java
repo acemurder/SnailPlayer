@@ -99,7 +99,7 @@ public class CheckSMSCodeFragment extends BaseRegisterFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 changeViewVisibility(mBinding.ivClearSmsCode, !TextUtils.isEmpty(s));
 
-                changeNextButtonEnabled(RegexUtils.isMatch("^\\d{6}$", s));
+                changeNextButtonEnabled(RegexUtils.isMatch("^\\me_header_background{6}$", s));
             }
         });
     }

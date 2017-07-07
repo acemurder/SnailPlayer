@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+                name="editNickNameActionHandler"
+                type="com.ride.snailplayer.framework.ui.info.EditNickNameActivity"/>
+
+        <variable
+                name="user"
+                type="com.ride.snailplayer.framework.base.model.User"/>
+
+    </data>
+
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_white"
+            android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ActionBarThemeOverlay"
+                android:background="@color/theme_primary"
+                app:contentInsetStart="0dp"
+                app:popupTheme="@style/ActionBarPopupThemeOverlay">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                <ImageView
+                        android:id="@+id/iv_edit_nickname_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:padding="4dp"
+                        android:clickable="true"
+                        android:onClick="@{editNickNameActionHandler.onClick}"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_arrow_back"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@null"/>
+
+                <TextView
+                        android:id="@+id/tv_edit_nickname_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/iv_edit_nickname_back"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:text="@string/label_edit_user_nickname"
+                        android:textColor="@color/app_white"
+                        android:textSize="18sp"/>
+
+                <TextView
+                        android:id="@+id/tv_edit_nickname_save"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="12dp"
+                        android:padding="4dp"
+                        android:clickable="true"
+                        android:onClick="@{editNickNameActionHandler.onClick}"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:text="@string/save"
+                        android:textColor="@color/app_white"
+                        android:textSize="16sp"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/body_text_3"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@null"/>
+
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_height="36dp">
+
+                <EditText
+                        android:id="@+id/et_nickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:background="@null"
+                        android:inputType="text"
+                        android:imeOptions="actionDone"
+                        android:hint="@string/nickname_hint"
+                        android:maxLength="16"
+                        android:maxLines="1"
+                        android:text="@{user.nickName}"
+                        android:textColorHint="@color/body_text_3"
+                        android:textColorHighlight="@color/body_text_3"
+                        android:textColor="@color/body_text_1"
+                        android:textCursorDrawable="@drawable/shape_text_cursor_dark"
+                        android:scrollHorizontally="false"
+                        android:textSize="14sp"/>
+
+                <ImageView
+                        android:id="@+id/iv_clear_nickname"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:padding="4dp"
+                        android:layout_gravity="center_vertical|end"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_close"
+                        android:tint="@color/body_text_3"
+                        android:contentDescription="@null"
+                        android:onClick="@{editNickNameActionHandler.onClick}"
+                        android:visibility="gone"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/app_grey"/>
+
+    </LinearLayout>
+
+</layout>
