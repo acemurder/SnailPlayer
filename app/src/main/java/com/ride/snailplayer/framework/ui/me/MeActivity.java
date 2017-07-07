@@ -68,7 +68,7 @@ public class MeActivity extends BaseActivity {
     private void initAppBar() {
         setupUserInfo();
 
-        //设置Title渐变效果
+        //设置Appbar渐变效果
         mBinding.appbarMe.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             int actionBarHeight = getResources().getDimensionPixelSize(R.dimen.action_bar_size);
             int collapsingLayoutMaxOffset = getResources().getDimensionPixelSize(R.dimen.me_header_height)
@@ -76,13 +76,29 @@ public class MeActivity extends BaseActivity {
             int titleAutoTransparentTotalOffset = 2 * actionBarHeight;
             int titleAutoTransparentMinOffset = collapsingLayoutMaxOffset - titleAutoTransparentTotalOffset;
 
+            int appbarContentAutoTransparentTotalOffset = (int) (1.5 * actionBarHeight);
+            int appbarContentAutoTransparentMaxOffset = collapsingLayoutMaxOffset - appbarContentAutoTransparentTotalOffset;
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                //渐变Toolbar Title
                 if (Math.abs(verticalOffset) >= titleAutoTransparentMinOffset) {
                     float fraction = (Math.abs(verticalOffset) - titleAutoTransparentMinOffset) / (float) (titleAutoTransparentTotalOffset);
                     mBinding.tvMeTitle.setAlpha(fraction);
                 } else {
                     mBinding.tvMeTitle.setAlpha(0f);
+                }
+
+                //渐变Appbar内容区域：头像等
+                if (Math.abs(verticalOffset) >= appbarContentAutoTransparentMaxOffset) {
+                    mBinding.circleIvMeAvatar.setAlpha(0f);
+                    mBinding.tvMeUserName.setAlpha(0f);
+                    mBinding.llMeMyInfo.setAlpha(0f);
+                } else {
+                    float fraction = (appbarContentAutoTransparentMaxOffset - Math.abs(verticalOffset)) / (float) (appbarContentAutoTransparentTotalOffset);
+                    mBinding.circleIvMeAvatar.setAlpha(fraction);
+                    mBinding.tvMeUserName.setAlpha(fraction);
+                    mBinding.llMeMyInfo.setAlpha(fraction);
                 }
             }
         });
@@ -95,7 +111,6 @@ public class MeActivity extends BaseActivity {
             mBinding.setUser(user);
         } else {
             Glide.with(this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvMeAvatar);
-            mBinding.setUser(user);
         }
     }
 

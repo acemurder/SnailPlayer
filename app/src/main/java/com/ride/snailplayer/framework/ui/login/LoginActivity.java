@@ -23,6 +23,7 @@ import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.db.UserContract;
 import com.ride.snailplayer.framework.ui.home.HomeActivity;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.register.RegisterActivity;
 import com.ride.snailplayer.util.TextWatcherAdapter;
 import com.ride.snailplayer.widget.dialog.BaseDialog;
@@ -33,6 +34,8 @@ import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.NetworkUtils;
 import com.ride.util.common.util.RegexUtils;
 import com.ride.util.common.util.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -250,6 +253,7 @@ public class LoginActivity extends BaseActivity {
                         public void done(User result, BmobException e) {
                             if (e == null) {
                                 Timber.i("登录成功");
+                                EventBus.getDefault().post(new OnUserInfoUpdateEvent());
                                 HomeActivity.launchActivity(LoginActivity.this);
                             } else {
                                 Timber.e("登录失败," + e.getMessage());

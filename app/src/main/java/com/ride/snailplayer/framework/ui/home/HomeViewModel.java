@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * @author Stormouble
@@ -27,16 +32,39 @@ import io.reactivex.Observable;
 
 public class HomeViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<List<Channel>> mPreloadChannelList
+    private final MutableLiveData<List<Channel>> mPreloadChannels
             = new MutableLiveData<>();
 
     public HomeViewModel(Application application) {
         super(application);
-        setupChannelListData();
+        initPreloadChannels(getChannelsData());
     }
 
-    private void setupChannelListData() {
-        Observable<List<Channel>> obserPreChannelData = Observable.create(e -> {
+    private void initPreloadChannels(Observable<List<Channel>> obserChannels) {
+        obserChannels.subscribe(mPreloadChannels::setValue);
+    }
+
+    private Observable<List<Channel>> getChannelsData() {
+        return getFrontChannels().flatMap(new Function<List<Channel>, ObservableSource<List<Channel>>>() {
+                    @Override
+                    public ObservableSource<List<Channel>> apply(@NonNull List<Channel> frontChannels) throws Exception {
+                        BufferedReader reader = null;
+                        try {
+                            reader = new BufferedReader(new InputStreamReader(
+                                    getApplication().getApplicationContext().getAssets().open("channel.json")));
+                            List<Channel> localChannels = new Gson()
+                                    .fromJson(reader, new TypeToken<List<Channel>>() {}.getType());
+                            frontChannels.addAll(localChannels);
+                            return Observable.just(frontChannels);
+                        } finally {
+                            IOUtils.closeQuietly(reader);
+                        }
+                    }
+                });
+    }
+
+    private Observable<List<Channel>> getFrontChannels() {
+        return Observable.create(e -> {
             List<Channel> channels = new ArrayList<>();
             Channel recommendChannel = new Channel();
             recommendChannel.id = "0";
@@ -46,43 +74,18 @@ public class HomeViewModel extends AndroidViewModel {
 
             if (!e.isDisposed()) {
                 e.onNext(channels);
-            } else {
                 e.onComplete();
             }
         });
-
-        Observable<List<Channel>> obserLocalChannelData = Observable.create(e -> {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new InputStreamReader(
-                        getApplication().getApplicationContext().getAssets().open("channel.json")));
-                List<Channel> localList = new Gson()
-                        .fromJson(reader, new TypeToken<List<Channel>>() {
-                        }.getType());
-
-                if (!e.isDisposed()) {
-                    e.onNext(localList);
-                } else {
-                    e.onComplete();
-                }
-            } finally {
-                IOUtils.closeQuietly(reader);
-            }
-        });
-
-        Observable.zip(obserPreChannelData, obserLocalChannelData, (preChannels, localChannels) -> {
-            preChannels.addAll(localChannels);
-            return preChannels;
-        }).compose(MainThreadObservableTransformer.instance()).subscribe(mPreloadChannelList::setValue, ignored -> Timber.e("读取assets channel.json文件错误"));
     }
 
     public LiveData<List<Channel>> getPreloadChannelList() {
-        return mPreloadChannelList;
+        return mPreloadChannels;
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        mPreloadChannelList.setValue(null);
+        mPreloadChannels.setValue(null);
     }
 }

@@ -45,7 +45,7 @@ public class RecommendFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list,container,false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_list, container, false);
         initView();
         return mBinding.getRoot();
     }
