@@ -29,7 +29,7 @@ import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
 import com.ride.snailplayer.framework.ui.me.MeActivity;
-import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
 import com.ride.snailplayer.net.ApiClient;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
@@ -216,7 +216,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onUserUpdate(UserUpdateEvent event) {
+    public void onUserUpdate(OnUserInfoUpdateEvent event) {
         Timber.i("onUserUpdate");
         updateUserAvatar();
     }

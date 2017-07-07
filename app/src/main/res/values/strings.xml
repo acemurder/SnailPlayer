@@ -18,6 +18,7 @@
     <string name="label_register">注册</string>
     <string name="label_avatar">个人头像</string>
     <string name="label_user_info">我的资料</string>
+    <string name="label_edit_user_nickname">修改昵称</string>
 
     <!--LaunchActivity-->
     <string name="app_slogan">享受美妙时光</string>
@@ -28,7 +29,7 @@
 
     <!--HomeActivity-->
     <string name="menu_search">@string/label_search</string>
-    <string name="menu_file_download">下载</string>
+    <string name="menu_file_download"   >下载</string>
     <string name="no_login">未登录</string>
 
     <!--LoginActivity-->
@@ -36,6 +37,7 @@
     <string name="password_hint">密码</string>
     <string name="forget_password">忘记密码？</string>
     <string name="new_user_register">新用户注册</string>
+    <string name="find_password">找回密码</string>
     <string name="login_error_dialog_title">登录失败</string>
     <string name="login_error_dialog_content">账号或密码错误，请重新输入。</string>
 
@@ -75,6 +77,8 @@
     <string name="no_setting">未设置</string>
     <string name="no_fill">未填写</string>
     <string name="no_sign">还没有签名</string>
+    <string name="save">保存</string>
+    <string name="nickname_hint">请输入昵称</string>
 
     <!--AvatarActivity-->
     <string name="take_photo">拍摄</string>

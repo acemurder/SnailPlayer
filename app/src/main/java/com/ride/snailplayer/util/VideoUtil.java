@@ -69,7 +69,7 @@ public class VideoUtil {
 
         Formatter formatter = new Formatter();
         return hours > 0
-                ? formatter.format("%d:%02d:%02d", new Object[]{hours, minutes, seconds}).toString()
+                ? formatter.format("%me_header_background:%02d:%02d", new Object[]{hours, minutes, seconds}).toString()
                 : formatter.format("%02d:%02d", new Object[]{minutes, seconds}).toString();
     }
 

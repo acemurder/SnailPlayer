@@ -342,7 +342,9 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
     }
 
     private void dismissProgressDialog() {
-        mProgressDialog.dismiss();
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 
     @Override

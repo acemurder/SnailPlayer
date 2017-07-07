@@ -1,21 +1,10 @@
 package com.ride.snailplayer.framework.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.ride.snailplayer.framework.base.model.User;
-import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
-import com.ride.snailplayer.net.exception.SnailPlayerApiException;
-import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
-import com.ride.util.common.log.Timber;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 
@@ -24,16 +13,7 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
-import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.CompletableOnSubscribe;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author Stormouble
