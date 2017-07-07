@@ -10,6 +10,7 @@ import cn.bmob.v3.BmobUser;
 public class User extends BmobUser {
     private String avatarUrl;
     private String nickName;
+    private String sex;
     private String birthday;
     private String sign;
 
@@ -27,6 +28,14 @@ public class User extends BmobUser {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getBirthday() {

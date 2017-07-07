@@ -132,28 +132,4 @@ public class UserInfoViewModel extends ViewModel {
             }
         });
     }
-
-    public Observable<Bitmap> setAvatarForCircleImageView(@NonNull String url) {
-        return Observable.create(emitter -> {
-            OkHttpClient client = ApiClient.IQIYI.getOkHttpClient();
-            Request request = new Request.Builder().url(url).build();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    emitter.onError(e);
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response != null && response.isSuccessful()) {
-                        Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        emitter.onNext(bitmap);
-                        emitter.onComplete();
-                    } else {
-                        emitter.onError(new Exception("头像bitmap下载失败"));
-                    }
-                }
-            });
-        });
-    }
 }

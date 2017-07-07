@@ -312,8 +312,6 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                         ToastUtils.showShortToast(AvatarActivity.this, "头像更改成功");
                                         Glide.with(AvatarActivity.this)
                                                 .load(url)
-                                                .skipMemoryCache(true)
-                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
                                                 .centerCrop()
                                                 .crossFade()
                                                 .into(mBinding.ivAvatar);

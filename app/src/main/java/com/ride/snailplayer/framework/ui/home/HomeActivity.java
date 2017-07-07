@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityHomeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -89,15 +90,10 @@ public class HomeActivity extends BaseActivity {
     private void setupUserInfo() {
         User user = mUserViewModel.getUser();
         if (user != null) {
-            mUserViewModel.setAvatarForCircleImageView(user.getAvatarUrl())
-                    .compose(MainThreadObservableTransformer.instance())
-                    .subscribe(bitmap -> {
-                        Timber.d("头像url=" + user.getAvatarUrl());
-                        mBinding.circleIvHomeAvatar.setImageBitmap(bitmap);
-                    }, Timber::e);
+            Glide.with(this).load(user.getAvatarUrl()).dontAnimate().into(mBinding.circleIvHomeAvatar);
             mBinding.homeTvLoginStatus.setText(user.getNickName());
         } else {
-            mBinding.circleIvHomeAvatar.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_profile));
+            Glide.with(this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvHomeAvatar);
             mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
         }
     }

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.config.contants.PermissionsConstants;
 import com.ride.snailplayer.databinding.ActivityUserInfoBinding;
@@ -55,7 +56,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class UserInfoActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener,
-        EasyPermissions.PermissionCallbacks{
+        EasyPermissions.PermissionCallbacks {
 
     private static final String DATE_DIALOG_TAG_BIRTHDAY = "birthday";
 
@@ -99,11 +100,8 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         mAvatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel.class);
         mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
-        mUser = mUserViewModel.getUser();
 
-        if (mUser != null) {
-            initUserInfo();
-        }
+        initUserInfo();
         mUCropClient = new UCropClient.Builder(this)
                 .compressionFormat(Bitmap.CompressFormat.JPEG)
                 .compressQuality(95)
@@ -111,14 +109,13 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
     }
 
     private void initUserInfo() {
-        initUserAvatar();
-        mBinding.tvUserInfoNickname.setText(mUser.getNickName());
-    }
-
-    private void initUserAvatar() {
-        mUserInfoViewModel.setAvatarForCircleImageView(mUser.getAvatarUrl())
-                .compose(MainThreadObservableTransformer.instance())
-                .subscribe(bitmap -> mBinding.circleIvUserInfoAvatar.setImageBitmap(bitmap), Timber::e);
+        User user = mUserViewModel.getUser();
+        if (user != null) {
+            Glide.with(UserInfoActivity.this).load(user.getAvatarUrl()).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
+            mBinding.setUser(user);
+        } else {
+            Glide.with(UserInfoActivity.this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
+        }
     }
 
     public void onClick(View view) {
@@ -378,7 +375,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                                     public void onNext(@io.reactivex.annotations.NonNull Bitmap bitmap) {
                                         dismissProgressDialog();
                                         ToastUtils.showShortToast(UserInfoActivity.this, "上传头像成功");
-                                        mBinding.circleIvUserInfoAvatar.setImageBitmap(bitmap);
+                                        Glide.with(UserInfoActivity.this).load(bitmap).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
                                     }
 
                                     @Override
