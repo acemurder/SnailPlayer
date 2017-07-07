@@ -203,50 +203,50 @@
 
         </FrameLayout>
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_marginLeft="8dp"
-                android:background="@color/app_grey"/>
+        <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.1dp"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:background="@color/app_grey"/>-->
 
-        <FrameLayout
-                android:id="@+id/ll_user_info_university"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:clickable="true"
-                android:onClick="@{userInfoActionHandler.onClick}"
-                android:background="@drawable/selector_common_background"
-                android:orientation="horizontal">
+        <!--<FrameLayout-->
+                <!--android:id="@+id/ll_user_info_university"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:paddingTop="8dp"-->
+                <!--android:paddingBottom="8dp"-->
+                <!--android:paddingLeft="8dp"-->
+                <!--android:paddingRight="8dp"-->
+                <!--android:clickable="true"-->
+                <!--android:onClick="@{userInfoActionHandler.onClick}"-->
+                <!--android:background="@drawable/selector_common_background"-->
+                <!--android:orientation="horizontal">-->
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/university"
-                    android:textSize="16sp"
-                    android:textColor="@color/body_text_2"/>
+            <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:text="@string/university"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:textColor="@color/body_text_2"/>-->
 
-            <TextView
-                    android:id="@+id/tv_user_info_university"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:hint="@string/no_fill"
-                    android:textColorHint="@color/app_grey"
-                    android:textSize="14sp"
-                    android:textColor="@color/body_text_3"/>
+            <!--<TextView-->
+                    <!--android:id="@+id/tv_user_info_university"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_vertical|right"-->
+                    <!--android:hint="@string/no_fill"-->
+                    <!--android:textColorHint="@color/app_grey"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:textColor="@color/body_text_3"/>-->
 
-        </FrameLayout>
+        <!--</FrameLayout>-->
 
         <FrameLayout
                 android:id="@+id/ll_user_info_sign"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"

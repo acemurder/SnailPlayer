@@ -79,6 +79,7 @@
     <string name="no_sign">还没有签名</string>
     <string name="save">保存</string>
     <string name="nickname_hint">请输入昵称</string>
+    <string name="sign_hint">一句话介绍</string>
 
     <!--AvatarActivity-->
     <string name="take_photo">拍摄</string>

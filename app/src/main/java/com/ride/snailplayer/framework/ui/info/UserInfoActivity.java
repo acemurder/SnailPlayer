@@ -17,8 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.config.contants.PermissionsConstants;
 import com.ride.snailplayer.databinding.ActivityUserInfoBinding;
@@ -26,16 +24,16 @@ import com.ride.snailplayer.databinding.DialogChangeAvatarBinding;
 import com.ride.snailplayer.databinding.DialogCommonBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
 import com.ride.snailplayer.framework.base.model.User;
-import com.ride.snailplayer.framework.ui.me.AvatarActivity;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.viewmodel.AvatarViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
-import com.ride.snailplayer.net.func.MainThreadSingleTransformer;
 import com.ride.snailplayer.util.ucrop.UCropClient;
 import com.ride.snailplayer.widget.dialog.BaseDialog;
 import com.ride.snailplayer.widget.dialog.ProgressDialog;
 import com.ride.util.common.log.Timber;
+import com.ride.util.common.util.KeyboardUtils;
 import com.ride.util.common.util.ToastUtils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.yalantis.ucrop.UCrop;
@@ -106,6 +104,10 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
         if (mUser != null) {
             initUserInfo();
         }
+        mUCropClient = new UCropClient.Builder(this)
+                .compressionFormat(Bitmap.CompressFormat.JPEG)
+                .compressQuality(95)
+                .build();
     }
 
     private void initUserInfo() {
@@ -116,18 +118,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
     private void initUserAvatar() {
         mUserInfoViewModel.setAvatarForCircleImageView(mUser.getAvatarUrl())
                 .compose(MainThreadObservableTransformer.instance())
-                .subscribe(bitmap -> {
-
-                }, Timber::e);
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        switch (view.getTag()) {
-            case DATE_DIALOG_TAG_BIRTHDAY:
-                mBinding.tvUserInfoBirthday.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                break;
-        }
+                .subscribe(bitmap -> mBinding.circleIvUserInfoAvatar.setImageBitmap(bitmap), Timber::e);
     }
 
     public void onClick(View view) {
@@ -173,6 +164,53 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 dialog.show(getFragmentManager(), DATE_DIALOG_TAG_BIRTHDAY);
                 break;
             case R.id.ll_user_info_sign:
+                EditSignActivity.launchActivity(this);
+                break;
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        switch (view.getTag()) {
+            case DATE_DIALOG_TAG_BIRTHDAY:
+                String birthday = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                mUserInfoViewModel.isUserBirthdayChanged(mUser, birthday)
+                        .flatMap(new Function<String, ObservableSource<User>>() {
+                            @Override
+                            public ObservableSource<User> apply(@io.reactivex.annotations.NonNull String birthday) throws Exception {
+                                return mUserInfoViewModel.updateUserBirthday(mUser, birthday);
+                            }
+                        })
+                        .compose(MainThreadObservableTransformer.instance())
+                        .doAfterNext(user -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
+                        .subscribe(new Observer<User>() {
+                            @Override
+                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                                if (!d.isDisposed()) {
+                                    mProgressDialog.show();
+                                }
+                            }
+
+                            @Override
+                            public void onNext(@io.reactivex.annotations.NonNull User user) {
+                                dismissProgressDialog();
+                                ToastUtils.showShortToast("保存成功");
+                            }
+
+                            @Override
+                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                                dismissProgressDialog();
+                                Timber.e(e);
+                                ToastUtils.showShortToast("保存失败");
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                dismissProgressDialog();
+                                KeyboardUtils.hideSoftInput(UserInfoActivity.this);
+                                onBackPressed();
+                            }
+                        });
                 break;
         }
     }
