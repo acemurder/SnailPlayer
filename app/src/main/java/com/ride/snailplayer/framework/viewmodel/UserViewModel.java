@@ -69,7 +69,7 @@ public class UserViewModel extends ViewModel {
                     }
                 });
             } else {
-                emitter.onError(new SnailPlayerApiException("user == null"));
+                emitter.onError(new Exception("user == null"));
             }
         });
     }

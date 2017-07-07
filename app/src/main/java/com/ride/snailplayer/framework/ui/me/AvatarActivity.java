@@ -31,6 +31,7 @@ import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.viewmodel.AvatarViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
+import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.util.ucrop.UCropClient;
 import com.ride.snailplayer.widget.dialog.BaseDialog;
 import com.ride.snailplayer.widget.dialog.ProgressDialog;
@@ -48,6 +49,7 @@ import io.reactivex.SingleObserver;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -289,9 +291,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                     Uri cropResultUri = UCrop.getOutput(data);
                     if (cropResultUri != null) {
                         mUserViewModel.uploadUserAvatar(cropResultUri)
-                                .subscribeOn(Schedulers.io())
-                                .unsubscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(MainThreadObservableTransformer.instance())
                                 .flatMap(new Function<String, ObservableSource<String>>() {
                                     @Override
                                     public ObservableSource<String> apply(@io.reactivex.annotations.NonNull String url) throws Exception {

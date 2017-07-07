@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,33 +22,18 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerIte
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
-import com.ride.snailplayer.framework.ui.me.event.UserUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.fragment.AboutMeFragement;
 import com.ride.snailplayer.framework.ui.me.fragment.AttentionFragment;
 import com.ride.snailplayer.framework.ui.me.viewmodel.MeViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
-import com.ride.snailplayer.net.ApiClient;
-import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
+import com.ride.snailplayer.net.func.MainThreadSingleTransformer;
 import com.ride.snailplayer.widget.GradientTextView;
-import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.BarUtils;
 import com.ride.util.common.util.ScreenUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.io.IOException;
-
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
-import io.reactivex.Observable;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MeActivity extends BaseActivity {
 
@@ -180,13 +161,6 @@ public class MeActivity extends BaseActivity {
         }
     }
 
-    private void setupBasicInfo() {
-        if (mUser != null) {
-            updateUser(mUser.getAvatarUrl());
-            //mBinding..setText(mUser.getNickName());
-        }
-    }
-
     public void onClick(View view) {
         final int id = view.getId();
         switch (id) {
@@ -204,75 +178,11 @@ public class MeActivity extends BaseActivity {
 
     @Subscribe
     public void onAvatarChange(OnAvatarChangeEvent event) {
-//        BmobFile bmobFile = new BmobFile(new File(AvatarActivity.AVATAR_FILE_PATH));
-//        bmobFile.uploadblock(new UploadFileListener() {
-//            @Override
-//            public void done(BmobException e) {
-//                if (e == null) {
-//                    Timber.i("上传文件成功:" + bmobFile.getFileUrl());
-//                    updateUser(bmobFile.getFileUrl());
-//                } else {
-//                    Timber.i("上传文件失败：" + e.getMessage());
-//                }
-//            }
-//
-//            @Override
-//            public void onProgress(Integer value) {
-//            }
-//        });
-    }
+        mMeViewModel.setAvatarForCircleImageView(mUserViewModel.getUser().getAvatarUrl())
+                .compose(MainThreadSingleTransformer.instance())
+                .subscribe(bitmap -> {
 
-    private void updateUser(String avatarUrl) {
-        updateUserAvatar(avatarUrl);
-
-        User currentUser = BmobUser.getCurrentUser(User.class);
-        if (currentUser != null) {
-            User newUser = new User();
-            newUser.setAvatarUrl(avatarUrl);
-            newUser.update(currentUser.getObjectId(), new UpdateListener() {
-                @Override
-                public void done(BmobException e) {
-                    if (e == null) {
-                        EventBus.getDefault().post(new UserUpdateEvent());
-                        Timber.i("更新用户信息成功");
-                    } else {
-                        Timber.i("更新用户信息失败:" + e.getMessage());
-                    }
-                }
-            });
-        }
-    }
-
-    private void updateUserAvatar(String url) {
-        if (!TextUtils.isEmpty(url)) {
-            Observable.just(url)
-                    .compose(MainThreadObservableTransformer.instance())
-                    .map(s -> {
-                        OkHttpClient client = ApiClient.IQIYI.getOkHttpClient();
-                        Request request = new Request.Builder().url(s).build();
-                        return client.newCall(request);
-                    })
-                    .subscribe(call -> call.enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Timber.i("下载bitmap失败");
-                        }
-
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                            if (response.isSuccessful() && response.body() != null) {
-                                Timber.i("下载bitmap成功");
-                                Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                                AppExecutors.getInstance().getMainThreadExecutor().execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //mBinding.circleIvMeAvatar.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }
-                    }));
-        }
+                }, Timber::e);
     }
 
     @Override
