@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.qiyi.video.playcore.ErrorCode;
 import com.qiyi.video.playcore.IQYPlayerHandlerCallBack;
 import com.qiyi.video.playcore.QiyiVideoView;
@@ -49,6 +50,7 @@ public class VideoPlayView extends RelativeLayout {
     private TextView mTitleText;
     private ImageView mBackImage;
     private LinearLayout mRemindLayout;
+    private  LottieAnimationView lottieAnimationView;
 
     private OnBackClickListener listener;
 
@@ -59,6 +61,7 @@ public class VideoPlayView extends RelativeLayout {
          */
         @Override
         public void OnSeekSuccess(long l) {
+            Timber.i("SeekTo 成功");
         }
 
         /**
@@ -66,6 +69,35 @@ public class VideoPlayView extends RelativeLayout {
          */
         @Override
         public void OnWaiting(boolean b) {
+//            Observable.create((ObservableOnSubscribe<Object>) e -> {
+//                if (b) {
+//                    lottieAnimationView.setVisibility(VISIBLE);
+//                    lottieAnimationView.playAnimation();
+//
+//                }else {
+//                    lottieAnimationView.setVisibility(GONE);
+//                }
+//                e.onNext(1);
+//
+//            }).subscribeOn(AndroidSchedulers.mainThread())
+//                    .unsubscribeOn(AndroidSchedulers.mainThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe();
+            if (b){
+                ((Activity)getContext()).runOnUiThread(()->{
+                    lottieAnimationView.setVisibility(VISIBLE);
+                });
+                Timber.i("数据加载暂停");
+
+            }
+
+            else{
+                Timber.i("数据加载暂停false");
+           //     lottieAnimationView.cancelAnimation();
+                ((Activity)getContext()).runOnUiThread(()->{
+                    lottieAnimationView.setVisibility(GONE);
+                });
+            }
         }
 
         /**
@@ -74,6 +106,7 @@ public class VideoPlayView extends RelativeLayout {
         @Override
         public void OnError(ErrorCode errorCode) {
             mMainHandler.removeMessages(HANDLER_MSG_UPDATE_PROGRESS);
+            Timber.i("错误");
         }
 
         /**
@@ -90,6 +123,37 @@ public class VideoPlayView extends RelativeLayout {
          */
         @Override
         public void OnPlayerStateChanged(int i) {
+            switch (i) {
+                case 0:
+                    Timber.i("空闲");
+                    break;
+                case 1:
+                    Timber.i("已经初始化");
+                    break;
+                case 2:
+                    Timber.i("调用PrepareMovie");
+                    break;
+                case 4:
+                    Timber.i("可以获取视频信息");
+                    break;
+                case 8:
+                    Timber.i("广告播放中");
+                    break;
+                case 16:
+                    Timber.i("正片播放中");
+                    break;
+                case 32:
+                    Timber.i("一个影片播放结束");
+                    break;
+                case 64:
+                    Timber.i("错误");
+                    break;
+                case 128:
+                    Timber.i("播放结束");
+                    break;
+
+
+            }
         }
     };
 
@@ -144,12 +208,12 @@ public class VideoPlayView extends RelativeLayout {
 
     }
 
-    public void setVisibilityGone(){
+    public void setVisibilityGone() {
         mRemindLayout.setVisibility(GONE);
         mControlLayout.setVisibility(GONE);
     }
 
-    public void setVisibilityVisible(){
+    public void setVisibilityVisible() {
         mRemindLayout.setVisibility(VISIBLE);
         mControlLayout.setVisibility(VISIBLE);
     }
@@ -168,6 +232,9 @@ public class VideoPlayView extends RelativeLayout {
 //
 //        }));
 
+        lottieAnimationView = (LottieAnimationView) findViewById(R.id.lottie_animation_view);
+        //lottieAnimationView.cancelAnimation();
+        lottieAnimationView.setVisibility(GONE);
         mCurrentTimeText = (TextView) findViewById(R.id.tv_play_time);
 
         mPlayImage = (ImageView) findViewById(R.id.iv_play);
@@ -192,10 +259,10 @@ public class VideoPlayView extends RelativeLayout {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    mProgress = progress;
-                    removeCallbacks(mGestureController.getDoubleTapRunnable());
-                }
+                // if (fromUser) {
+                mProgress = progress;
+                removeCallbacks(mGestureController.getDoubleTapRunnable());
+                //   }
             }
 
             @Override
@@ -207,7 +274,7 @@ public class VideoPlayView extends RelativeLayout {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mSeekBar.setProgress(mProgress);
                 mVideoView.seekTo(mProgress);
-                postDelayed(mGestureController.getDoubleTapRunnable(),2000);
+                postDelayed(mGestureController.getDoubleTapRunnable(), 2000);
             }
         });
         viewContainer = (FrameLayout) findViewById(R.id.fl_view_container);
@@ -227,7 +294,16 @@ public class VideoPlayView extends RelativeLayout {
 
     }
 
-    public void setTitle(String title){
+    public void seekTo(int position) {
+        mVideoView.seekTo(position);
+        mSeekBar.setProgress(position);
+    }
+
+    public void setSeekbarPosition(int position) {
+        mSeekBar.setProgress(position);
+    }
+
+    public void setTitle(String title) {
         mTitleText.setText(title);
     }
 
@@ -236,7 +312,7 @@ public class VideoPlayView extends RelativeLayout {
     }
 
     private void initGestureController() {
-        mGestureController = new VideoPlayGestureController(getContext(), viewContainer,viewProgressContainer,this);
+        mGestureController = new VideoPlayGestureController(getContext(), viewContainer, viewProgressContainer, this);
     }
 
     @Override
@@ -249,16 +325,15 @@ public class VideoPlayView extends RelativeLayout {
     public boolean onTouchEvent(MotionEvent event) {
 
         mGestureController.handleTouchEvent(event);
-        Timber.i("onTouchEvent");
         return true;
 
     }
 
-    public int getPostion(){
+    public int getPostion() {
         return mVideoView.getDuration();
     }
 
-    public int getCurrentPostion(){
+    public int getCurrentPostion() {
         return mVideoView.getCurrentPosition();
     }
 
@@ -319,13 +394,13 @@ public class VideoPlayView extends RelativeLayout {
 
     }
 
-    public void setOrientation(){
-        Activity activity =  ((Activity)getContext());
-        if(activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+    public void setOrientation() {
+        Activity activity = ((Activity) getContext());
+        if (activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             //切换竖屏
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             mFullScreenImage.setBackgroundResource(R.drawable.ic_fullscreen);
-        }else{
+        } else {
             //切换横屏
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             mFullScreenImage.setBackgroundResource(R.drawable.ic_fullscreen_exit);
@@ -347,12 +422,11 @@ public class VideoPlayView extends RelativeLayout {
         return mVideoView;
     }
 
-    public interface OnBackClickListener{
+    public interface OnBackClickListener {
         void onClick();
     }
 
     //private GestureDetector mGestureDetector = new GestureDetector()
-
 
 
 }

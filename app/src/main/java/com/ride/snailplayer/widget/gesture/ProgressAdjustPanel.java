@@ -2,6 +2,7 @@ package com.ride.snailplayer.widget.gesture;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -40,7 +41,11 @@ public class ProgressAdjustPanel extends LinearLayout {
     }
 
     private void initLayout(Context context) {
-        View.inflate(context, R.layout.layout_progress_adjust_panel, this);
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_progress_adjust_panel,this,false);
+  //        View.inflate(context, R.layout.layout_progress_adjust_panel, null);
+//        View.inflate(cont, R.layout.layout_adjust_panel, this);
+        addView(v);
+
         adjustIconView = findViewById(R.id.adjust_icon);
         currProgress = (TextView) findViewById(R.id.curr_progress);
         totalDuration = (TextView) findViewById(R.id.total_duration);
@@ -56,13 +61,14 @@ public class ProgressAdjustPanel extends LinearLayout {
     }
 
     private void adjustInternal(int iconResId, int currProgressMS, int totalDurationMS) {
-        Timber.i(currProgressMS + " " + totalDurationMS);
+        setVisibility(VISIBLE);
         ViewGroup parent = (ViewGroup) getParent();
-        parent.setVisibility(VISIBLE);
+        Timber.i(parent.getVisibility() + "");
         adjustIconView.setBackgroundResource(iconResId);
         currProgress.setText(VideoUtil.formatTime(currProgressMS));
         totalDuration.setText(VideoUtil.formatTime(totalDurationMS));
         parent.setVisibility(VISIBLE);
+        Timber.e(getChildCount() + "");
 
 
     }

@@ -1,6 +1,7 @@
 package com.ride.snailplayer.framework.ui.play;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -18,7 +19,9 @@ import com.google.gson.reflect.TypeToken;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityPlayBinding;
 import com.ride.snailplayer.framework.base.model.Comment;
+import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.adapter.CommentAdapter;
+import com.ride.snailplayer.framework.viewmodel.UserViewModel;
 import com.ride.snailplayer.net.model.VideoInfo;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.KeyboardUtils;
@@ -43,6 +46,8 @@ public class PlayActivity extends AppCompatActivity {
     private int currentOrientation = 1;
     private CommentAdapter mCommentAdapter;
     private List<Comment> comments = new ArrayList<>();
+    private UserViewModel model;
+    private User user;
 
 
 
@@ -58,12 +63,19 @@ public class PlayActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_play);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initView();
+        model = ViewModelProviders.of(this).get(UserViewModel.class);
+        user = model.getUser();
         mBinding.videoPlayView.setPlayData(videoInfo.tId);
         loadData();
     }
 
     private void initView() {
         videoInfo = (VideoInfo) getIntent().getSerializableExtra("video");
+
+        mBinding.tvVideoTitle.setText(videoInfo.title);
+        mBinding.tvPlayCount.setText(videoInfo.playCountText+"次播放");
+        if (!TextUtils.isEmpty(videoInfo.snsScore))
+            mBinding.tvVideoScore.setText(videoInfo.snsScore+"分");
 
         mCommentAdapter = new CommentAdapter(R.layout.item_comment,comments,this);
         mBinding.commentList.setLayoutManager(new LinearLayoutManager(this));
@@ -79,15 +91,19 @@ public class PlayActivity extends AppCompatActivity {
                 comment.setContent(content);
                 comment.setTvId(videoInfo.tId);
                 //comment.setUserAvatar("");
-                comment.setUserName("acemurder");
+                String userName = "匿名用户";
+                if (user != null)
+                    userName = user.getNickName();
+
+                comment.setUserName(userName);
+                mBinding.commentEdit.setText("");
+                KeyboardUtils.hideSoftInput(PlayActivity.this);
                 comment.save(new SaveListener<String>() {
                     @Override
                     public void done(String s, BmobException e) {
                         if (e == null){
                             Timber.i(s);
-                            mBinding.commentEdit.setText("");
-                            KeyboardUtils.hideSoftInput(PlayActivity.this);
-                            loadData();
+                             loadData();
                             //TODO
                         }else {
                             Toast.makeText(PlayActivity.this,"网络错误",Toast.LENGTH_LONG).show();

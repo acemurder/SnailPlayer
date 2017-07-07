@@ -20,6 +20,7 @@ import cn.bmob.v3.Bmob;
 
 public class SnailPlayerApplication extends Application {
 
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -45,5 +46,7 @@ public class SnailPlayerApplication extends Application {
     private void initBomb() {
         Bmob.initialize(this, SnailPlayerConfig.BMOB_APPLICATION_ID);
     }
+
+
 
 }

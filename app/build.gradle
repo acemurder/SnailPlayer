@@ -151,6 +151,10 @@ dependencies {
     }
     compile rootProject.ext.dependencies["smart-tab"]
     compile rootProject.ext.dependencies["rollviewpager"]
+    compile rootProject.ext.dependencies["rxcache"]
+    compile rootProject.ext.dependencies["jolyglot_gson"]
+
+
 
     compile files('libs/iQIYISdk.jar')
     compile project(':util-lib')

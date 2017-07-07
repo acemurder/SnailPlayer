@@ -16,7 +16,6 @@ import com.ride.snailplayer.framework.ui.home.adapter.LooperAdapter;
 import com.ride.snailplayer.framework.ui.home.adapter.RecommendListAdapter;
 import com.ride.snailplayer.framework.ui.home.adapter.TagAdapter;
 import com.ride.snailplayer.net.ApiClient;
-import com.ride.snailplayer.net.func.FuncMapResourceToData;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.RecommendItem;
 import com.ride.snailplayer.net.util.IQiYiApiParamsUtils;
@@ -24,9 +23,13 @@ import com.ride.util.common.log.Timber;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
+import io.rx_cache2.Reply;
 import me.dkzwm.smoothrefreshlayout.SmoothRefreshLayout;
 
 /**
@@ -76,13 +79,17 @@ public class RecommendFragment extends Fragment {
     }
 
     private void loadData(){
-        ApiClient.IQIYI.getIQiYiApiService().qiyiRecommendDetail(IQiYiApiParamsUtils.genRecommendDetailParams(1,30))
+        Observable<List<RecommendItem>> o =ApiClient.IQIYI.getIQiYiApiService().qiyiRecommendDetail(IQiYiApiParamsUtils
+                .genRecommendDetailParams(1,100)).
+                map(listResource -> listResource.data);
+
+        ApiClient.IQIYI.getCacheProviders().qiyiRecommendDetail(o,new DynamicKey(1),
+                new EvictDynamicKey(false))
+                .map(Reply::getData)
                 .compose(MainThreadObservableTransformer.instance())
-                .map(FuncMapResourceToData.instance())
                 .subscribe(new Observer<List<RecommendItem>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-                        mBinding.smoothRefreshLayout.autoRefresh();
 
                     }
 
@@ -93,12 +100,11 @@ public class RecommendFragment extends Fragment {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        mBinding.smoothRefreshLayout.refreshComplete();
+                        e.printStackTrace();
                     }
 
                     @Override
                     public void onComplete() {
-                        mBinding.smoothRefreshLayout.refreshComplete();
 
                     }
                 });
@@ -112,6 +118,7 @@ public class RecommendFragment extends Fragment {
             }
         }
         for (RecommendItem item: items){
+            Timber.i(item.channelName);
             Timber.i( item.title + ":"+ item.videoInfoList.size() + " ");
             if (item.title.equals("轮播图")){
 

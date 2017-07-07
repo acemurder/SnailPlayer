@@ -2,30 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center">
 
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.qiyi.video.playcore.QiyiVideoView
             android:id="@+id/video_view"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
+
+
         <FrameLayout
-            android:id="@+id/fl_view_container_progress"
-            android:layout_width="100dp"
+            android:id="@+id/fl_view_container"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
         </FrameLayout>
 
+
         <FrameLayout
-            android:id="@+id/fl_view_container"
-            android:layout_width="100dp"
+            android:id="@+id/fl_view_container_progress"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             android:layout_centerInParent="true">
         </FrameLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_animation_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            app:lottie_fileName="empty_status.json"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true" />
 
     </RelativeLayout>
     <LinearLayout

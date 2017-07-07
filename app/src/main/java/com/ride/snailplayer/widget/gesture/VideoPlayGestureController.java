@@ -41,15 +41,14 @@ public class VideoPlayGestureController {
     private FrameLayout mAdjustPanelContainer;
     private FrameLayout mProgressAdjustPanelContainer;
 
-    private boolean isVisible = true;
-
+    private int currentPosition = 0;
 
     public VideoPlayGestureController(Context context, FrameLayout viewContainer, FrameLayout viewProgressContainer,
                                       VideoPlayView mPlayView) {
         mContext = context;
         this.mPlayView = mPlayView;
-        setAdjustPanelContainer(viewContainer);
         setProgressAdjustPanelContainer(viewProgressContainer);
+        setAdjustPanelContainer(viewContainer);
         initGestureDetector();
         mCurrentBrightness = VideoUtil.getSystemBrightnessPercent(context);
         mPlayView.setVisibilityGone();
@@ -70,10 +69,13 @@ public class VideoPlayGestureController {
             mPlayView.postDelayed(mDoubleTapRunnable,1500);
             if (mGestureType == FastBackwardOrForward) {
                 //   mGestureCallBack.onEndDragProgress(mDragProgressPosition, event.getRawX() - mStartDragX);
+                mPlayView.seekTo(currentPosition);
                 mStartDragProgressPosition = INVALID_DRAG_PROGRESS;
+
                 mDragProgressPosition = 0;
                 mStartDragX = 0;
-            }
+                currentPosition = 0;
+               }
             reset();
 
         }
@@ -136,7 +138,7 @@ public class VideoPlayGestureController {
 
         mAdjustPanel = new AdjustPanel(mContext);
         mAdjustPanelContainer.setVisibility(View.GONE);
-        mAdjustPanelContainer.removeAllViews();
+        //mAdjustPanelContainer.removeAllViews();
         mAdjustPanelContainer.addView(mAdjustPanel, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -146,9 +148,9 @@ public class VideoPlayGestureController {
         mProgressAdjustPanelContainer = layout;
         mProgressAdjustPanel = new ProgressAdjustPanel(mContext);
         mProgressAdjustPanel.setVisibility(View.GONE);
-        mProgressAdjustPanel.removeAllViews();
-        ViewGroup.LayoutParams params =
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+      //  mProgressAdjustPanel.removeAllViews();
+        FrameLayout.LayoutParams params =
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         mProgressAdjustPanelContainer.addView(mProgressAdjustPanel, params);
     }
@@ -286,6 +288,8 @@ public class VideoPlayGestureController {
         int seekOffset = (int) (total * percent);
 
         currPosition += seekOffset;
+        currentPosition = currPosition;
+        mPlayView.setSeekbarPosition(currPosition);
         if (currPosition < 0) {
             currPosition = 0;
         } else if (currPosition > total) {

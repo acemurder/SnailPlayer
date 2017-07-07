@@ -1,6 +1,5 @@
 package com.ride.snailplayer.framework.ui.home.fragment.list;
 
-import com.ride.snailplayer.config.SnailPlayerConfig;
 import com.ride.snailplayer.net.ApiClient;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.ChannelDetail;
@@ -12,10 +11,14 @@ import org.apache.http.conn.ConnectTimeoutException;
 
 import java.net.SocketTimeoutException;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
+import io.rx_cache2.Reply;
 
 /**
  * Created by ：AceMurder
@@ -32,21 +35,64 @@ public class VideoListPresenter implements VideoListContract.Presenter {
 
     public VideoListPresenter(VideoListContract.View view) {
         this.view = view;
-        observer = new Observer<Resource<ChannelDetail>>() {
+//        observer = new Observer<ChannelDetail>() {
+//            @Override
+//            public void onSubscribe(@NonNull Disposable d) {
+//                mDisposables.add(d);
+//                view.showProgress();
+//            }
+//
+//            @Override
+//            public void onNext(@NonNull <ChannelDetail> channelDetailResource) {
+//                if (channelDetailResource.code == SnailPlayerConfig.API_CODE_SUCCESS){
+//                   if (channelDetailResource == null || channelDetailResource.data == null || channelDetailResource.data.videoInfoList == null){
+//                       view.onEmptyData();
+//                   }else
+//                    view.onSuccess(channelDetailResource.data.videoInfoList);
+//
+//                }
+//                else if (channelDetailResource.code == SnailPlayerConfig.API_CODE_NO_DATA)
+//                    view.onEmptyData();
+//                else
+//                    view.onServerError();
+//            }
+//
+//            @Override
+//            public void onError(@NonNull Throwable e) {
+//                view.stopProgress();
+//                if (e instanceof SocketTimeoutException || e instanceof ConnectTimeoutException)
+//                    view.onNetworkError();
+//                else
+//                    view.onServerError();
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//                view.stopProgress();
+//            }
+//        };
+    }
+
+    @Override
+    public void loadVideoInfo(String id, String name, int page, int size) {
+        Timber.i(id, name, page, size);
+        Observable<ChannelDetail> o = ApiClient.IQIYI.
+                getIQiYiApiService().qiyiChannelDetail(IQiYiApiParamsUtils.genChannelDetailParams(id, name, page, size))
+                .map(channelDetailResource -> channelDetailResource.data);
+        ApiClient.IQIYI.getCacheProviders().qiyiChannelDetail(o,
+                new DynamicKey(name + page), new EvictDynamicKey(false)).
+                map(Reply::getData).compose(MainThreadObservableTransformer.instance()).subscribe(new Observer<ChannelDetail>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-                mDisposables.add(d);
                 view.showProgress();
             }
 
             @Override
-            public void onNext(@NonNull Resource<ChannelDetail> channelDetailResource) {
-                if (channelDetailResource.code == SnailPlayerConfig.API_CODE_SUCCESS)
-                    view.onSuccess(channelDetailResource.data.videoInfoList);
-                else if (channelDetailResource.code == SnailPlayerConfig.API_CODE_NO_DATA)
+            public void onNext(@NonNull ChannelDetail channelDetail) {
+                if (channelDetail != null && channelDetail.videoInfoList != null) {
+                    view.onSuccess(channelDetail.videoInfoList);
+                }else
                     view.onEmptyData();
-                else
-                    view.onServerError();
             }
 
             @Override
@@ -56,20 +102,17 @@ public class VideoListPresenter implements VideoListContract.Presenter {
                     view.onNetworkError();
                 else
                     view.onServerError();
+
             }
 
             @Override
             public void onComplete() {
                 view.stopProgress();
             }
-        };
-    }
+        });
 
-    @Override
-    public void loadVideoInfo(String id, String name, int page, int size) {
-        Timber.i(id,name,page,size);
-        ApiClient.IQIYI.getIQiYiApiService().qiyiChannelDetail(IQiYiApiParamsUtils.genChannelDetailParams(id,name,page,size))
-                .compose(MainThreadObservableTransformer.instance()).subscribe(observer);
+//        ApiClient.IQIYI.getIQiYiApiService().qiyiChannelDetail(IQiYiApiParamsUtils.genChannelDetailParams(id,name,page,size))
+//                .compose(MainThreadObservableTransformer.instance()).subscribe(observer);
     }
 
     @Override
