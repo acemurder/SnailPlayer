@@ -40,6 +40,10 @@ public class UserViewModel extends ViewModel {
         return BmobUser.getCurrentUser(User.class);
     }
 
+    public void loginOut() {
+        BmobUser.logOut();
+    }
+
     public Observable<String> updateUserAvatar(@NonNull String url) {
         return Observable.create(emitter -> {
             User user = getUser();

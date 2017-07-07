@@ -15,9 +15,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
@@ -43,6 +45,7 @@ import com.ride.snailplayer.widget.GradientTextView;
 import com.ride.util.common.AppExecutors;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ScreenUtils;
+import com.ride.util.common.util.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,6 +69,8 @@ public class HomeActivity extends BaseActivity {
     private LiveData<List<Channel>> mPreloadChannelList;
     private FragmentStatePagerItemAdapter mAdapter;
     private FragmentPagerItems mItems;
+
+    private long mExitTime = 0;
     private boolean mIsTabClicked;
 
     public static void launchActivity(Activity startingActivity) {
@@ -203,8 +208,18 @@ public class HomeActivity extends BaseActivity {
         SearchActivity.launchActivity(this);
     }
 
-    public void onMenuFileDownloadClick() {
-        //TODO
+    public void onMenuMoreClick() {
+        PopupMenu popupMenu = new PopupMenu(this, mBinding.homeIvMore);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_home, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            Handler handler = new Handler();
+            handler.post(() -> {
+                mUserViewModel.loginOut();
+                EventBus.getDefault().post(new OnUserInfoUpdateEvent());
+            });
+            return true;
+        });
+        popupMenu.show();
     }
 
     public void onAvatarClick() {
@@ -214,6 +229,20 @@ public class HomeActivity extends BaseActivity {
         } else {
             MeActivity.launchActivity(this);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                mExitTime = System.currentTimeMillis();
+                ToastUtils.showShortToast(this, "再按一次退出程序");
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

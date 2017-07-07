@@ -30,8 +30,9 @@
 
     <!--HomeActivity-->
     <string name="menu_search">@string/label_search</string>
-    <string name="menu_file_download"   >下载</string>
+    <string name="menu_file_download">下载</string>
     <string name="no_login">未登录</string>
+    <string name="login_out">退出登录</string>
 
     <!--LoginActivity-->
     <string name="account_hint">手机号</string>
@@ -65,7 +66,6 @@
     <!--MeActivity-->
     <string name="my_info">我的资料</string>
     <string name="setting">设置</string>
-    <string name="exit">退出登录</string>
     <string name="attention_frag_title">收藏</string>
     <string name="about_me_frag_title">关于我</string>
 
