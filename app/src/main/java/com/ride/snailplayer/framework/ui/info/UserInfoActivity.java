@@ -77,7 +77,6 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
     private UserViewModel mUserViewModel;
     private AvatarViewModel mAvatarViewModel;
     private UserInfoViewModel mUserInfoViewModel;
-    private User mUser;
 
     private UCropClient mUCropClient;
     private MaterialDialog mChangeAvatarDialog;
@@ -106,6 +105,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 .compressionFormat(Bitmap.CompressFormat.JPEG)
                 .compressQuality(95)
                 .build();
+        mProgressDialog = new ProgressDialog(this).initProgressDialog();
     }
 
     private void initUserInfo() {
@@ -170,17 +170,18 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         switch (view.getTag()) {
             case DATE_DIALOG_TAG_BIRTHDAY:
-                String birthday = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                mUserInfoViewModel.isUserBirthdayChanged(mUser, birthday)
-                        .flatMap(new Function<String, ObservableSource<User>>() {
+                String input = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                User user = mUserViewModel.getUser();
+                mUserInfoViewModel.isUserBirthdayChanged(user, input)
+                        .flatMap(new Function<String, ObservableSource<String>>() {
                             @Override
-                            public ObservableSource<User> apply(@io.reactivex.annotations.NonNull String birthday) throws Exception {
-                                return mUserInfoViewModel.updateUserBirthday(mUser, birthday);
+                            public ObservableSource<String> apply(@io.reactivex.annotations.NonNull String birthday) throws Exception {
+                                return mUserInfoViewModel.updateUserBirthday(user, birthday);
                             }
                         })
                         .compose(MainThreadObservableTransformer.instance())
-                        .doAfterNext(user -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
-                        .subscribe(new Observer<User>() {
+                        .doAfterNext(birthday -> EventBus.getDefault().post(new OnUserInfoUpdateEvent()))
+                        .subscribe(new Observer<String>() {
                             @Override
                             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                                 if (!d.isDisposed()) {
@@ -189,8 +190,9 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                             }
 
                             @Override
-                            public void onNext(@io.reactivex.annotations.NonNull User user) {
+                            public void onNext(@io.reactivex.annotations.NonNull String birthday) {
                                 dismissProgressDialog();
+                                mBinding.tvUserInfoBirthday.setText(birthday);
                                 ToastUtils.showShortToast(UserInfoActivity.this, "保存成功");
                             }
 
@@ -204,8 +206,6 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                             @Override
                             public void onComplete() {
                                 dismissProgressDialog();
-                                KeyboardUtils.hideSoftInput(UserInfoActivity.this);
-                                onBackPressed();
                             }
                         });
                 break;
@@ -360,7 +360,6 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                                     @Override
                                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                                         if (!d.isDisposed()) {
-                                            mProgressDialog = new ProgressDialog(UserInfoActivity.this).initProgressDialog();
                                             mProgressDialog.show();
                                         }
                                     }
@@ -401,6 +400,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        KeyboardUtils.hideSoftInput(UserInfoActivity.this);
         dismissChangeAvatarDialog();
         dismissPromptPermNeededDialog();
         dismissProgressDialog();

@@ -54,16 +54,9 @@ public class UserInfoViewModel extends ViewModel {
                 });
     }
 
-    public Observable<String> isUserBirthdayChanged(User user, @NonNull String currentBirthday) {
-        return Observable.just(currentBirthday)
-                .filter(birthday -> {
-                    if (user != null) {
-                        if (user.getBirthday() != null) {
-                            return !user.getBirthday().equals(birthday);
-                        }
-                    }
-                    return false;
-                });
+    public Observable<String> isUserBirthdayChanged(User user, @NonNull String newBirthday) {
+        return Observable.just(newBirthday)
+                .filter(birthday -> user != null && !birthday.equals(user.getBirthday()));
     }
 
 
@@ -111,7 +104,7 @@ public class UserInfoViewModel extends ViewModel {
         });
     }
 
-    public Observable<User> updateUserBirthday(User user, String birthday) {
+    public Observable<String> updateUserBirthday(User user, String birthday) {
         return Observable.create(emitter -> {
             if (user != null && !TextUtils.isEmpty(birthday)) {
                 User newUser = new User();
@@ -120,7 +113,7 @@ public class UserInfoViewModel extends ViewModel {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            emitter.onNext(user);
+                            emitter.onNext(birthday);
                             emitter.onComplete();
                         } else {
                             emitter.onError(e);
