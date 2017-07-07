@@ -355,14 +355,8 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                                         return mUserViewModel.updateUserAvatar(url);
                                     }
                                 })
-                                .flatMap(new Function<String, ObservableSource<Bitmap>>() {
-                                    @Override
-                                    public ObservableSource<Bitmap> apply(@io.reactivex.annotations.NonNull String url) throws Exception {
-                                        return mUserInfoViewModel.setAvatarForCircleImageView(url);
-                                    }
-                                })
-                                .doAfterNext(bitmap -> EventBus.getDefault().post(new OnAvatarChangeEvent()))
-                                .subscribe(new Observer<Bitmap>() {
+                                .doOnComplete(() -> EventBus.getDefault().post(new OnAvatarChangeEvent()))
+                                .subscribe(new Observer<String>() {
                                     @Override
                                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                                         if (!d.isDisposed()) {
@@ -372,10 +366,10 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                                     }
 
                                     @Override
-                                    public void onNext(@io.reactivex.annotations.NonNull Bitmap bitmap) {
+                                    public void onNext(@io.reactivex.annotations.NonNull String url) {
                                         dismissProgressDialog();
                                         ToastUtils.showShortToast(UserInfoActivity.this, "上传头像成功");
-                                        Glide.with(UserInfoActivity.this).load(bitmap).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
+                                        Glide.with(UserInfoActivity.this).load(url).dontAnimate().into(mBinding.circleIvUserInfoAvatar);
                                     }
 
                                     @Override

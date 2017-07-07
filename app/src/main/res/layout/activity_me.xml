@@ -7,6 +7,10 @@
                 name="meActionHandler"
                 type="com.ride.snailplayer.framework.ui.me.MeActivity"/>
 
+        <variable
+                name="user"
+                type="com.ride.snailplayer.framework.base.model.User"/>
+
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -58,7 +62,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Stromouble"
+                            android:text="@{user.nickName}"
                             android:textColor="@color/app_white"
                             android:textSize="14sp"/>
 

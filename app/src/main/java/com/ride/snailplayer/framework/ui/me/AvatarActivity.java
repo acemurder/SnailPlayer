@@ -292,10 +292,6 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                         return mUserViewModel.updateUserAvatar(url);
                                     }
                                 })
-                                .doOnNext(url -> {
-                                    mUser.setAvatarUrl(url);
-                                    Timber.d("avatar url=" + mUser.getAvatarUrl());
-                                })
                                 .doOnComplete(() -> EventBus.getDefault().post(new OnAvatarChangeEvent()))
                                 .subscribe(new Observer<String>() {
                                     @Override

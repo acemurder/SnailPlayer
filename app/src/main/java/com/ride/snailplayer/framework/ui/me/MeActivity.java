@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.ride.snailplayer.R;
 import com.ride.snailplayer.databinding.ActivityMeBinding;
 import com.ride.snailplayer.framework.base.BaseActivity;
@@ -22,14 +23,13 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerIte
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.info.UserInfoActivity;
+import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.fragment.AboutMeFragement;
 import com.ride.snailplayer.framework.ui.me.fragment.AttentionFragment;
 import com.ride.snailplayer.framework.ui.me.viewmodel.MeViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
-import com.ride.snailplayer.net.func.MainThreadSingleTransformer;
 import com.ride.snailplayer.widget.GradientTextView;
-import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.BarUtils;
 import com.ride.util.common.util.ScreenUtils;
 
@@ -43,7 +43,6 @@ public class MeActivity extends BaseActivity {
     private FragmentStatePagerItemAdapter mAdapter;
     private MeViewModel mMeViewModel;
     private UserViewModel mUserViewModel;
-    private User mUser;
 
     private boolean mIsTabClicked;
 
@@ -60,7 +59,6 @@ public class MeActivity extends BaseActivity {
         mBinding.setMeActionHandler(this);
         mMeViewModel = ViewModelProviders.of(this).get(MeViewModel.class);
         mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        mUser = mUserViewModel.getUser();
         EventBus.getDefault().register(this);
 
         initAppBar();
@@ -68,6 +66,8 @@ public class MeActivity extends BaseActivity {
     }
 
     private void initAppBar() {
+        setupUserInfo();
+
         //设置Title渐变效果
         mBinding.appbarMe.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             int actionBarHeight = getResources().getDimensionPixelSize(R.dimen.action_bar_size);
@@ -86,6 +86,17 @@ public class MeActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void setupUserInfo() {
+        User user = mUserViewModel.getUser();
+        if (user != null) {
+            Glide.with(this).load(user.getAvatarUrl()).dontAnimate().into(mBinding.circleIvMeAvatar);
+            mBinding.setUser(user);
+        } else {
+            Glide.with(this).load(R.drawable.default_profile).dontAnimate().into(mBinding.circleIvMeAvatar);
+            mBinding.setUser(user);
+        }
     }
 
     private void initTabLayout() {
@@ -179,11 +190,12 @@ public class MeActivity extends BaseActivity {
 
     @Subscribe
     public void onAvatarChange(OnAvatarChangeEvent event) {
-        mMeViewModel.setAvatarForCircleImageView(mUserViewModel.getUser().getAvatarUrl())
-                .compose(MainThreadSingleTransformer.instance())
-                .subscribe(bitmap -> {
+        setupUserInfo();
+    }
 
-                }, Timber::e);
+    @Subscribe
+    public void onUserInfoUpdated(OnUserInfoUpdateEvent event) {
+        setupUserInfo();
     }
 
     @Override
