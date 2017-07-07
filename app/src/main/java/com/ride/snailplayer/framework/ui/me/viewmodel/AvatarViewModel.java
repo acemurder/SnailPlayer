@@ -4,10 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.BitmapCompat;
 
 import java.io.File;
 
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
 
 /**

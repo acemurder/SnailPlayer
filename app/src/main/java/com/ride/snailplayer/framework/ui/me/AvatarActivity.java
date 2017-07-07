@@ -1,9 +1,6 @@
 package com.ride.snailplayer.framework.ui.me;
 
 import android.app.Activity;
-import android.app.Application;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -19,6 +16,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -34,18 +32,24 @@ import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.viewmodel.AvatarViewModel;
 import com.ride.snailplayer.framework.viewmodel.UserViewModel;
 import com.ride.snailplayer.util.ucrop.UCropClient;
+import com.ride.snailplayer.widget.dialog.BaseDialog;
+import com.ride.snailplayer.widget.dialog.ProgressDialog;
 import com.ride.util.common.log.Timber;
 import com.ride.util.common.util.ToastUtils;
 import com.yalantis.ucrop.UCrop;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
 import java.util.List;
 
-import io.reactivex.functions.Consumer;
-import pub.devrel.easypermissions.AppSettingsDialog;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
@@ -72,9 +76,9 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
     private UCropClient mUCropClient;
     private MaterialDialog mChangeAvatarDialog;
     private MaterialDialog mPromptPermNeededDialog;
+    private BaseDialog mProgressDialog;
 
     private Uri mPhotoUriFromCamera;
-    private Uri mCropResultUri;
 
     public static void launchActivity(Activity activity, View element, String elementName) {
         Intent intent = new Intent(activity, AvatarActivity.class);
@@ -132,8 +136,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                     dismissChangeAvatarDialog();
                     switch (v.getId()) {
                         case R.id.btn_avatar_take_photo:
-                            //startTakePhoto();
-                            doTakePhoto();
+                            startTakePhoto();
                             break;
                         case R.id.btn_avatar_pick_from_album:
                             startPickPhotoFromAlbum();
@@ -283,15 +286,52 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                 break;
             case UCrop.REQUEST_CROP:
                 if (resultCode == RESULT_OK && data != null) {
-                    mCropResultUri = UCrop.getOutput(data);
-                    if (mCropResultUri != null) {
-                        Glide.with(AvatarActivity.this)
-                                .load(mCropResultUri)
-                                .skipMemoryCache(true)
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .centerCrop()
-                                .crossFade()
-                                .into(mBinding.ivAvatar);
+                    Uri cropResultUri = UCrop.getOutput(data);
+                    if (cropResultUri != null) {
+                        mUserViewModel.uploadUserAvatar(cropResultUri)
+                                .subscribeOn(Schedulers.io())
+                                .unsubscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .flatMap(new Function<String, ObservableSource<String>>() {
+                                    @Override
+                                    public ObservableSource<String> apply(@io.reactivex.annotations.NonNull String url) throws Exception {
+                                        return mUserViewModel.updateUserAvatar(url);
+                                    }
+                                })
+                                .doAfterNext(url -> EventBus.getDefault().post(new OnAvatarChangeEvent()))
+                                .subscribe(new Observer<String>() {
+                                    @Override
+                                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                                        if (!d.isDisposed()) {
+                                            mProgressDialog = new ProgressDialog(AvatarActivity.this).initProgressDialog();
+                                            mProgressDialog.show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onNext(@io.reactivex.annotations.NonNull String url) {
+                                        dismissProgressDialog();
+                                        ToastUtils.showShortToast("上传头像成功");
+                                        Glide.with(AvatarActivity.this)
+                                                .load(url)
+                                                .skipMemoryCache(true)
+                                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                .centerCrop()
+                                                .crossFade()
+                                                .into(mBinding.ivAvatar);
+                                    }
+
+                                    @Override
+                                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                                        dismissProgressDialog();
+                                        Timber.e(e);
+                                        ToastUtils.showShortToast("上传头像失败");
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+                                    }
+                                });
                     }
                 }
                 break;
@@ -301,11 +341,20 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
         }
     }
 
+    private void dismissProgressDialog() {
+        mProgressDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissChangeAvatarDialog();
+        dismissPromptPermNeededDialog();
+        dismissProgressDialog();
+    }
+
     @Override
     public void onBackPressed() {
-        if (mCropResultUri != null) {
-            EventBus.getDefault().post(new OnAvatarChangeEvent());
-        }
         ActivityCompat.finishAfterTransition(this);
     }
 }
