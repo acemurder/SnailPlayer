@@ -17,6 +17,7 @@
     <string name="label_login">登录</string>
     <string name="label_register">注册</string>
     <string name="label_avatar">个人头像</string>
+    <string name="label_user_info">我的资料</string>
 
     <!--LaunchActivity-->
     <string name="app_slogan">享受美妙时光</string>
@@ -64,6 +65,16 @@
     <string name="exit">退出登录</string>
     <string name="attention_frag_title">收藏</string>
     <string name="about_me_frag_title">关于我</string>
+
+    <!--UserInfoActivity-->
+    <string name="avatar">头像</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="university">大学</string>
+    <string name="sign">签名</string>
+    <string name="no_setting">未设置</string>
+    <string name="no_fill">未填写</string>
+    <string name="no_sign">还没有签名</string>
 
     <!--AvatarActivity-->
     <string name="take_photo">拍摄</string>

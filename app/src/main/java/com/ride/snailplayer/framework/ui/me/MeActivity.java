@@ -21,6 +21,7 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerIte
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentPagerItems;
 import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePagerItemAdapter;
 import com.ride.snailplayer.framework.base.model.User;
+import com.ride.snailplayer.framework.ui.info.UserInfoActivity;
 import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.me.fragment.AboutMeFragement;
 import com.ride.snailplayer.framework.ui.me.fragment.AttentionFragment;
@@ -171,7 +172,7 @@ public class MeActivity extends BaseActivity {
                 AvatarActivity.launchActivity(this, mBinding.circleIvMeAvatar, getResources().getString(R.string.transition_avatar));
                 break;
             case R.id.ll_me_my_info:
-
+                UserInfoActivity.launchActivity(this);
                 break;
         }
     }

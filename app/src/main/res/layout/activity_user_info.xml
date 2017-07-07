@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+                name="userInfoActionHandler"
+                type="com.ride.snailplayer.framework.ui.info.UserInfoActivity"/>
+
+    </data>
+
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/dark_background">
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ActionBarThemeOverlay"
+                android:background="@color/theme_primary"
+                app:contentInsetStart="0dp"
+                app:popupTheme="@style/ActionBarPopupThemeOverlay">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                <ImageView
+                        android:id="@+id/iv_user_info_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:padding="4dp"
+                        android:clickable="true"
+                        android:onClick="@{userInfoActionHandler.onClick}"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_arrow_back"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@null"/>
+
+                <TextView
+                        android:id="@+id/tv_me_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="@string/label_user_info"
+                        android:textColor="@color/app_white"
+                        android:textSize="18sp"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <FrameLayout
+                android:id="@+id/ll_user_info_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:onClick="@{userInfoActionHandler.onClick}"
+                android:background="@drawable/selector_common_background"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/avatar"
+                    android:textSize="16sp"
+                    android:textColor="@color/body_text_2"/>
+
+            <com.ride.snailplayer.widget.imageview.CircleImageView
+                    android:id="@+id/circle_iv_user_info_avatar"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_profile"
+                    app:civ_border_color="@color/app_white"
+                    app:civ_border_width="0.1dp"/>
+
+        </FrameLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="8dp"
+                android:background="@color/app_grey"/>
+
+        <FrameLayout
+                android:id="@+id/ll_user_info_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:onClick="@{userInfoActionHandler.onClick}"
+                android:background="@drawable/selector_common_background"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/nickname"
+                    android:textSize="16sp"
+                    android:textColor="@color/body_text_2"/>
+
+            <TextView
+                    android:id="@+id/tv_user_info_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:text="@string/nickname"
+                    android:textSize="14sp"
+                    android:textColor="@color/body_text_3"/>
+
+        </FrameLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="8dp"
+                android:background="@color/app_grey"/>
+
+        <FrameLayout
+                android:id="@+id/ll_user_info_sex"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:onClick="@{userInfoActionHandler.onClick}"
+                android:background="@drawable/selector_common_background"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/sex"
+                    android:textSize="16sp"
+                    android:textColor="@color/body_text_2"/>
+
+            <TextView
+                    android:id="@+id/tv_user_info_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:text="@string/sex"
+                    android:textSize="14sp"
+                    android:textColor="@color/body_text_3"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+                android:id="@+id/ll_user_info_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:onClick="@{userInfoActionHandler.onClick}"
+                android:background="@drawable/selector_common_background"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/birthday"
+                    android:textSize="16sp"
+                    android:textColor="@color/body_text_2"/>
+
+            <TextView
+                    android:id="@+id/tv_user_info_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:hint="@string/no_setting"
+                    android:textColorHint="@color/app_grey"
+                    android:textSize="14sp"
+                    android:textColor="@color/body_text_3"/>
+
+        </FrameLayout>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginLeft="8dp"
+                android:background="@color/app_grey"/>
+
+        <FrameLayout
+                android:id="@+id/ll_user_info_university"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:onClick="@{userInfoActionHandler.onClick}"
+                android:background="@drawable/selector_common_background"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/university"
+                    android:textSize="16sp"
+                    android:textColor="@color/body_text_2"/>
+
+            <TextView
+                    android:id="@+id/tv_user_info_university"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:hint="@string/no_fill"
+                    android:textColorHint="@color/app_grey"
+                    android:textSize="14sp"
+                    android:textColor="@color/body_text_3"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+                android:id="@+id/ll_user_info_sign"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="24dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:clickable="true"
+                android:onClick="@{userInfoActionHandler.onClick}"
+                android:background="@drawable/selector_common_background"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/sign"
+                    android:textSize="16sp"
+                    android:textColor="@color/body_text_2"/>
+
+            <TextView
+                    android:id="@+id/tv_user_info_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:hint="@string/no_sign"
+                    android:textColorHint="@color/app_grey"
+                    android:textSize="14sp"
+                    android:textColor="@color/body_text_3"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</layout>
