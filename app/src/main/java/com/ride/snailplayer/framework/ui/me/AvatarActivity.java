@@ -292,7 +292,11 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                         return mUserViewModel.updateUserAvatar(url);
                                     }
                                 })
-                                .doAfterNext(url -> EventBus.getDefault().post(new OnAvatarChangeEvent()))
+                                .doOnNext(url -> {
+                                    mUser.setAvatarUrl(url);
+                                    Timber.d("avatar url=" + mUser.getAvatarUrl());
+                                })
+                                .doOnComplete(() -> EventBus.getDefault().post(new OnAvatarChangeEvent()))
                                 .subscribe(new Observer<String>() {
                                     @Override
                                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -305,7 +309,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                     @Override
                                     public void onNext(@io.reactivex.annotations.NonNull String url) {
                                         dismissProgressDialog();
-                                        ToastUtils.showShortToast("上传头像成功");
+                                        ToastUtils.showShortToast(AvatarActivity.this, "头像更改成功");
                                         Glide.with(AvatarActivity.this)
                                                 .load(url)
                                                 .skipMemoryCache(true)
@@ -319,7 +323,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                                         dismissProgressDialog();
                                         Timber.e(e);
-                                        ToastUtils.showShortToast("上传头像失败");
+                                        ToastUtils.showShortToast(AvatarActivity.this, "头像更改失败");
                                     }
 
                                     @Override
@@ -330,7 +334,7 @@ public class AvatarActivity extends BaseActivity implements EasyPermissions.Perm
                 }
                 break;
             case UCrop.RESULT_ERROR:
-                ToastUtils.showShortToast("剪裁失败");
+                ToastUtils.showShortToast(AvatarActivity.this, "剪裁失败");
                 break;
         }
     }

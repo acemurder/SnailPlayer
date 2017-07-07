@@ -59,7 +59,7 @@ public class CompleteRegisterFragment extends BaseRegisterFragment {
                 ActivityCompat.finishAfterTransition(mHostActivity);
                 break;
             case R.id.btn_fcr_login:
-                HomeActivity.launchActivity(getActivity(), true);
+                HomeActivity.launchActivity(getActivity());
                 break;
         }
     }

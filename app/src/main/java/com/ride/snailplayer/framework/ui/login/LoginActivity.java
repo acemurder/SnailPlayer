@@ -197,13 +197,13 @@ public class LoginActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(account)) {
             mBinding.etAccount.requestFocus();
-            ToastUtils.showShortToast("请输入账号");
+            ToastUtils.showShortToast(LoginActivity.this, "请输入账号");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
             mBinding.etPassword.requestFocus();
-            ToastUtils.showShortToast("请输入密码");
+            ToastUtils.showShortToast(LoginActivity.this, "请输入密码");
             return;
         }
 
@@ -250,7 +250,7 @@ public class LoginActivity extends BaseActivity {
                         public void done(User result, BmobException e) {
                             if (e == null) {
                                 Timber.i("登录成功");
-                                HomeActivity.launchActivity(LoginActivity.this, true);
+                                HomeActivity.launchActivity(LoginActivity.this);
                             } else {
                                 Timber.e("登录失败," + e.getMessage());
                             }

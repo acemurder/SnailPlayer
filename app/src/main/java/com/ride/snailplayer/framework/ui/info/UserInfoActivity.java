@@ -194,14 +194,14 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                             @Override
                             public void onNext(@io.reactivex.annotations.NonNull User user) {
                                 dismissProgressDialog();
-                                ToastUtils.showShortToast("保存成功");
+                                ToastUtils.showShortToast(UserInfoActivity.this, "保存成功");
                             }
 
                             @Override
                             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                                 dismissProgressDialog();
                                 Timber.e(e);
-                                ToastUtils.showShortToast("保存失败");
+                                ToastUtils.showShortToast(UserInfoActivity.this, "保存失败");
                             }
 
                             @Override
@@ -377,7 +377,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                                     @Override
                                     public void onNext(@io.reactivex.annotations.NonNull Bitmap bitmap) {
                                         dismissProgressDialog();
-                                        ToastUtils.showShortToast("上传头像成功");
+                                        ToastUtils.showShortToast(UserInfoActivity.this, "上传头像成功");
                                         mBinding.circleIvUserInfoAvatar.setImageBitmap(bitmap);
                                     }
 
@@ -385,7 +385,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                                         dismissProgressDialog();
                                         Timber.e(e);
-                                        ToastUtils.showShortToast("上传头像失败");
+                                        ToastUtils.showShortToast(UserInfoActivity.this, "上传头像失败");
                                     }
 
                                     @Override
@@ -396,7 +396,7 @@ public class UserInfoActivity extends BaseActivity implements DatePickerDialog.O
                 }
                 break;
             case UCrop.RESULT_ERROR:
-                ToastUtils.showShortToast("剪裁失败");
+                ToastUtils.showShortToast(UserInfoActivity.this, "剪裁失败");
                 break;
         }
     }

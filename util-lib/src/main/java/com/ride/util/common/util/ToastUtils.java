@@ -1,5 +1,7 @@
 package com.ride.util.common.util;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -22,15 +24,15 @@ public final class ToastUtils {
      *
      * @param message Toast的内容
      */
-    public static void showShortToast(String message) {
+    public static void showShortToast(@NonNull Context context, String message) {
         if (!TextUtils.isEmpty(message)) {
-            showToast(message, Toast.LENGTH_SHORT);
+            showToast(context, message, Toast.LENGTH_SHORT);
         }
     }
 
-    private static void showToast(String message, int duration) {
+    private static void showToast(@NonNull Context context, String message, int duration) {
         if (mToast == null) {
-            mToast = Toast.makeText(Utils.getContext(), message, duration);
+            mToast = Toast.makeText(context, message, duration);
             mToast.setGravity(Gravity.CENTER, 0, 0);
         } else {
             mToast.setText(message);

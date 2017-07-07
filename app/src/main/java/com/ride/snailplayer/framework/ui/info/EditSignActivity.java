@@ -112,14 +112,14 @@ public class EditSignActivity extends BaseActivity {
                             @Override
                             public void onNext(@NonNull User user) {
                                 dismissProgressDialog();
-                                ToastUtils.showShortToast("保存成功");
+                                ToastUtils.showShortToast(EditSignActivity.this, "保存成功");
                             }
 
                             @Override
                             public void onError(@NonNull Throwable e) {
                                 dismissProgressDialog();
                                 Timber.e(e);
-                                ToastUtils.showShortToast("保存失败");
+                                ToastUtils.showShortToast(EditSignActivity.this, "保存失败");
                             }
 
                             @Override

@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
 import com.ride.snailplayer.R;
@@ -28,9 +29,12 @@ import com.ride.snailplayer.framework.base.adapter.viewpager.v4.FragmentStatePag
 import com.ride.snailplayer.framework.base.model.User;
 import com.ride.snailplayer.framework.ui.home.fragment.list.MovieListFragment;
 import com.ride.snailplayer.framework.ui.home.fragment.recommend.RecommendFragment;
+import com.ride.snailplayer.framework.ui.login.LoginActivity;
 import com.ride.snailplayer.framework.ui.me.MeActivity;
 import com.ride.snailplayer.framework.ui.info.event.OnUserInfoUpdateEvent;
+import com.ride.snailplayer.framework.ui.me.event.OnAvatarChangeEvent;
 import com.ride.snailplayer.framework.ui.search.SearchActivity;
+import com.ride.snailplayer.framework.viewmodel.UserViewModel;
 import com.ride.snailplayer.net.ApiClient;
 import com.ride.snailplayer.net.func.MainThreadObservableTransformer;
 import com.ride.snailplayer.net.model.Channel;
@@ -55,29 +59,17 @@ import okhttp3.Response;
 
 public class HomeActivity extends BaseActivity {
 
-    public static final String USER_UPDATE_SIGNAL = "user_update_signal";
-
     private ActivityHomeBinding mBinding;
     private HomeViewModel mHomeViewModel;
+    private UserViewModel mUserViewModel;
     private LiveData<List<Channel>> mPreloadChannelList;
     private FragmentStatePagerItemAdapter mAdapter;
     private FragmentPagerItems mItems;
-    private Handler mHanlder;
-
-    private User mUser;
     private boolean mIsTabClicked;
-    private boolean mUserUpdated;
 
     public static void launchActivity(Activity startingActivity) {
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeBasic();
         Intent intent = new Intent(startingActivity, HomeActivity.class);
-        ActivityCompat.startActivity(startingActivity, intent, optionsCompat.toBundle());
-    }
-
-    public static void launchActivity(Activity startingActivity, boolean updated) {
-        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeBasic();
-        Intent intent = new Intent(startingActivity, HomeActivity.class);
-        intent.putExtra(USER_UPDATE_SIGNAL, updated);
         ActivityCompat.startActivity(startingActivity, intent, optionsCompat.toBundle());
     }
 
@@ -87,11 +79,27 @@ public class HomeActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         mBinding.setHomeActionHandler(this);
         mHomeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-
-        mHanlder = new Handler();
+        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         EventBus.getDefault().register(this);
 
+        setupUserInfo();
         setupTab();
+    }
+
+    private void setupUserInfo() {
+        User user = mUserViewModel.getUser();
+        if (user != null) {
+            mUserViewModel.setAvatarForCircleImageView(user.getAvatarUrl())
+                    .compose(MainThreadObservableTransformer.instance())
+                    .subscribe(bitmap -> {
+                        Timber.d("头像url=" + user.getAvatarUrl());
+                        mBinding.circleIvHomeAvatar.setImageBitmap(bitmap);
+                    }, Timber::e);
+            mBinding.homeTvLoginStatus.setText(user.getNickName());
+        } else {
+            mBinding.circleIvHomeAvatar.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_profile));
+            mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
+        }
     }
 
     private void setupTab() {
@@ -185,72 +193,14 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mUserUpdated = getIntent().getBooleanExtra(USER_UPDATE_SIGNAL, true);
-        if (mUserUpdated) {
-            updateUser();
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        mUserUpdated = intent.getBooleanExtra(USER_UPDATE_SIGNAL, false);
-        if (mUserUpdated) {
-            updateUser();
-        }
-        Timber.i("onNewIntent,updated=" + mUserUpdated);
-    }
-
-    private void updateUser() {
-        mUser = BmobUser.getCurrentUser(User.class);
-        if (mUser != null) {
-            mBinding.homeTvLoginStatus.setText(mUser.getNickName());
-            updateUserAvatar();
-        } else {
-            mBinding.homeTvLoginStatus.setText(getResources().getString(R.string.no_login));
-            mBinding.ivAvatar.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.default_profile));
-        }
+    @Subscribe
+    public void onAvatarChanged(OnAvatarChangeEvent event) {
+        setupUserInfo();
     }
 
     @Subscribe
-    public void onUserUpdate(OnUserInfoUpdateEvent event) {
-        Timber.i("onUserUpdate");
-        updateUserAvatar();
-    }
-
-    private void updateUserAvatar() {
-        if (!TextUtils.isEmpty(mUser.getAvatarUrl())) {
-            Observable.just(mUser.getAvatarUrl())
-                    .compose(MainThreadObservableTransformer.instance())
-                    .map(s -> {
-                        OkHttpClient client = ApiClient.IQIYI.getOkHttpClient();
-                        Request request = new Request.Builder().url(s).build();
-                        return client.newCall(request);
-                    })
-                    .subscribe(call -> call.enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Timber.i("下载bitmap失败");
-                        }
-
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                            if (response.isSuccessful() && response.body() != null) {
-                                Timber.i("下载bitmap成功");
-                                Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                                AppExecutors.getInstance().getMainThreadExecutor().execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mBinding.ivAvatar.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }
-                    }), throwable -> Timber.i("下载bitmap失败"));
-        }
+    public void onUserInfoUpdated(OnUserInfoUpdateEvent event) {
+        setupUserInfo();
     }
 
     public void onMenuSearchClick() {
@@ -262,10 +212,9 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void onAvatarClick() {
-        User user = BmobUser.getCurrentUser(User.class);
+        User user = mUserViewModel.getUser();
         if (user == null) {
-            MeActivity.launchActivity(this);
-            //LoginActivity.launchActivity(this);
+            LoginActivity.launchActivity(this);
         } else {
             MeActivity.launchActivity(this);
         }
@@ -275,7 +224,6 @@ public class HomeActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        mHanlder.removeCallbacksAndMessages(null);
     }
 
     @Override
